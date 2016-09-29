@@ -46,7 +46,7 @@ class SearchProductViewController: AnimationViewController {
         
         navigationController?.navigationBar.barTintColor = LFBNavigationBarWhiteBackgroundColor
         
-        if searchCollectionView != nil && (goodses?.count)! > 0 {
+        if searchCollectionView != nil && goodses != nil {
             searchCollectionView!.reloadData()
         }
     }
@@ -188,6 +188,7 @@ class SearchProductViewController: AnimationViewController {
         searchCollectionView?.addSubview(collectionHeadView!)
         searchCollectionView?.contentInset = UIEdgeInsetsMake(80, 0, 30, 0)
         searchCollectionView?.register(HomeCollectionFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footerView")
+        searchCollectionView?.register(HomeCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView")
         view.addSubview(searchCollectionView!)
     }
     
@@ -287,13 +288,19 @@ extension SearchProductViewController: UISearchBarDelegate, UIScrollViewDelegate
 }
 
 
-extension SearchProductViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SearchProductViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if goodses == nil {
+            return 0
+        } else {
+            return 1
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return goodses?.count ?? 0
+        return (goodses?.count)!
     }
     
     
@@ -308,15 +315,16 @@ extension SearchProductViewController: UICollectionViewDelegate, UICollectionVie
         return cell
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
     
         let itemSize = CGSize(width:(ScreenWidth - HomeCollectionViewCellMargin * 2) * 0.5 - 4, height:250)
         
         return itemSize
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         
         if (goodses!.count) <= 0 || goodses == nil {
             return CGSize.zero
@@ -325,10 +333,14 @@ extension SearchProductViewController: UICollectionViewDelegate, UICollectionVie
         return CGSize(width:ScreenWidth, height:30)
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize.zero
     }
+    
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//
+//        return CGSize.zero
+//    }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
@@ -340,7 +352,7 @@ extension SearchProductViewController: UICollectionViewDelegate, UICollectionVie
             return footerView
 
         } else {
-            return collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "footerView", for: indexPath as IndexPath)
+            return collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "headerView", for: indexPath as IndexPath)
         }
     }
     

@@ -59,8 +59,11 @@ class UserShopCarTool: NSObject {
     
     func getAllProductsPrice() -> String {
         var allPrice: Double = 0
+        
         for goods in supermarketProducts {
-            allPrice = allPrice + Double(goods["partner_price"] as! String)! * Double(goods["userBuyNumber"] as! String)!
+//            let tmp = goods["partner_price"] as! Double
+//            print("tmp\(tmp)")
+            allPrice = allPrice + (goods["partner_price"] as! NSString).doubleValue
         }
         
         return "\(allPrice)".cleanDecimalPointZear()

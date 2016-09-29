@@ -131,10 +131,11 @@ class BuyView: UIView {
     // MARK: - Action
     func addGoodsButtonClick() {
         
-        if buyNumber >= (goods?["number"] as! Int) {
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: HomeGoodsInventoryProblem), object: (goods?["name"] as! String))
-            return
-        }
+//        print(goods?["number"])
+//        if buyNumber >= (goods?["number"] as? Int)! {
+//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: HomeGoodsInventoryProblem), object: (goods?["name"] as! String))
+//            return
+//        }
         
         reduceGoodsButton.isHidden = false
         buyNumber += 1

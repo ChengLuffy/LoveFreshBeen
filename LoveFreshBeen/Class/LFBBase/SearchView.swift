@@ -15,7 +15,7 @@ class SearchView: UIView {
     private let searchLabel = UILabel()
     private var lastX: CGFloat = 0
     private var lastY: CGFloat = 35
-    private var searchButtonClickCallback:((_ sender: UIButton) -> ())?
+    var searchButtonClickCallback:((_ sender: UIButton) -> ())?
     var searchHeight: CGFloat = 0
     
     override init(frame: CGRect) {
@@ -53,7 +53,7 @@ class SearchView: UIView {
             btn.layer.cornerRadius = 15
             btn.layer.borderWidth = 0.5
             btn.layer.borderColor = UIColor.colorWithCustom(r: 200, g: 200, b: 200).cgColor
-            btn.addTarget(self, action: Selector(("searchButtonClick:")), for: UIControlEvents.touchUpInside)
+            btn.addTarget(self, action: #selector(SearchView.searchButtonClick(sender:)), for: UIControlEvents.touchUpInside)
             btnW = btn.titleLabel!.width + addW
             
             if frame.width - lastX > btnW {
