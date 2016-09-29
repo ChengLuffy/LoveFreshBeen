@@ -20,36 +20,36 @@ extension UIBarButtonItem {
     class func barButton(title: String, titleColor: UIColor, image: UIImage, hightLightImage: UIImage?, target: AnyObject?, action: Selector, type: ItemButtonType) -> UIBarButtonItem {
         var btn:UIButton = UIButton()
         if type == ItemButtonType.Left {
-            btn = ItemLeftButton(type: .Custom)
+            btn = ItemLeftButton(type: .custom)
         } else {
-            btn = ItemRightButton(type: .Custom)
+            btn = ItemRightButton(type: .custom)
         }
-        btn.setTitle(title, forState: .Normal)
-        btn.setImage(image, forState: .Normal)
-        btn.setTitleColor(titleColor, forState: .Normal)
-        btn.setImage(hightLightImage, forState: .Highlighted)
-        btn.addTarget(target, action: action, forControlEvents: .TouchUpInside)
-        btn.frame = CGRectMake(0, 0, 60, 44)
-        btn.titleLabel?.font = UIFont.systemFontOfSize(10)
+        btn.setTitle(title, for: .normal)
+        btn.setImage(image, for: .normal)
+        btn.setTitleColor(titleColor, for: .normal)
+        btn.setImage(hightLightImage, for: .highlighted)
+        btn.addTarget(target, action: action, for: .touchUpInside)
+        btn.frame = CGRect(x:0, y:0, width:60, height:44)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 10)
         
         return UIBarButtonItem(customView: btn)
     }
     
     class func barButton(image: UIImage, target: AnyObject?, action: Selector) -> UIBarButtonItem {
-        let btn = ItemLeftImageButton(type: .Custom)
-        btn.setImage(image, forState: UIControlState.Normal)
-        btn.imageView?.contentMode = UIViewContentMode.Center
-        btn.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
-        btn.frame = CGRectMake(0, 0, 44, 44)
+        let btn = ItemLeftImageButton(type: .custom)
+        btn.setImage(image, for: UIControlState.normal)
+        btn.imageView?.contentMode = UIViewContentMode.center
+        btn.addTarget(target, action: action, for: UIControlEvents.touchUpInside)
+        btn.frame = CGRect(x:0, y:0, width:44, height:44)
         return UIBarButtonItem(customView: btn)
     }
     
     class func barButton(title: String, titleColor: UIColor, target: AnyObject?, action: Selector) -> UIBarButtonItem {
-        let btn = UIButton(frame: CGRectMake(0, 0, 60, 44))
-        btn.setTitle(title, forState: .Normal)
-        btn.setTitleColor(titleColor, forState: .Normal)
-        btn.addTarget(target, action: action, forControlEvents: UIControlEvents.TouchUpInside)
-        btn.titleLabel?.font = UIFont.systemFontOfSize(15)
+        let btn = UIButton(frame: CGRect(x:0, y:0, width:60, height:44))
+        btn.setTitle(title, for: .normal)
+        btn.setTitleColor(titleColor, for: .normal)
+        btn.addTarget(target, action: action, for: UIControlEvents.touchUpInside)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         if title.characters.count == 2 {
             btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -25)
         }

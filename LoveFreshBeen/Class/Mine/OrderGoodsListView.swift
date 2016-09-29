@@ -47,32 +47,32 @@ class OrderGoodsListView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
-        costLabel.textColor = UIColor.lightGrayColor()
-        costLabel.font = UIFont.systemFontOfSize(12)
+        costLabel.textColor = UIColor.lightGray
+        costLabel.font = UIFont.systemFont(ofSize: 12)
         costLabel.text = "费用明细"
         addSubview(costLabel)
         
         addSubview(goodsListView)
         
         lineView1.alpha = 0.1
-        lineView1.backgroundColor = UIColor.lightGrayColor()
+        lineView1.backgroundColor = UIColor.lightGray
         addSubview(lineView1)
         
         addSubview(feeListView)
         
-        backView.backgroundColor = UIColor.whiteColor()
+        backView.backgroundColor = UIColor.white
         addSubview(backView)
         
-        payMoneyLabel.textColor = UIColor.redColor()
-        payMoneyLabel.font = UIFont.systemFontOfSize(14)
-        payMoneyLabel.textAlignment = NSTextAlignment.Right
+        payMoneyLabel.textColor = UIColor.red
+        payMoneyLabel.font = UIFont.systemFont(ofSize: 14)
+        payMoneyLabel.textAlignment = NSTextAlignment.right
         addSubview(payMoneyLabel)
         
-        payLabel.textAlignment = NSTextAlignment.Right
+        payLabel.textAlignment = NSTextAlignment.right
         payLabel.textColor = LFBTextBlackColor
-        payLabel.font = UIFont.systemFontOfSize(14)
+        payLabel.font = UIFont.systemFont(ofSize: 14)
         addSubview(payLabel)
     }
     
@@ -84,16 +84,16 @@ class OrderGoodsListView: UIView {
         super.layoutSubviews()
         
         let leftMargin: CGFloat = 10
-        costLabel.frame = CGRectMake(leftMargin, 0, width - leftMargin, 30)
-        lineView1.frame = CGRectMake(leftMargin, CGRectGetMaxY(costLabel.frame), width - leftMargin, 1)
-        goodsListView.frame = CGRectMake(0, CGRectGetMaxY(costLabel.frame), width, orderGoodsViewHeight)
-        feeListView.frame = CGRectMake(0, CGRectGetMaxY(goodsListView.frame), width, feeListViewHeight)
-        payMoneyLabel.frame = CGRectMake(width - 100 - 10, CGRectGetMaxY(feeListView.frame), 100, 40)
-        payLabel.frame = CGRectMake(CGRectGetMinX(payMoneyLabel.frame) - 60, CGRectGetMaxY(feeListView.frame), 60, 40)
-        backView.frame = CGRectMake(0, CGRectGetMaxY(feeListView.frame), width, 40)
+        costLabel.frame = CGRect(x:leftMargin, y:0, width:width - leftMargin, height:30)
+        lineView1.frame = CGRect(x:leftMargin, y:costLabel.frame.maxY, width:width - leftMargin, height:1)
+        goodsListView.frame = CGRect(x:0, y:costLabel.frame.maxY, width:width, height:orderGoodsViewHeight)
+        feeListView.frame = CGRect(x:0, y:goodsListView.frame.maxY, width:width, height:feeListViewHeight)
+        payMoneyLabel.frame = CGRect(x:width - 100 - 10, y:feeListView.frame.maxY, width:100, height:40)
+        payLabel.frame = CGRect(x:payMoneyLabel.frame.minX - 60, y:feeListView.frame.maxY, width:60, height:40)
+        backView.frame = CGRect(x:0, y:feeListView.frame.maxY, width:width, height:40)
         
         if delegate != nil {
-            delegate!.orderGoodsListViewHeightDidChange(CGRectGetMaxY(backView.frame))
+            delegate!.orderGoodsListViewHeightDidChange(height: backView.frame.maxY)
         }
     }
     
@@ -114,21 +114,21 @@ class OrderGoodsView: UIView {
             for i in 0..<order_goods!.count {
                 let array = order_goods![i]
                 if array.count == 1 {
-                    let goodsView = GoodsView(frame: CGRectMake(0, lastViewY + 10, ScreenWidth, 20))
+                    let goodsView = GoodsView(frame: CGRect(x:0, y:lastViewY + 10, width:ScreenWidth, height:20))
                     orderGoodsViewHeight += 40
                     goodsView.orderGoods = array[0]
-                    lastViewY = CGRectGetMaxY(goodsView.frame) + 10
+                    lastViewY = goodsView.frame.maxY + 10
                     addSubview(goodsView)
                 } else if array.count > 1 {
                     orderGoodsViewHeight = orderGoodsViewHeight + CGFloat(array.count) * 20 + 20
                     for i in 0..<array.count {
                         let goodsView = GoodsView()
                         if i == 0 {
-                            goodsView.frame = CGRectMake(0, lastViewY + 10, ScreenWidth, 20)
-                            lastViewY = CGRectGetMaxY(goodsView.frame)
+                            goodsView.frame = CGRect(x:0, y:lastViewY + 10, width:ScreenWidth, height:20)
+                            lastViewY = goodsView.frame.maxY
                         } else {
-                            goodsView.frame = CGRectMake(0, lastViewY, ScreenWidth, 20)
-                            lastViewY = CGRectGetMaxY(goodsView.frame) + 10
+                            goodsView.frame = CGRect(x:0, y:lastViewY, width:ScreenWidth, height:20)
+                            lastViewY = goodsView.frame.maxY + 10
                         }
                         goodsView.orderGoods = array[i]
                         addSubview(goodsView)
@@ -136,8 +136,8 @@ class OrderGoodsView: UIView {
                 }
                 let lineView = UIView()
                 lineView.alpha = 0.1
-                lineView.backgroundColor = UIColor.lightGrayColor()
-                lineView.frame = CGRectMake(10, orderGoodsViewHeight, ScreenWidth - 10, 1)
+                lineView.backgroundColor = UIColor.lightGray
+                lineView.frame = CGRect(x:10, y:orderGoodsViewHeight, width:ScreenWidth - 10, height:1)
                 addSubview(lineView)
             }
         }
@@ -146,7 +146,7 @@ class OrderGoodsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -173,35 +173,35 @@ class GoodsView: UIView {
             priceLabel.text = "$" + (orderGoods?.goods_price)!.cleanDecimalPointZear()
             if orderGoods?.is_gift != -1 {
                 if orderGoods!.is_gift == 0 {
-                    giftImageView.hidden = true
+                    giftImageView.isHidden = true
                     isShowImageView = false
                     layoutSubviews()
                 } else if orderGoods!.is_gift == 1 {
-                    giftImageView.hidden = false
+                    giftImageView.isHidden = false
                     isShowImageView = true
-                    priceLabel.hidden = true
+                    priceLabel.isHidden = true
                 }
             }
         }
     }
     
     override init(frame: CGRect) {
-        super.init(frame: CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 20))
+        super.init(frame: CGRect(x:frame.origin.x, y:frame.origin.y, width:frame.size.width, height:20))
 
-        titleLabel.font = UIFont.systemFontOfSize(14)
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
         titleLabel.textColor = LFBTextBlackColor
         addSubview(titleLabel)
         
-        numberLabel.font = UIFont.systemFontOfSize(14)
+        numberLabel.font = UIFont.systemFont(ofSize: 14)
         numberLabel.textColor = LFBTextBlackColor
         addSubview(numberLabel)
         
-        priceLabel.font = UIFont.systemFontOfSize(14)
+        priceLabel.font = UIFont.systemFont(ofSize: 14)
         priceLabel.textColor = LFBTextBlackColor
-        priceLabel.textAlignment = NSTextAlignment.Right
+        priceLabel.textAlignment = NSTextAlignment.right
         addSubview(priceLabel)
         
-        giftImageView.hidden = true
+        giftImageView.isHidden = true
         giftImageView.image = UIImage(named: "jingxuan.png")
         addSubview(giftImageView)
     }
@@ -214,14 +214,14 @@ class GoodsView: UIView {
         super.layoutSubviews()
         
         if isShowImageView {
-            giftImageView.frame = CGRectMake(10, (height - 15) * 0.5, 40, 15)
-            titleLabel.frame = CGRectMake(CGRectGetMaxX(giftImageView.frame) + 5, 0, width * 0.6, height)
-            numberLabel.frame = CGRectMake(CGRectGetMaxX(titleLabel.frame) + 10 - 45, 0, 30, height)
+            giftImageView.frame = CGRect(x:10, y:(height - 15) * 0.5, width:40, height:15)
+            titleLabel.frame = CGRect(x:giftImageView.frame.maxX + 5, y:0, width:width * 0.6, height:height)
+            numberLabel.frame = CGRect(x:titleLabel.frame.maxX + 10 - 45, y:0, width:30, height:height)
         } else {
-            titleLabel.frame = CGRectMake(10, 0, width * 0.6, height)
-            numberLabel.frame = CGRectMake(CGRectGetMaxX(titleLabel.frame) + 10, 0, 30, height)
+            titleLabel.frame = CGRect(x:10, y:0, width:width * 0.6, height:height)
+            numberLabel.frame = CGRect(x:titleLabel.frame.maxX + 10, y:0, width:30, height:height)
         }
-        priceLabel.frame = CGRectMake(width - 60 - 10, 0, 60, 20)
+        priceLabel.frame = CGRect(x:width - 60 - 10, y:0, width:60, height:20)
     }
     
 }
@@ -234,9 +234,9 @@ class FeeListView: UIView {
     var feeListViewHeight: CGFloat = 20
     var fee_list: [OrderFeeList]? {
         didSet {
-            if fee_list?.count > 1 {
+            if (fee_list?.count)! > 1 {
                 for i in 0..<fee_list!.count {
-                    let feelView = FeeView(frame: CGRectMake(0, 10 + CGFloat(i) * 25, ScreenWidth, 25), fee: fee_list![i])
+                    let feelView = FeeView(frame: CGRect(x:0, y:10 + CGFloat(i) * 25, width:ScreenWidth, height:25), fee: fee_list![i])
                     feeListViewHeight += 25
                     addSubview(feelView)
                 }
@@ -247,13 +247,13 @@ class FeeListView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         lineView1.alpha = 0.1
-        lineView1.backgroundColor = UIColor.lightGrayColor()
+        lineView1.backgroundColor = UIColor.lightGray
         addSubview(lineView1)
         
         lineView2.alpha = 0.1
-        lineView2.backgroundColor = UIColor.lightGrayColor()
+        lineView2.backgroundColor = UIColor.lightGray
         addSubview(lineView2)
     }
     
@@ -264,8 +264,8 @@ class FeeListView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        lineView1.frame = CGRectMake(10, 0, width - 10, 1)
-        lineView2.frame = CGRectMake(10, feeListViewHeight - 1, width - 10, 1)
+        lineView1.frame = CGRect(x:10, y:0, width:width - 10, height:1)
+        lineView2.frame = CGRect(x:10, y:feeListViewHeight - 1, width:width - 10, height:1)
     }
 }
 
@@ -276,15 +276,15 @@ class FeeView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         titleLabel.textColor = LFBTextBlackColor
-        titleLabel.font = UIFont.systemFontOfSize(14)
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
         addSubview(titleLabel)
         
         prictLabel.textColor = LFBTextBlackColor
-        prictLabel.textAlignment = NSTextAlignment.Right
-        prictLabel.font = UIFont.systemFontOfSize(14)
+        prictLabel.textAlignment = NSTextAlignment.right
+        prictLabel.font = UIFont.systemFont(ofSize: 14)
         addSubview(prictLabel)
     }
     
@@ -301,8 +301,8 @@ class FeeView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        titleLabel.frame = CGRectMake(10, 0, width - 100, 25)
-        prictLabel.frame = CGRectMake(width - 150, 0, 140, 25)
+        titleLabel.frame = CGRect(x:10, y:0, width:width - 100, height:25)
+        prictLabel.frame = CGRect(x:width - 150, y:0, width:140, height:25)
     }
 }
 

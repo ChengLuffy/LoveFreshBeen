@@ -19,7 +19,7 @@ class AdressCell: UITableViewCell {
     private let modifyImageView = UIImageView()
     private let bottomView      = UIView()
     
-    var modifyClickCallBack:(Int -> Void)?
+    var modifyClickCallBack:((Int) -> Void)?
     
     var adress: Adress? {
         didSet {
@@ -32,36 +32,36 @@ class AdressCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
         
-        backgroundColor = UIColor.clearColor()
-        contentView.backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.clear
+        contentView.backgroundColor = UIColor.white
         
-        nameLabel.font = UIFont.systemFontOfSize(14)
+        nameLabel.font = UIFont.systemFont(ofSize: 14)
         nameLabel.textColor = LFBTextBlackColor
         contentView.addSubview(nameLabel)
         
-        phoneLabel.font = UIFont.systemFontOfSize(14)
+        phoneLabel.font = UIFont.systemFont(ofSize: 14)
         phoneLabel.textColor = LFBTextBlackColor
         contentView.addSubview(phoneLabel)
         
-        adressLabel.font = UIFont.systemFontOfSize(13)
-        adressLabel.textColor = UIColor.lightGrayColor()
+        adressLabel.font = UIFont.systemFont(ofSize: 13)
+        adressLabel.textColor = UIColor.lightGray
         contentView.addSubview(adressLabel)
         
-        lineView.backgroundColor = UIColor.lightGrayColor()
+        lineView.backgroundColor = UIColor.lightGray
         lineView.alpha = 0.2
         contentView.addSubview(lineView)
         
         modifyImageView.image = UIImage(named: "v2_address_edit_highlighted")
-        modifyImageView.contentMode = UIViewContentMode.Center
+        modifyImageView.contentMode = UIViewContentMode.center
         contentView.addSubview(modifyImageView)
         
-        let tap = UITapGestureRecognizer(target: self, action: "modifyImageViewClick:")
-        modifyImageView.userInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: Selector(("modifyImageViewClick:")))
+        modifyImageView.isUserInteractionEnabled = true
         modifyImageView.addGestureRecognizer(tap)
         
-        bottomView.backgroundColor = UIColor.lightGrayColor()
+        bottomView.backgroundColor = UIColor.lightGray
         bottomView.alpha = 0.4
         contentView.addSubview(bottomView)
     }
@@ -72,11 +72,11 @@ class AdressCell: UITableViewCell {
     
     static private let identifier = "AdressCell"
     
-    class func adressCell(tableView: UITableView, indexPath: NSIndexPath, modifyClickCallBack:(Int -> Void)) -> AdressCell {
+    class open func adressCell(tableView: UITableView, indexPath: NSIndexPath, modifyClickCallBack:@escaping ((Int) -> Void)) -> AdressCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? AdressCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? AdressCell
         if cell == nil {
-            cell = AdressCell(style: UITableViewCellStyle.Default, reuseIdentifier: identifier)
+            cell = AdressCell(style: UITableViewCellStyle.default, reuseIdentifier: identifier)
         }
         cell?.modifyClickCallBack = modifyClickCallBack
         cell?.modifyImageView.tag = indexPath.row
@@ -88,12 +88,12 @@ class AdressCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        nameLabel.frame = CGRectMake(10, 15, 80, 20)
-        phoneLabel.frame = CGRectMake(CGRectGetMaxX(nameLabel.frame) + 10, 15, 150, 20)
-        adressLabel.frame = CGRectMake(10, CGRectGetMaxY(phoneLabel.frame) + 10, width * 0.6, 20)
-        lineView.frame = CGRectMake(width * 0.8, 10, 1, height - 20)
-        modifyImageView.frame = CGRectMake(width * 0.8 + (width * 0.2 - 40) * 0.5, (height - 40) * 0.5, 40, 40)
-        bottomView.frame = CGRectMake(0, height - 1, width, 1)
+        nameLabel.frame = CGRect(x:10, y:15, width:80, height:20)
+        phoneLabel.frame = CGRect(x:nameLabel.frame.maxX + 10, y:15, width:150, height:20)
+        adressLabel.frame = CGRect(x:10, y:phoneLabel.frame.maxY + 10, width:width * 0.6, height:20)
+        lineView.frame = CGRect(x:width * 0.8, y:0, width:1, height:height - 20)
+        modifyImageView.frame = CGRect(x:width * 0.8 + (width * 0.2 - 40) * 0.5, y:(height - 40) * 0.5, width:40, height:40)
+        bottomView.frame = CGRect(x:0, y:height - 1, width:width, height:1)
     }
     
     // MARK: - Action

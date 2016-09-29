@@ -20,32 +20,32 @@ enum PayWayType: Int {
 class PayWayView: UIView {
     
     private var payType: PayWayType?
-    private let payIconImageView = UIImageView(frame: CGRectMake(20, 10, 20, 20))
-    private let payTitleLabel: UILabel = UILabel(frame: CGRectMake(55, 0, 150, 40))
-    private var selectedCallback: ((type: PayWayType) -> Void)?
-    let selectedButton = UIButton(frame: CGRectMake(ScreenWidth - 10 - 16, (40 - 16) * 0.5, 16, 16))
+    private let payIconImageView = UIImageView(frame: CGRect(x:20, y:10, width:20, height:20))
+    private let payTitleLabel: UILabel = UILabel(frame: CGRect(x:55, y:0, width:150, height:40))
+    private var selectedCallback: ((_ type: PayWayType) -> Void)?
+    let selectedButton = UIButton(frame: CGRect(x:ScreenWidth - 10 - 16, y:(40 - 16) * 0.5, width:16, height:16))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        payIconImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        payIconImageView.contentMode = UIViewContentMode.scaleAspectFill
         addSubview(payIconImageView)
         
-        payTitleLabel.textColor = UIColor.blackColor()
-        payTitleLabel.font = UIFont.systemFontOfSize(14)
+        payTitleLabel.textColor = UIColor.black
+        payTitleLabel.font = UIFont.systemFont(ofSize: 14)
         addSubview(payTitleLabel)
         
-        selectedButton.setImage(UIImage(named: "v2_noselected"), forState: UIControlState.Normal)
-        selectedButton.setImage(UIImage(named: "v2_selected"), forState: UIControlState.Selected)
-        selectedButton.userInteractionEnabled = false
+        selectedButton.setImage(UIImage(named: "v2_noselected"), for: UIControlState.normal)
+        selectedButton.setImage(UIImage(named: "v2_selected"), for: UIControlState.selected)
+        selectedButton.isUserInteractionEnabled = false
         addSubview(selectedButton)
         
-        let lineView = UIView(frame: CGRectMake(15, 0, ScreenWidth - 15, 0.5))
-        lineView.backgroundColor = UIColor.blackColor()
+        let lineView = UIView(frame: CGRect(x:15, y:0, width:ScreenWidth - 15, height:0.5))
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         addSubview(lineView)
         
-        let tap = UITapGestureRecognizer(target: self, action: "selectedPayView")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(PayWayView.selectedPayView))
         addGestureRecognizer(tap)
     }
     
@@ -53,7 +53,7 @@ class PayWayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(frame: CGRect, payType: PayWayType, selectedCallBack: ((type: PayWayType) -> ())) {
+    convenience init(frame: CGRect, payType: PayWayType, selectedCallBack: @escaping ((_ type: PayWayType) -> ())) {
         self.init(frame: frame)
         self.payType = payType
         
@@ -81,9 +81,9 @@ class PayWayView: UIView {
     
     // MARK: Action
     func selectedPayView() {
-        selectedButton.selected = true
+        selectedButton.isSelected = true
         if selectedCallback != nil && payType != nil {
-            selectedCallback!(type: payType!)
+            selectedCallback!(payType!)
         }
     }
     
@@ -101,18 +101,18 @@ class PayView: UIView {
         super.init(frame: frame)
         
         weak var tmpSelf = self
-        weChatView = PayWayView(frame: CGRectMake(0, 0, ScreenWidth, 40), payType: .WeChat, selectedCallBack: { (type) -> () in
-            tmpSelf!.setSelectedPayView(type)
+        weChatView = PayWayView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:40), payType: .WeChat, selectedCallBack: { (type) -> () in
+            tmpSelf!.setSelectedPayView(type: type)
         })
-        weChatView?.selectedButton.selected = true
-        qqPurseView = PayWayView(frame: CGRectMake(0, 40, ScreenWidth, 40), payType: .QQPurse, selectedCallBack: { (type) -> () in
-            tmpSelf!.setSelectedPayView(type)
+        weChatView?.selectedButton.isSelected = true
+        qqPurseView = PayWayView(frame: CGRect(x:0, y:40, width:ScreenWidth, height:40), payType: .QQPurse, selectedCallBack: { (type) -> () in
+            tmpSelf!.setSelectedPayView(type: type)
         })
-        alipayView = PayWayView(frame: CGRectMake(0, 80, ScreenWidth, 40), payType: .AliPay, selectedCallBack: { (type) -> () in
-            tmpSelf!.setSelectedPayView(type)
+        alipayView = PayWayView(frame: CGRect(x:0, y:80, width:ScreenWidth, height:40), payType: .AliPay, selectedCallBack: { (type) -> () in
+            tmpSelf!.setSelectedPayView(type: type)
         })
-        deliveryView = PayWayView(frame: CGRectMake(0, 120, ScreenWidth, 40), payType: .Delivery, selectedCallBack: { (type) -> () in
-            tmpSelf!.setSelectedPayView(type)
+        deliveryView = PayWayView(frame: CGRect(x:0, y:120, width:ScreenWidth, height:40), payType: .Delivery, selectedCallBack: { (type) -> () in
+            tmpSelf!.setSelectedPayView(type: type)
         })
         
         addSubview(weChatView!)
@@ -126,10 +126,10 @@ class PayView: UIView {
     }
     
     func setSelectedPayView(type: PayWayType) {
-        weChatView?.selectedButton.selected = type.rawValue == PayWayType.WeChat.rawValue
-        qqPurseView?.selectedButton.selected = type.rawValue == PayWayType.QQPurse.rawValue
-        alipayView?.selectedButton.selected = type.rawValue == PayWayType.AliPay.rawValue
-        deliveryView?.selectedButton.selected = type.rawValue == PayWayType.Delivery.rawValue
+        weChatView?.selectedButton.isSelected = type.rawValue == PayWayType.WeChat.rawValue
+        qqPurseView?.selectedButton.isSelected = type.rawValue == PayWayType.QQPurse.rawValue
+        alipayView?.selectedButton.isSelected = type.rawValue == PayWayType.AliPay.rawValue
+        deliveryView?.selectedButton.isSelected = type.rawValue == PayWayType.Delivery.rawValue
     }
 }
 

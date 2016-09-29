@@ -18,19 +18,19 @@ class OrderData: NSObject, DictModelProtocol {
         return ["data" : "\(Order.self)"]
     }
     
-    class func loadOrderData(completion:(data: OrderData?, error: NSError?) -> Void) {
-        let path = NSBundle.mainBundle().pathForResource("MyOrders", ofType: nil)
+    class func loadOrderData(completion:(_ data: OrderData?, _ error: NSError?) -> Void) {
+        let path = Bundle.main.path(forResource: "MyOrders", ofType: nil)
         let data = NSData(contentsOfFile: path!)
         if data != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)) as! NSDictionary
             let modelTool = DictModelManager.sharedManager
-            let data = modelTool.objectWithDictionary(dict, cls: OrderData.self) as? OrderData
-            completion(data: data, error: nil)
+            let data = modelTool.objectWithDictionary(dict: dict, cls: OrderData.self) as? OrderData
+            completion(data, nil)
         }
     }
 }
 
-class Order: NSObject, DictModelProtocol {
+class Order: NSObject {
     var star: Int = -1
     var comment: String?
     var id: String?

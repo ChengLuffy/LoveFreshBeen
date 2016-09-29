@@ -9,7 +9,7 @@
 //  小熊的新浪微博:http://weibo.com/5622363113/profile?topnav=1&wvr=6
 
 import UIKit
-
+import SVProgressHUD
 
 class ProgressHUDManager {
     
@@ -30,11 +30,11 @@ class ProgressHUDManager {
     }
     
     class func setFont(font: UIFont) {
-        SVProgressHUD.setFont(UIFont.systemFontOfSize(16))
+        SVProgressHUD.setFont(UIFont.systemFont(ofSize: 16))
     }
 
     class func showImage(image: UIImage, status: String) {
-        SVProgressHUD.showImage(image, status: status)
+        SVProgressHUD.show(image, status: status)
     }
     
     class func show() {
@@ -46,7 +46,7 @@ class ProgressHUDManager {
     }
     
     class func showWithStatus(status: String) {
-        SVProgressHUD.showWithStatus(status)
+        SVProgressHUD.show(withStatus: status)
     }
     
     class func isVisible() -> Bool {
@@ -54,6 +54,6 @@ class ProgressHUDManager {
     }
     
     class func showSuccessWithStatus(string: String) {
-        SVProgressHUD.showSuccessWithStatus(string)
+        SVProgressHUD.showSuccess(withStatus: string)
     }
 }

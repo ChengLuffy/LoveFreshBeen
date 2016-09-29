@@ -16,7 +16,7 @@ class LoadProgressAnimationView: UIView {
     override var frame: CGRect {
         willSet {
             if frame.size.width == viewWidth {
-                self.hidden = true
+                self.isHidden = true
             }
             super.frame = frame
         }
@@ -36,19 +36,24 @@ class LoadProgressAnimationView: UIView {
     
     func startLoadProgressAnimation() {
         self.frame.size.width = 0
-        hidden = false
+        isHidden = false
         weak var tmpSelf = self
-        UIView.animateWithDuration(0.4, animations: { () -> Void in
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
             tmpSelf!.frame.size.width = tmpSelf!.viewWidth * 0.6
             
             }) { (finish) -> Void in
                 
-                let time = dispatch_time(DISPATCH_TIME_NOW,Int64(0.4 * Double(NSEC_PER_SEC)))
-                dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                    UIView.animate(withDuration: 0.3, animations: { () -> Void in
                         tmpSelf!.frame.size.width = tmpSelf!.viewWidth * 0.8
-                    })
+                        })
                 })
+//                let time = DispatchTime.now(dispatch_time_t(DispatchTime.now),Int64(0.4 * Double(NSEC_PER_SEC)))
+//                dispatch_after(time, DispatchQueue.main, { () -> Void in
+//                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+//                        tmpSelf!.frame.size.width = tmpSelf!.viewWidth * 0.8
+//                    })
+//                })
         }
         
     }
@@ -56,10 +61,10 @@ class LoadProgressAnimationView: UIView {
     func endLoadProgressAnimation() {
         weak var tmpSelf = self
         
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animate(withDuration: 0.2, animations: { () -> Void in
             tmpSelf!.frame.size.width = tmpSelf!.viewWidth
             }) { (finish) -> Void in
-                tmpSelf!.hidden = true
+                tmpSelf!.isHidden = true
         }
     }
 }

@@ -12,16 +12,16 @@ import UIKit
 
 class HelpDetailViewController: BaseViewController {
     
-    private var questionTableView: LFBTableView?
-    private var questions: [Question]?
-    private var lastOpenIndex = -1
-    private var isOpenCell = false
+    var questionTableView: LFBTableView?
+    var questions: [Question]?
+    var lastOpenIndex = -1
+    var isOpenCell = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "常见问题"
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.white
         
         buildQuestionTableView()
         
@@ -29,9 +29,9 @@ class HelpDetailViewController: BaseViewController {
     }
     
     private func buildQuestionTableView() {
-        questionTableView = LFBTableView(frame: view.bounds, style: UITableViewStyle.Plain)
-        questionTableView?.backgroundColor = UIColor.whiteColor()
-        questionTableView?.registerClass(HelpHeadView.self, forHeaderFooterViewReuseIdentifier: "headView")
+        questionTableView = LFBTableView(frame: view.bounds, style: UITableViewStyle.plain)
+        questionTableView?.backgroundColor = UIColor.white
+        questionTableView?.register(HelpHeadView.self, forHeaderFooterViewReuseIdentifier: "headView")
         questionTableView?.sectionHeaderHeight = 50
         questionTableView!.delegate = self
         questionTableView!.dataSource = self
@@ -51,21 +51,22 @@ class HelpDetailViewController: BaseViewController {
 
 
 extension HelpDetailViewController: UITableViewDelegate, UITableViewDataSource, HelpHeadViewDelegate {
+
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = AnswerCell.answerCell(tableView)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = AnswerCell.answerCell(tableView: tableView)
         cell.question = questions![indexPath.section]
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if lastOpenIndex == section && isOpenCell {
             return 1
         }
         return 0
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if lastOpenIndex == indexPath.section && isOpenCell {
             return questions![indexPath.section].cellHeight
         }
@@ -73,12 +74,12 @@ extension HelpDetailViewController: UITableViewDelegate, UITableViewDataSource, 
         return 0
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return questions?.count ?? 0
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier("headView") as? HelpHeadView
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "headView") as? HelpHeadView
         headView!.tag = section
         headView?.delegate = self
         let question = questions![section]
@@ -89,26 +90,26 @@ extension HelpDetailViewController: UITableViewDelegate, UITableViewDataSource, 
     
     func headViewDidClck(headView: HelpHeadView) {
         if lastOpenIndex != -1 && lastOpenIndex != headView.tag && isOpenCell {
-            let headView = questionTableView?.headerViewForSection(lastOpenIndex) as? HelpHeadView
+            let headView = questionTableView?.headerView(forSection: lastOpenIndex) as? HelpHeadView
             headView?.isSelected = false
             
-            let deleteIndexPaths = [NSIndexPath(forRow: 0, inSection: lastOpenIndex)]
+            let deleteIndexPaths = [IndexPath(row: 0, section: lastOpenIndex)]
             isOpenCell = false
-            questionTableView?.deleteRowsAtIndexPaths(deleteIndexPaths, withRowAnimation: UITableViewRowAnimation.Automatic)
+            questionTableView?.deleteRows(at: deleteIndexPaths, with: UITableViewRowAnimation.automatic)
         }
         
 
         if lastOpenIndex == headView.tag && isOpenCell {
-            let deleteIndexPaths = [NSIndexPath(forRow: 0, inSection: lastOpenIndex)]
+            let deleteIndexPaths = [IndexPath(row: 0, section: lastOpenIndex)]
             isOpenCell = false
-            questionTableView?.deleteRowsAtIndexPaths(deleteIndexPaths, withRowAnimation: UITableViewRowAnimation.Automatic)
+            questionTableView?.deleteRows(at: deleteIndexPaths, with: UITableViewRowAnimation.automatic)
             return
         }
         
         lastOpenIndex = headView.tag
         isOpenCell = true
-        let insertIndexPaths = [NSIndexPath(forRow: 0, inSection: headView.tag)]
-        questionTableView?.insertRowsAtIndexPaths(insertIndexPaths, withRowAnimation: UITableViewRowAnimation.Top)
+        let insertIndexPaths = [IndexPath(row: 0, section: headView.tag)]
+        questionTableView?.insertRows(at: insertIndexPaths, with: UITableViewRowAnimation.top)
     }
     
 }

@@ -20,7 +20,7 @@ extension UIColor {
         let r = CGFloat(arc4random_uniform(256))
         let g = CGFloat(arc4random_uniform(256))
         let b = CGFloat(arc4random_uniform(256))
-        return UIColor.colorWithCustom(r, g: g, b: b)
+        return UIColor.colorWithCustom(r: r, g: g, b: b)
     }
 
 }

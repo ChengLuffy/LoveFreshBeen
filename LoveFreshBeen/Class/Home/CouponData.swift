@@ -21,20 +21,20 @@ class CouponData: NSObject, DictModelProtocol {
         return ["data" : "\(Coupon.self)"]
     }
     
-    class func loadCouponData(completion:(data: CouponData?, error: NSError?) -> Void) {
-        let path = NSBundle.mainBundle().pathForResource("MyCoupon", ofType: nil)
+    class func loadCouponData(completion:(_ data: CouponData?, _ error: NSError?) -> Void) {
+        let path = Bundle.main.path(forResource: "MyCoupon", ofType: nil)
         let data = NSData(contentsOfFile: path!)
         if data != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)) as! NSDictionary
             let modelTool = DictModelManager.sharedManager
-            let data = modelTool.objectWithDictionary(dict, cls: CouponData.self) as? CouponData
-            completion(data: data, error: nil)
+            let data = modelTool.objectWithDictionary(dict: dict, cls: CouponData.self) as? CouponData
+            completion(data, nil)
         }
     }
     
 }
 
-class Coupon: NSObject {
+class Coupon: NSObject, DictModelProtocol {
     var id: String?
     var card_pwd: String?
     /// 开始时间

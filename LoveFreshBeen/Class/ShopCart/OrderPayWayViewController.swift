@@ -12,8 +12,8 @@ import UIKit
 
 class OrderPayWayViewController: BaseViewController {
 
-    private var scrollView = UIScrollView(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64 - 50))
-    private var tableHeaderView = UIView(frame: CGRectMake(0, 0, ScreenWidth, 40 + 15 + 190 + 30))
+    private var scrollView = UIScrollView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:ScreenHeight - 64 - 50))
+    private var tableHeaderView = UIView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:40 + 15 + 190 + 30))
     private let leftMargin: CGFloat = 15
     
     override func viewDidLoad() {
@@ -24,7 +24,7 @@ class OrderPayWayViewController: BaseViewController {
         buildScrollView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         print(navigationController)
@@ -37,7 +37,7 @@ class OrderPayWayViewController: BaseViewController {
 
     private func buildScrollView() {
         scrollView.contentSize = CGSize(width: ScreenWidth, height: 1000)
-        scrollView.backgroundColor = UIColor.clearColor()
+        scrollView.backgroundColor = UIColor.clear
         view.addSubview(scrollView)
         
         buildTableHeaderView()
@@ -45,7 +45,7 @@ class OrderPayWayViewController: BaseViewController {
     }
     
     private func buildTableHeaderView() {
-        tableHeaderView.backgroundColor = UIColor.clearColor()
+        tableHeaderView.backgroundColor = UIColor.clear
         
         buildCouponView()
         
@@ -55,84 +55,84 @@ class OrderPayWayViewController: BaseViewController {
     }
     
     private func buildCouponView() {
-        let couponView = UIView(frame: CGRectMake(0, 0, ScreenWidth, 40))
-        couponView.backgroundColor = UIColor.whiteColor()
+        let couponView = UIView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:40))
+        couponView.backgroundColor = UIColor.white
         tableHeaderView.addSubview(couponView)
         
         let couponImageView = UIImageView(image: UIImage(named: "v2_submit_Icon"))
-        couponImageView.frame = CGRectMake(leftMargin, 10, 20, 20)
+        couponImageView.frame = CGRect(x:leftMargin, y:10, width:20, height:20)
         couponView.addSubview(couponImageView)
         
-        let couponLabel = UILabel(frame: CGRectMake(CGRectGetMaxX(couponImageView.frame) + 10, 0, ScreenWidth * 0.4, 40))
+        let couponLabel = UILabel(frame: CGRect(x:couponImageView.frame.maxX + 10, y:0, width:ScreenWidth * 0.4, height:40))
         couponLabel.text = "1张优惠劵"
-        couponLabel.textColor = UIColor.redColor()
-        couponLabel.font = UIFont.systemFontOfSize(14)
+        couponLabel.textColor = UIColor.red
+        couponLabel.font = UIFont.systemFont(ofSize: 14)
         couponView.addSubview(couponLabel)
         
         let arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView.frame = CGRectMake(ScreenWidth - 10 - 5, 15, 5, 10)
+        arrowImageView.frame = CGRect(x:ScreenWidth - 10 - 5, y:15, width:5, height:10)
         couponView.addSubview(arrowImageView)
         
-        let checkButton = UIButton(frame: CGRectMake(ScreenWidth - 60, 0, 40, 40))
-        checkButton.setTitle("查看", forState: UIControlState.Normal)
-        checkButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        checkButton.titleLabel?.font = UIFont.systemFontOfSize(14)
+        let checkButton = UIButton(frame: CGRect(x:ScreenWidth - 60, y:0, width:40, height:40))
+        checkButton.setTitle("查看", for: UIControlState.normal)
+        checkButton.setTitleColor(UIColor.black, for: UIControlState.normal)
+        checkButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         couponView.addSubview(checkButton)
         
-        buildLineView(couponView, lineFrame: CGRectMake(0, 40 - 1, ScreenWidth, 1))
+        buildLineView(addView: couponView, lineFrame: CGRect(x:0, y:40 - 1, width:ScreenWidth, height:1))
     }
     
     private func buildPayView() {
-        let payView = UIView(frame: CGRectMake(0, 55, ScreenWidth, 190))
-        payView.backgroundColor = UIColor.whiteColor()
+        let payView = UIView(frame: CGRect(x:0, y:55, width:ScreenWidth, height:190))
+        payView.backgroundColor = UIColor.white
         tableHeaderView.addSubview(payView)
         
-        buildLabel(CGRectMake(leftMargin, 0, 150, 30), textColor: UIColor.lightGrayColor(), font: UIFont.systemFontOfSize(12), addView: payView, text: "选择支付方式")
-        let payV = PayView(frame: CGRectMake(0, 30, ScreenWidth, 160))
+        buildLabel(labelFrame: CGRect(x:leftMargin, y:0, width:150, height:30), textColor: UIColor.lightGray, font: UIFont.systemFont(ofSize: 12), addView: payView, text: "选择支付方式")
+        let payV = PayView(frame: CGRect(x:0, y:30, width:ScreenWidth, height:160))
         payView.addSubview(payV)
         
-        buildLineView(payView, lineFrame: CGRectMake(0, 189, ScreenWidth, 1))
+        buildLineView(addView: payView, lineFrame: CGRect(x:0, y:189, width:ScreenWidth, height:1))
     }
     
     private func buildCarefullyView() {
-        let carefullyView = UIView(frame: CGRectMake(0, 40 + 15 + 190 + 15, ScreenWidth, 30))
-        carefullyView.backgroundColor = UIColor.whiteColor()
+        let carefullyView = UIView(frame: CGRect(x:0, y:40 + 15 + 190 + 15, width:ScreenWidth, height:30))
+        carefullyView.backgroundColor = UIColor.white
         tableHeaderView.addSubview(carefullyView)
         
-        buildLabel(CGRectMake(leftMargin, 0, 150, 30), textColor: UIColor.lightGrayColor(), font: UIFont.systemFontOfSize(12), addView: carefullyView, text: "精选商品")
+        buildLabel(labelFrame: CGRect(x:leftMargin, y:0, width:150, height:30), textColor: UIColor.lightGray, font: UIFont.systemFont(ofSize: 12), addView: carefullyView, text: "精选商品")
         
-        let goodsView = ShopCartGoodsListView(frame: CGRectMake(0, CGRectGetMaxY(carefullyView.frame), ScreenWidth, 300))
+        let goodsView = ShopCartGoodsListView(frame: CGRect(x:0, y:carefullyView.frame.maxY, width:ScreenWidth, height:300))
         goodsView.frame.size.height = goodsView.goodsHeight
         scrollView.addSubview(goodsView)
         
-        let costDetailView = CostDetailView(frame: CGRectMake(0, CGRectGetMaxY(goodsView.frame) + 10, ScreenWidth, 135))
+        let costDetailView = CostDetailView(frame: CGRect(x:0, y:goodsView.frame.maxY + 10, width:ScreenWidth, height:135))
         scrollView.addSubview(costDetailView)
         
-        scrollView.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(costDetailView.frame) + 15)
+        scrollView.contentSize = CGSize(width:ScreenWidth, height:costDetailView.frame.maxY + 15)
         
-        let bottomView = UIView(frame: CGRectMake(0, ScreenHeight - 50 - 64, ScreenWidth, 50))
-        bottomView.backgroundColor = UIColor.whiteColor()
-        buildLineView(bottomView, lineFrame: CGRectMake(0, 0, ScreenWidth, 1))
+        let bottomView = UIView(frame: CGRect(x:0, y:ScreenHeight - 50 - 64, width:ScreenWidth, height:50))
+        bottomView.backgroundColor = UIColor.white
+        buildLineView(addView: bottomView, lineFrame: CGRect(x:0, y:0, width:ScreenWidth, height:1))
         view.addSubview(bottomView)
         
-        buildLabel(CGRectMake(leftMargin, 0, 80, 50), textColor: UIColor.blackColor(), font: UIFont.systemFontOfSize(14), addView: bottomView, text: "实付金额:")
+        buildLabel(labelFrame: CGRect(x:leftMargin, y:0, width:80, height:50), textColor: UIColor.black, font: UIFont.systemFont(ofSize: 14), addView: bottomView, text: "实付金额:")
         var priceText = costDetailView.coupon == "0" ? UserShopCarTool.sharedUserShopCar.getAllProductsPrice() : "\((UserShopCarTool.sharedUserShopCar.getAllProductsPrice() as NSString).floatValue - 5)"
         if (priceText as NSString).floatValue < 30 {
             priceText = "\((priceText as NSString).floatValue + 8)".cleanDecimalPointZear()
         }
-        buildLabel(CGRectMake(85, 0, 150, 50), textColor: UIColor.redColor(), font: UIFont.systemFontOfSize(14), addView: bottomView, text: "$" + priceText)
+        buildLabel(labelFrame: CGRect(x:85, y:0, width:150, height:50), textColor: UIColor.red, font: UIFont.systemFont(ofSize: 14), addView: bottomView, text: "$" + priceText)
         
-        let payButton = UIButton(frame: CGRectMake(ScreenWidth - 100, 1, 100, 49))
-        payButton.titleLabel?.font = UIFont.systemFontOfSize(14)
-        payButton.setTitle("确认付款", forState: UIControlState.Normal)
+        let payButton = UIButton(frame: CGRect(x:ScreenWidth - 100, y:1, width:100, height:49))
+        payButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        payButton.setTitle("确认付款", for: UIControlState.normal)
         payButton.backgroundColor = LFBNavigationYellowColor
-        payButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        payButton.setTitleColor(UIColor.black, for: UIControlState.normal)
         bottomView.addSubview(payButton)
     }
     
     private func buildLineView(addView: UIView, lineFrame: CGRect) {
         let lineView = UIView(frame: lineFrame)
-        lineView.backgroundColor = UIColor.blackColor()
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         addView.addSubview(lineView)
     }

@@ -16,24 +16,33 @@ class Supermarket: NSObject, DictModelProtocol {
     var reqid: String?
     var data: SupermarketResouce?
     
-    class func loadSupermarketData(completion:(data: Supermarket?, error: NSError?) -> Void) {
-        let path = NSBundle.mainBundle().pathForResource("supermarket", ofType: nil)
+    class func loadSupermarketData(completion:(_ data: NSDictionary?, _ error: NSError?) -> Void) {
+        let path = Bundle.main.path(forResource: "supermarket", ofType: nil)
         let data = NSData(contentsOfFile: path!)
         
         if data != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
-            let modelTool = DictModelManager.sharedManager
-            let data = modelTool.objectWithDictionary(dict, cls: Supermarket.self) as? Supermarket
-            completion(data: data, error: nil)
+            do {
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data as! Data, options: .allowFragments)) as! NSDictionary
+                print(dict)
+                completion(dict, nil)
+            } catch {
+                print(error)
+                completion(nil, error as NSError?)
+            }
+//            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data, options: .allowFragments)) as! NSDictionary
+//            let modelTool = DictModelManager.sharedManager
+//            let data = modelTool.objectWithDictionary(dict: dict, cls: Supermarket.self) as? Supermarket
+            
+            
         }
     }
     
-    class func searchCategoryMatchProducts(supermarketResouce: SupermarketResouce) -> [[Goods]]? {
-        var arr = [[Goods]]()
+    class func searchCategoryMatchProducts(supermarketResouce: NSDictionary) -> [[NSDictionary]]? {
+        var arr = [[NSDictionary]]()
         
-        let products = supermarketResouce.products
-        for cate in supermarketResouce.categories! {
-           let goodsArr = products!.valueForKey(cate.id!) as! [Goods]
+        let products = supermarketResouce["products"] as! NSDictionary
+        for cate in (supermarketResouce.value(forKey: "categories") as! NSArray) {
+           let goodsArr = products[(cate as! NSDictionary)["id"] as! String] as! [NSDictionary]
             arr.append(goodsArr)
         }
         return arr

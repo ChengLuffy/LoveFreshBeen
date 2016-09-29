@@ -31,19 +31,19 @@ class UserMessage: NSObject {
     var cellHeight: CGFloat = 60 + 60 + 20
     var subTitleViewHeightSpread: CGFloat = 0
     
-    class func loadSystemMessage(complete: ((data: [UserMessage]?, error: NSError?) -> ())) {
+    class func loadSystemMessage(complete: ((_ data: [UserMessage]?, _ error: NSError?) -> ())) {
         
-        complete(data: loadMessage(.System)!, error: nil)
+        complete(loadMessage(type: .System)!, nil)
     }
     
-    class func loadUserMessage(complete: ((data: [UserMessage]?, error: NSError?) -> ())) {
-        complete(data: loadMessage(.User), error: nil)
+    class func loadUserMessage(complete: ((_ data: [UserMessage]?, _ error: NSError?) -> ())) {
+        complete(loadMessage(type: .User), nil)
     }
     
     private class func userMessage(dict: NSDictionary) -> UserMessage {
 
         let modelTool = DictModelManager.sharedManager
-        let message = modelTool.objectWithDictionary(dict, cls: UserMessage.self) as? UserMessage
+        let message = modelTool.objectWithDictionary(dict: dict, cls: UserMessage.self) as? UserMessage
 
         return message!
     }
@@ -51,13 +51,13 @@ class UserMessage: NSObject {
     private class func loadMessage(type: UserMessageType) -> [UserMessage]? {
         var data: [UserMessage]? = []
         
-        let path = NSBundle.mainBundle().pathForResource(((type == .System) ? "SystemMessage" : "UserMessage"), ofType: nil)
+        let path = Bundle.main.path(forResource: ((type == .System) ? "SystemMessage" : "UserMessage"), ofType: nil)
         let resData = NSData(contentsOfFile: path!)
         if resData != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(resData!, options: .AllowFragments)) as! NSDictionary
-            if let array = dict.objectForKey("data") as? NSArray {
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: resData! as Data, options: .allowFragments)) as! NSDictionary
+            if let array = dict.object(forKey: "data") as? NSArray {
                 for dict in array {
-                    let message = UserMessage.userMessage(dict as! NSDictionary)
+                    let message = UserMessage.userMessage(dict: dict as! NSDictionary)
                     data?.append(message)
                 }
             }

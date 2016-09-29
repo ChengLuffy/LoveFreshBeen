@@ -12,21 +12,21 @@ import UIKit
 
 class MineHeadView: UIImageView {
     
-    let setUpBtn: UIButton = UIButton(type: .Custom)
+    let setUpBtn: UIButton = UIButton(type: .custom)
     let iconView: IconView = IconView()
-    var buttonClick:(Void -> Void)?
+    var buttonClick:((Void) -> Void)?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         image = UIImage(named: "v2_my_avatar_bg")
-        setUpBtn.setImage(UIImage(named: "v2_my_settings_icon"), forState: .Normal)
-        setUpBtn.addTarget(self, action: "setUpButtonClick", forControlEvents: .TouchUpInside)
+        setUpBtn.setImage(UIImage(named: "v2_my_settings_icon"), for: .normal)
+        setUpBtn.addTarget(self, action: #selector(MineHeadView.setUpButtonClick), for: .touchUpInside)
         addSubview(setUpBtn)
         addSubview(iconView)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     
-    convenience init(frame: CGRect, settingButtonClick:(() -> Void)) {
+    convenience init(frame: CGRect, settingButtonClick:@escaping (() -> Void)) {
         self.init(frame: frame)
         buttonClick = settingButtonClick
     }
@@ -39,9 +39,9 @@ class MineHeadView: UIImageView {
         super.layoutSubviews()
         
         let iconViewWH: CGFloat = 150
-        iconView.frame = CGRectMake((width - 150) * 0.5, 30, iconViewWH, iconViewWH)
+        iconView.frame = CGRect(x:(width - 150) * 0.5, y:30, width:iconViewWH, height:iconViewWH)
         
-        setUpBtn.frame = CGRectMake(width - 50, 10, 50, 50)
+        setUpBtn.frame = CGRect(x:width - 50, y:10, width:50, height:50)
     }
     
     func setUpButtonClick() {
@@ -62,9 +62,9 @@ class IconView: UIView {
         
         phoneNum = UILabel()
         phoneNum.text = "18612348765"
-        phoneNum.font = UIFont.boldSystemFontOfSize(18)
-        phoneNum.textColor = UIColor.whiteColor()
-        phoneNum.textAlignment = .Center
+        phoneNum.font = UIFont.boldSystemFont(ofSize: 18)
+        phoneNum.textColor = UIColor.white
+        phoneNum.textAlignment = .center
         addSubview(phoneNum)
     }
     
@@ -74,7 +74,7 @@ class IconView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        iconImageView.frame = CGRectMake((width - iconImageView.size.width) * 0.5, 0, iconImageView.size.width, iconImageView.size.height)
-        phoneNum.frame = CGRectMake(0, CGRectGetMaxY(iconImageView.frame) + 5, width, 30)
+        iconImageView.frame = CGRect(x:(width - iconImageView.size.width) * 0.5, y:0, width:iconImageView.size.width, height:iconImageView.size.height)
+        phoneNum.frame = CGRect(x:0, y:iconImageView.frame.maxY + 5, width:width, height:30)
     }
 }

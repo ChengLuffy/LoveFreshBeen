@@ -23,10 +23,10 @@ class MineCell: UITableViewCell {
     
     class func cellFor(tableView: UITableView) -> MineCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? MineCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? MineCell
         
         if cell == nil {
-            cell = MineCell(style: .Default, reuseIdentifier: identifier)
+            cell = MineCell(style: .default, reuseIdentifier: identifier)
         }
         
         return cell!
@@ -41,19 +41,19 @@ class MineCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(iconImageView)
-        titleLabel.textColor = UIColor.blackColor()
-        titleLabel.font = UIFont.systemFontOfSize(16)
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
         titleLabel.alpha = 0.8
         contentView.addSubview(titleLabel)
         
-        bottomLine.backgroundColor = UIColor.grayColor()
+        bottomLine.backgroundColor = UIColor.gray
         bottomLine.alpha = 0.15
         contentView.addSubview(bottomLine)
         
         arrowView.image = UIImage(named: "icon_go")
         contentView.addSubview(arrowView)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -63,15 +63,15 @@ class MineCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        arrowView.frame = CGRectMake(width - 20, (height - (arrowView.image?.size.height)!) * 0.5, (arrowView.image?.size.width)!, (arrowView.image?.size.height)!)
+        arrowView.frame = CGRect(x:width - 20, y:(height - (arrowView.image?.size.height)!) * 0.5, width:(arrowView.image?.size.width)!, height:(arrowView.image?.size.height)!)
         
         let rightMargin: CGFloat = 10
         let iconWH: CGFloat = 20
-        iconImageView.frame = CGRectMake(rightMargin, (height - iconWH) * 0.5, iconWH, iconWH)
-        titleLabel.frame = CGRectMake(CGRectGetMaxX(iconImageView.frame) + rightMargin, 0, 200, height)
+        iconImageView.frame = CGRect(x:rightMargin, y:(height - iconWH) * 0.5, width:iconWH, height:iconWH)
+        titleLabel.frame = CGRect(x:iconImageView.frame.maxX + rightMargin, y:0, width:200, height:height)
         
         let leftMarge: CGFloat = 20
-        bottomLine.frame = CGRectMake(leftMarge, height - 0.5, width - leftMarge, 0.5)
+        bottomLine.frame = CGRect(x:leftMarge, y:height - 0.5, width:width - leftMarge, height:0.5)
     }
     
 }
@@ -85,11 +85,11 @@ class MineCellModel: NSObject {
     class func loadMineCellModels() -> [MineCellModel] {
         
         var mines = [MineCellModel]()
-        let path = NSBundle.mainBundle().pathForResource("MinePlist", ofType: "plist")
+        let path = Bundle.main.path(forResource: "MinePlist", ofType: "plist")
         let arr = NSArray(contentsOfFile: path!)
 
         for dic in arr! {
-            mines.append(MineCellModel.mineModel(dic as! NSDictionary))
+            mines.append(MineCellModel.mineModel(dic: dic as! NSDictionary))
         }
         
         return mines

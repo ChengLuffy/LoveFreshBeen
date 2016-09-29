@@ -28,12 +28,12 @@ class EditAdressViewController: BaseViewController {
     private var manButton: LeftImageRightTextButton?
     private var womenButton: LeftImageRightTextButton?
     private var selectCityPickView: UIPickerView?
-    private var currentSelectedCityIndex = -1
+    var currentSelectedCityIndex = -1
     weak var topVC: MyAdressViewController?
     var vcType: EditAdressViewControllerType?
     var currentAdressRow: Int = -1
     
-    private lazy var cityArray: [String]? = {
+    lazy var cityArray: [String]? = {
         let array = ["北京市", "上海市", "天津市", "广州市", "佛山市", "深圳市", "廊坊市", "武汉市", "苏州市", "无锡市"]
         return array
         }()
@@ -51,7 +51,7 @@ class EditAdressViewController: BaseViewController {
         buildDeleteAdressView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.barTintColor = LFBNavigationBarWhiteBackgroundColor
@@ -61,7 +61,7 @@ class EditAdressViewController: BaseViewController {
             contactsTextField?.text = adress.accept_name
             if adress.telphone?.characters.count == 11 {
                 let telphone = adress.telphone! as NSString
-                phoneNumberTextField?.text = telphone.substringWithRange(NSMakeRange(0, 3)) + " " + telphone.substringWithRange(NSMakeRange(3, 4)) + " " + telphone.substringWithRange(NSMakeRange(7, 4))
+                phoneNumberTextField?.text = telphone.substring(with: NSMakeRange(0, 3)) + " " + telphone.substring(with: NSMakeRange(3, 4)) + " " + telphone.substring(with: NSMakeRange(7, 4))
             }
             
             if adress.telphone?.characters.count == 13 {
@@ -69,16 +69,16 @@ class EditAdressViewController: BaseViewController {
             }
             
             if adress.gender == "1" {
-                manButton?.selected = true
+                manButton?.isSelected = true
             } else {
-                womenButton?.selected = true
+                womenButton?.isSelected = true
             }
             cityTextField?.text = adress.city_name
-            let range = (adress.address! as NSString).rangeOfString(" ")
-            areaTextField?.text = (adress.address! as NSString).substringToIndex(range.location)
-            adressTextField?.text = (adress.address! as NSString).substringFromIndex(range.location + 1)
+            let range = (adress.address! as NSString).range(of: " ")
+            areaTextField?.text = (adress.address! as NSString).substring(to: range.location)
+            adressTextField?.text = (adress.address! as NSString).substring(from: range.location + 1)
             
-            deleteView.hidden = false
+            deleteView.isHidden = false
         }
         
     }
@@ -88,29 +88,29 @@ class EditAdressViewController: BaseViewController {
         
         navigationItem.title = "修改地址"
         
-        let rightItemButton = UIBarButtonItem.barButton("保存", titleColor: UIColor.lightGrayColor(), target: self, action: "saveButtonClick")
+        let rightItemButton = UIBarButtonItem.barButton(title: "保存", titleColor: UIColor.lightGray, target: self, action: #selector(EditAdressViewController.saveButtonClick))
         navigationItem.rightBarButtonItem = rightItemButton
     }
     
     private func buildDeleteAdressView() {
-        deleteView.frame = CGRectMake(0, CGRectGetMaxY(adressView.frame) + 10, view.width, 50)
-        deleteView.backgroundColor = UIColor.whiteColor()
+        deleteView.frame = CGRect(x:0, y:adressView.frame.maxY + 10, width:view.width, height:50)
+        deleteView.backgroundColor = UIColor.white
         scrollView.addSubview(deleteView)
         
-        let deleteLabel = UILabel(frame: CGRectMake(0, 0, view.width, 50))
+        let deleteLabel = UILabel(frame: CGRect(x:0, y:0, width:view.width, height:50))
         deleteLabel.text = "删除当前地址"
-        deleteLabel.textAlignment = NSTextAlignment.Center
-        deleteLabel.font = UIFont.systemFontOfSize(15)
+        deleteLabel.textAlignment = NSTextAlignment.center
+        deleteLabel.font = UIFont.systemFont(ofSize: 15)
         deleteView.addSubview(deleteLabel)
         
-        let tap = UITapGestureRecognizer(target: self, action: "deleteViewClick")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(EditAdressViewController.deleteViewClick))
         deleteView.addGestureRecognizer(tap)
-        deleteView.hidden = true
+        deleteView.isHidden = true
     }
     
     private func buildScrollView() {
         scrollView.frame = view.bounds
-        scrollView.backgroundColor = UIColor.clearColor()
+        scrollView.backgroundColor = UIColor.clear
         scrollView.alwaysBounceVertical = true
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
@@ -118,58 +118,58 @@ class EditAdressViewController: BaseViewController {
     }
     
     private func buildAdressView() {
-        adressView.frame = CGRectMake(0, 10, view.width, 300)
-        adressView.backgroundColor = UIColor.whiteColor()
+        adressView.frame = CGRect(x:0, y:10, width:view.width, height:300)
+        adressView.backgroundColor = UIColor.white
         scrollView.addSubview(adressView)
         
         let viewHeight: CGFloat = 50
         let leftMargin: CGFloat = 15
         let labelWidth: CGFloat = 70
-        buildUnchangedLabel(CGRectMake(leftMargin, 0, labelWidth, viewHeight), text: "联系人")
-        buildUnchangedLabel(CGRectMake(leftMargin, 2 * viewHeight, labelWidth, viewHeight), text: "手机号码")
-        buildUnchangedLabel(CGRectMake(leftMargin, 3 * viewHeight, labelWidth, viewHeight), text: "所在城市")
-        buildUnchangedLabel(CGRectMake(leftMargin, 4 * viewHeight, labelWidth, viewHeight), text: "所在地区")
-        buildUnchangedLabel(CGRectMake(leftMargin, 5 * viewHeight, labelWidth, viewHeight), text: "详细地址")
+        buildUnchangedLabel(frame: CGRect(x:leftMargin, y:0, width:labelWidth, height:viewHeight), text: "联系人")
+        buildUnchangedLabel(frame: CGRect(x:leftMargin, y:2 * viewHeight, width:labelWidth, height:viewHeight), text: "手机号码")
+        buildUnchangedLabel(frame: CGRect(x:leftMargin, y:3 * viewHeight, width:labelWidth, height:viewHeight), text: "所在城市")
+        buildUnchangedLabel(frame: CGRect(x:leftMargin, y:4 * viewHeight, width:labelWidth, height:viewHeight), text: "所在地区")
+        buildUnchangedLabel(frame: CGRect(x:leftMargin, y:5 * viewHeight, width:labelWidth, height:viewHeight), text: "详细地址")
         
-        let lineView = UIView(frame: CGRectMake(leftMargin, 49, view.width - 10, 1))
+        let lineView = UIView(frame: CGRect(x:leftMargin, y:49, width:view.width - 10, height:1))
         lineView.alpha = 0.15
-        lineView.backgroundColor = UIColor.lightGrayColor()
+        lineView.backgroundColor = UIColor.lightGray
         adressView.addSubview(lineView)
         
         let textFieldWidth = view.width * 0.6
         let x = leftMargin + labelWidth + 10
         contactsTextField = UITextField()
-        buildTextField(contactsTextField!, frame: CGRectMake(x, 0, textFieldWidth, viewHeight), placeholder: "收货人姓名", tag: 1)
+        buildTextField(textField: contactsTextField!, frame: CGRect(x:x, y:0, width:textFieldWidth, height:viewHeight), placeholder: "收货人姓名", tag: 1)
         
         phoneNumberTextField = UITextField()
-        buildTextField(phoneNumberTextField!, frame: CGRectMake(x, 2 * viewHeight, textFieldWidth, viewHeight), placeholder: "鲜蜂侠联系你的电话", tag: 2)
+        buildTextField(textField: phoneNumberTextField!, frame: CGRect(x:x, y:2 * viewHeight, width:textFieldWidth, height:viewHeight), placeholder: "鲜蜂侠联系你的电话", tag: 2)
         
         cityTextField = UITextField()
-        buildTextField(cityTextField!, frame: CGRectMake(x, 3 * viewHeight, textFieldWidth, viewHeight), placeholder: "请选择城市", tag: 3)
+        buildTextField(textField: cityTextField!, frame: CGRect(x:x, y:3 * viewHeight, width:textFieldWidth, height:viewHeight), placeholder: "请选择城市", tag: 3)
         
         areaTextField = UITextField()
-        buildTextField(areaTextField!, frame: CGRectMake(x, 4 * viewHeight, textFieldWidth, viewHeight), placeholder: "请选择你的住宅,大厦或学校", tag: 4)
+        buildTextField(textField: areaTextField!, frame: CGRect(x:x, y:4 * viewHeight, width:textFieldWidth, height:viewHeight), placeholder: "请选择你的住宅,大厦或学校", tag: 4)
         
         adressTextField = UITextField()
-        buildTextField(adressTextField!, frame: CGRectMake(x, 5 * viewHeight, textFieldWidth, viewHeight), placeholder: "请输入楼号门牌号等详细信息", tag: 5)
+        buildTextField(textField: adressTextField!, frame: CGRect(x:x, y:5 * viewHeight, width:textFieldWidth, height:viewHeight), placeholder: "请输入楼号门牌号等详细信息", tag: 5)
         
         manButton = LeftImageRightTextButton()
-        buildGenderButton(manButton!, frame: CGRectMake(CGRectGetMinX(phoneNumberTextField!.frame), 50, 100, 50), title: "先生", tag: 101)
+        buildGenderButton(button: manButton!, frame: CGRect(x:phoneNumberTextField!.frame.minX, y:50, width:100, height:50), title: "先生", tag: 101)
         
         womenButton = LeftImageRightTextButton()
-        buildGenderButton(womenButton!, frame: CGRectMake(CGRectGetMaxX(manButton!.frame) + 10, 50, 100, 50), title: "女士", tag: 102)
+        buildGenderButton(button: womenButton!, frame: CGRect(x:manButton!.frame.maxX + 10, y:50, width:100, height:50), title: "女士", tag: 102)
     }
     
     private func buildUnchangedLabel(frame: CGRect, text: String) {
         let label = UILabel(frame: frame)
         label.text = text
-        label.font = UIFont.systemFontOfSize(15)
+        label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = LFBTextBlackColor
         adressView.addSubview(label)
         
-        let lineView = UIView(frame: CGRectMake(15, frame.origin.y - 1, view.width - 10, 1))
+        let lineView = UIView(frame: CGRect(x:15, y:frame.origin.y - 1, width:view.width - 10, height:1))
         lineView.alpha = 0.15
-        lineView.backgroundColor = UIColor.lightGrayColor()
+        lineView.backgroundColor = UIColor.lightGray
         adressView.addSubview(lineView)
     }
     
@@ -177,7 +177,7 @@ class EditAdressViewController: BaseViewController {
         textField.frame = frame
         
         if 2 == tag {
-            textField.keyboardType = UIKeyboardType.NumberPad
+            textField.keyboardType = UIKeyboardType.numberPad
         }
         
         if 3 == tag {
@@ -189,45 +189,45 @@ class EditAdressViewController: BaseViewController {
         }
         
         textField.tag = tag
-        textField.autocorrectionType = UITextAutocorrectionType.No
-        textField.autocapitalizationType = UITextAutocapitalizationType.None
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.placeholder = placeholder
-        textField.font = UIFont.systemFontOfSize(15)
+        textField.font = UIFont.systemFont(ofSize: 15)
         textField.delegate = self
         textField.textColor = LFBTextBlackColor
         adressView.addSubview(textField)
     }
     
     private func buildInputView() -> UIView {
-        let toolBar = UIToolbar(frame: CGRectMake(0, 0, view.width, 40))
-        toolBar.backgroundColor = UIColor.whiteColor()
+        let toolBar = UIToolbar(frame: CGRect(x:0, y:0, width:view.width, height:40))
+        toolBar.backgroundColor = UIColor.white
         
-        let lineView = UIView(frame: CGRectMake(0, 0, view.width, 1))
-        lineView.backgroundColor = UIColor.blackColor()
+        let lineView = UIView(frame: CGRect(x:0, y:0, width:view.width, height:1))
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         toolBar.addSubview(lineView)
         
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFontOfSize(15)
-        titleLabel.textColor = UIColor.lightGrayColor()
+        titleLabel.font = UIFont.systemFont(ofSize: 15)
+        titleLabel.textColor = UIColor.lightGray
         titleLabel.alpha = 0.8
         titleLabel.text = "选择城市"
-        titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.frame = CGRectMake(0, 0, view.width, toolBar.height)
+        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.frame = CGRect(x:0, y:0, width:view.width, height:toolBar.height)
         toolBar.addSubview(titleLabel)
         
-        let cancleButton = UIButton(frame: CGRectMake(0, 0, 80, toolBar.height))
+        let cancleButton = UIButton(frame: CGRect(x:0, y:0, width:80, height:toolBar.height))
         cancleButton.tag = 10
-        cancleButton.addTarget(self, action: "selectedCityTextFieldDidChange:", forControlEvents: .TouchUpInside)
-        cancleButton.setTitle("取消", forState: .Normal)
-        cancleButton.setTitleColor(UIColor.colorWithCustom(82, g: 188, b: 248), forState: .Normal)
+        cancleButton.addTarget(self, action: Selector(("selectedCityTextFieldDidChange:")), for: .touchUpInside)
+        cancleButton.setTitle("取消", for: .normal)
+        cancleButton.setTitleColor(UIColor.colorWithCustom(r: 82, g: 188, b: 248), for: .normal)
         toolBar.addSubview(cancleButton)
         
-        let determineButton = UIButton(frame: CGRectMake(view.width - 80, 0, 80, toolBar.height))
+        let determineButton = UIButton(frame: CGRect(x:view.width - 80, y:0, width:80, height:toolBar.height))
         determineButton.tag = 11
-        determineButton.addTarget(self, action: "selectedCityTextFieldDidChange:", forControlEvents: .TouchUpInside)
-        determineButton.setTitleColor(UIColor.colorWithCustom(82, g: 188, b: 248), forState: .Normal)
-        determineButton.setTitle("确定", forState: .Normal)
+        determineButton.addTarget(self, action: Selector(("selectedCityTextFieldDidChange:")), for: .touchUpInside)
+        determineButton.setTitleColor(UIColor.colorWithCustom(r:82, g: 188, b: 248), for: .normal)
+        determineButton.setTitle("确定", for: .normal)
         toolBar.addSubview(determineButton)
         
         return toolBar
@@ -235,70 +235,70 @@ class EditAdressViewController: BaseViewController {
     
     private func buildGenderButton(button: LeftImageRightTextButton, frame: CGRect, title: String, tag: Int) {
         button.tag = tag
-        button.setImage(UIImage(named: "v2_noselected"), forState: UIControlState.Normal)
-        button.setImage(UIImage(named: "v2_selected"), forState: UIControlState.Selected)
-        button.addTarget(self, action: "genderButtonClick:", forControlEvents: .TouchUpInside)
-        button.setTitle(title, forState: UIControlState.Normal)
+        button.setImage(UIImage(named: "v2_noselected"), for: UIControlState.normal)
+        button.setImage(UIImage(named: "v2_selected"), for: UIControlState.selected)
+        button.addTarget(self, action: Selector(("genderButtonClick:")), for: .touchUpInside)
+        button.setTitle(title, for: UIControlState.normal)
         button.frame = frame
-        button.setTitleColor(LFBTextBlackColor, forState: .Normal)
+        button.setTitleColor(LFBTextBlackColor, for: .normal)
         adressView.addSubview(button)
     }
     
     // MARK: - Action
     func saveButtonClick() {
-        if contactsTextField?.text?.characters.count <= 1 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "我们需要你的大名~")
+        if (contactsTextField?.text?.characters.count)! <= 1 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "我们需要你的大名~")
             return
         }
         
-        if !manButton!.selected && !womenButton!.selected {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "人妖么,不男不女的~")
+        if !manButton!.isSelected && !womenButton!.isSelected {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "人妖么,不男不女的~")
             return
         }
         
         if phoneNumberTextField!.text?.characters.count != 13 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "没电话,特么怎么联系你~")
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "没电话,特么怎么联系你~")
             return
         }
         
-        if cityTextField?.text?.characters.count <= 0 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "你在哪个城市啊~空空的~")
+        if (cityTextField?.text?.characters.count)! <= 0 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "你在哪个城市啊~空空的~")
             return
         }
         
-        if areaTextField?.text?.characters.count <= 2 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "你的位置啊~")
+        if (areaTextField?.text?.characters.count)! <= 2 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "你的位置啊~")
             return
         }
         
-        if adressTextField?.text?.characters.count <= 2 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "在哪里呢啊~上哪找你去啊~")
+        if (adressTextField?.text?.characters.count)! <= 2 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "在哪里呢啊~上哪找你去啊~")
             return
         }
         
         if vcType == .Add {
             let adress = Adress()
-            setAdressModel(adress)
+            setAdressModel(adress: adress)
             if topVC?.adresses?.count == 0 || topVC?.adresses == nil {
                 topVC?.adresses = []
             }
             
-            topVC!.adresses!.insert(adress, atIndex: 0)
+            topVC!.adresses!.insert(adress, at: 0)
         }
         
         if vcType == .Edit {
             let adress = topVC!.adresses![currentAdressRow]
-            setAdressModel(adress)
+            setAdressModel(adress: adress)
         }
         
-        navigationController?.popViewControllerAnimated(true)
+        navigationController?.popViewController(animated: true)
         topVC?.adressTableView?.reloadData()
     }
     
     private func setAdressModel(adress: Adress) {
         adress.accept_name = contactsTextField!.text
         adress.telphone = phoneNumberTextField!.text
-        adress.gender = manButton!.selected ? "1" : "2"
+        adress.gender = manButton!.isSelected ? "1" : "2"
         adress.city_name = cityTextField!.text
         adress.address = areaTextField!.text! + " " + adressTextField!.text!
     }
@@ -307,12 +307,12 @@ class EditAdressViewController: BaseViewController {
         
         switch sender.tag {
         case 101:
-            manButton?.selected = true
-            womenButton?.selected = false
+            manButton?.isSelected = true
+            womenButton?.isSelected = false
             break
         case 102:
-            manButton?.selected = false
-            womenButton?.selected = true
+            manButton?.isSelected = false
+            womenButton?.isSelected = true
             break
         default:
             break
@@ -330,8 +330,8 @@ class EditAdressViewController: BaseViewController {
     }
     
     func deleteViewClick() {
-        topVC!.adresses!.removeAtIndex(currentAdressRow)
-        navigationController?.popViewControllerAnimated(true)
+        topVC!.adresses!.remove(at: currentAdressRow)
+        navigationController?.popViewController(animated: true)
         topVC?.adressTableView?.reloadData()
     }
 }
@@ -339,7 +339,7 @@ class EditAdressViewController: BaseViewController {
 
 extension EditAdressViewController: UITextFieldDelegate {
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if textField.tag == 2 {
             if textField.text?.characters.count == 13 {
@@ -363,19 +363,20 @@ extension EditAdressViewController: UITextFieldDelegate {
 
 extension EditAdressViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return cityArray!.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return cityArray![row]
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         currentSelectedCityIndex = row
     }
     

@@ -23,11 +23,11 @@ class AnswerCell: UITableViewCell {
                     textY += question!.everyRowHeight[j]
                 }
                 
-                let textLabel = UILabel(frame: CGRectMake(20, textY, ScreenWidth - 40, question!.everyRowHeight[i]))
+                let textLabel = UILabel(frame: CGRect(x:20, y:textY, width:ScreenWidth - 40, height:question!.everyRowHeight[i]))
                 textLabel.text = question!.texts![i]
                 textLabel.numberOfLines = 0
-                textLabel.textColor = UIColor.grayColor()
-                textLabel.font = UIFont.systemFontOfSize(14)
+                textLabel.textColor = UIColor.gray
+                textLabel.font = UIFont.systemFont(ofSize: 14)
                 
                 contentView.addSubview(textLabel)
             }
@@ -37,9 +37,9 @@ class AnswerCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
         lineView.alpha = 0.25
-        lineView.backgroundColor = UIColor.grayColor()
+        lineView.backgroundColor = UIColor.gray
         contentView.addSubview(lineView)
     }
     
@@ -47,7 +47,7 @@ class AnswerCell: UITableViewCell {
         
 //        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? AnswerCell
 //        if cell == nil {
-           let cell = AnswerCell(style: UITableViewCellStyle.Default, reuseIdentifier: identifier)
+           let cell = AnswerCell(style: UITableViewCellStyle.default, reuseIdentifier: identifier)
 //        }
         
         return cell
@@ -60,6 +60,6 @@ class AnswerCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        lineView.frame = CGRectMake(20, 0, width - 40, 0.5)
+        lineView.frame = CGRect(x:20, y:0, width:width - 40, height:0.5)
     }
 }

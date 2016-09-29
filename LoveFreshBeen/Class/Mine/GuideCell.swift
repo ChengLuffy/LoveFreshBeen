@@ -13,7 +13,7 @@ import UIKit
 class GuideCell: UICollectionViewCell {
     
     private let newImageView = UIImageView(frame: ScreenBounds)
-    private let nextButton = UIButton(frame: CGRectMake((ScreenWidth - 100) * 0.5, ScreenHeight - 110, 100, 33))
+    private let nextButton = UIButton(frame: CGRect(x:(ScreenWidth - 100) * 0.5, y:ScreenHeight - 110, width:100, height:33))
     
     var newImage: UIImage? {
         didSet {
@@ -24,12 +24,12 @@ class GuideCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        newImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        newImageView.contentMode = UIViewContentMode.scaleAspectFill
         contentView.addSubview(newImageView)
         
-        nextButton.setBackgroundImage(UIImage(named: "icon_next"), forState: UIControlState.Normal)
-        nextButton.addTarget(self, action: "nextButtonClick", forControlEvents: UIControlEvents.TouchUpInside)
-        nextButton.hidden = true
+        nextButton.setBackgroundImage(UIImage(named: "icon_next"), for: UIControlState.normal)
+        nextButton.addTarget(self, action: #selector(GuideCell.nextButtonClick), for: UIControlEvents.touchUpInside)
+        nextButton.isHidden = true
         contentView.addSubview(nextButton)
     }
 
@@ -38,10 +38,10 @@ class GuideCell: UICollectionViewCell {
     }
     
     func setNextButtonHidden(hidden: Bool) {
-        nextButton.hidden = hidden
+        nextButton.isHidden = hidden
     }
     
     func nextButtonClick() {
-        NSNotificationCenter.defaultCenter().postNotificationName(GuideViewControllerDidFinish, object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: GuideViewControllerDidFinish), object: nil)
     }
 }

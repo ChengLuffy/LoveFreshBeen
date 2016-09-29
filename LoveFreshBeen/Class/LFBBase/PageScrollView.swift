@@ -13,12 +13,12 @@ import UIKit
 class PageScrollView: UIView {
     
     private let imageViewMaxCount = 3
-    private var imageScrollView: UIScrollView!
-    private var pageControl: UIPageControl!
-    private var timer: NSTimer?
+    var imageScrollView: UIScrollView!
+    var pageControl: UIPageControl!
+    private var timer: Timer?
     private var placeholderImage: UIImage?
-    private var imageClick:((index: Int) -> ())?
-    var headData: HeadResources? {
+    private var imageClick:((_ index: Int) -> ())?
+    var headData: NSDictionary? {
         didSet {
             
             if timer != nil {
@@ -26,8 +26,8 @@ class PageScrollView: UIView {
                 timer = nil
             }
             
-            if headData?.data?.focus?.count >= 0 {
-                pageControl.numberOfPages = (headData?.data?.focus?.count)!
+            if (((headData!["data"] as! NSDictionary)["focus"] as! NSArray).count) >= 0 {
+                pageControl.numberOfPages = (((headData!["data"] as! NSDictionary)["focus"] as! NSArray).count)
                 pageControl.currentPage = 0
                 updatePageScrollView()
                 
@@ -45,7 +45,7 @@ class PageScrollView: UIView {
         
     }
     
-    convenience init(frame: CGRect, placeholder: UIImage, focusImageViewClick:((index: Int) -> Void)) {
+    convenience init(frame: CGRect, placeholder: UIImage, focusImageViewClick:@escaping ((_ index: Int) -> Void)) {
         self.init(frame: frame)
         placeholderImage = placeholder
         imageClick = focusImageViewClick
@@ -59,18 +59,18 @@ class PageScrollView: UIView {
         super.layoutSubviews()
         
         imageScrollView.frame = bounds
-        imageScrollView.contentSize = CGSizeMake(CGFloat(imageViewMaxCount) * width, 0)
+        imageScrollView.contentSize = CGSize(width:CGFloat(imageViewMaxCount) * width, height:0)
         for i in 0...imageViewMaxCount - 1 {
             let imageView = imageScrollView.subviews[i] as! UIImageView
-            imageView.userInteractionEnabled = true
-            imageView.frame = CGRectMake(CGFloat(i) * imageScrollView.width, 0, imageScrollView.width, imageScrollView.height)
+            imageView.isUserInteractionEnabled = true
+            imageView.frame = CGRect(x:CGFloat(i) * imageScrollView.width, y:0, width:imageScrollView.width, height:imageScrollView.height)
         }
         
         let pageW: CGFloat = 80
         let pageH: CGFloat = 20
         let pageX: CGFloat = imageScrollView.width - pageW
         let pageY: CGFloat = imageScrollView.height - pageH
-        pageControl.frame = CGRectMake(pageX, pageY, pageW, pageH)
+        pageControl.frame = CGRect(x:pageX, y:pageY, width:pageW, height:pageH)
         
         updatePageScrollView()
     }
@@ -81,13 +81,13 @@ class PageScrollView: UIView {
         imageScrollView.bounces = false
         imageScrollView.showsHorizontalScrollIndicator = false
         imageScrollView.showsVerticalScrollIndicator = false
-        imageScrollView.pagingEnabled = true
+        imageScrollView.isPagingEnabled = true
         imageScrollView.delegate = self
         addSubview(imageScrollView)
         
         for _ in 0..<3 {
             let imageView = UIImageView()
-            let tap = UITapGestureRecognizer(target: self, action: "imageViewClick:")
+            let tap = UITapGestureRecognizer(target: self, action: Selector(("imageViewClick:")))
             imageView.addGestureRecognizer(tap)
             imageScrollView.addSubview(imageView)
         }
@@ -102,15 +102,15 @@ class PageScrollView: UIView {
     }
     
     //MARK: 更新内容
-    private func updatePageScrollView() {
-        for var i = 0; i < imageScrollView.subviews.count; i++ {    
+    func updatePageScrollView() {
+        for i in 0 ..< imageScrollView.subviews.count {    
             let imageView = imageScrollView.subviews[i] as! UIImageView
             var index = pageControl.currentPage
             
             if i == 0 {
-                index--
+                index -= 1
             } else if 2 == i {
-                index++
+                index += 1
             }
             
             if index < 0 {
@@ -120,34 +120,35 @@ class PageScrollView: UIView {
             }
             
             imageView.tag = index
-            if headData?.data?.focus?.count > 0 {
-                imageView.sd_setImageWithURL(NSURL(string: headData!.data!.focus![index].img!), placeholderImage: placeholderImage)
+            if (((headData!["data"] as! NSDictionary)["focus"] as! NSArray).count) > 0 {
+                imageView.sd_setImage(with: URL.init(string: (((headData!["data"] as! NSDictionary)["focus"] as! NSArray)[index] as! NSDictionary).value(forKey: "img") as! String), placeholderImage: placeholderImage)
+//                imageView.sd_setImageWithURL(NSURL(string: headData!.data!.focus![index].img!), placeholderImage: placeholderImage)
             }
         }
         
-        imageScrollView.contentOffset = CGPointMake(imageScrollView.width, 0)
+        imageScrollView.contentOffset = CGPoint(x:imageScrollView.width, y:0)
     }
     
 
     // MARK: Timer
-    private func startTimer() {
-        timer = NSTimer(timeInterval: 3.0, target: self, selector: "next", userInfo: nil, repeats: true)
-        NSRunLoop.mainRunLoop().addTimer(timer!, forMode: NSRunLoopCommonModes)
+    func startTimer() {
+        timer = Timer(timeInterval: 3.0, target: self, selector: #selector(PageScrollView.next as (PageScrollView) -> () -> ()), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer!, forMode: RunLoopMode.commonModes)
     }
     
-    private func stopTimer() {
+    func stopTimer() {
         timer?.invalidate()
         timer = nil
     }
     
     func next() {
-        imageScrollView.setContentOffset(CGPointMake(2.0 * imageScrollView.frame.size.width, 0), animated: true)
+        imageScrollView.setContentOffset(CGPoint(x:2.0 * imageScrollView.frame.size.width, y:0), animated: true)
     }
     
     // MARK: ACTION
     func imageViewClick(tap: UITapGestureRecognizer) {
         if imageClick != nil {
-            imageClick!(index: tap.view!.tag)
+            imageClick!(tap.view!.tag)
         }
     }
 }
@@ -155,7 +156,7 @@ class PageScrollView: UIView {
 // MARK:- UIScrollViewDelegate
 extension PageScrollView: UIScrollViewDelegate {
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         var page: Int = 0
         var minDistance: CGFloat = CGFloat(MAXFLOAT)
         for i in 0..<imageScrollView.subviews.count {
@@ -170,19 +171,19 @@ extension PageScrollView: UIScrollViewDelegate {
         pageControl.currentPage = page
     }
     
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         stopTimer()
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         startTimer()
     }
     
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updatePageScrollView()
     }
     
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         updatePageScrollView()
     }
 }

@@ -20,14 +20,14 @@ extension String {
         
         var offset = newStr.length - 1
         while offset > 0 {
-            s = newStr.substringWithRange(NSMakeRange(offset, 1))
-            if s.isEqualToString("0") || s.isEqualToString(".") {
-                offset--
+            s = newStr.substring(with: NSMakeRange(offset, 1)) as NSString
+            if s.isEqual(to: "0") || s.isEqual(to: ".") {
+                offset -= 1
             } else {
                 break
             }
         }
         
-        return newStr.substringToIndex(offset + 1)
+        return newStr.substring(to: offset + 1)
     }
 }

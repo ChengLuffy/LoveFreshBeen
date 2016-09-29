@@ -23,12 +23,18 @@ class ReceiptAddressView: UIView {
     private let arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
     private let modifyButton = UIButton()
     var modifyButtonClickCallBack: (() -> ())?
-    var adress: Adress? {
+    var adress: NSDictionary? {
         didSet {
             if adress != nil{
-                consigneeTextLabel.text = adress!.accept_name! + (adress!.gender! == "1" ? " 先生" : " 女士")
-                phoneNumTextLabel.text = adress!.telphone
-                receiptAdressTextLabel.text = adress!.address
+                let str: String?
+                if adress!.value(forKey: "gender") as! String == "1" {
+                    str = "先生"
+                } else {
+                    str = "女士"
+                }
+                consigneeTextLabel.text = adress!.value(forKey: "accept_name") as! String + str!
+                phoneNumTextLabel.text = adress!.value(forKey: "telphone") as! String?
+                receiptAdressTextLabel.text = adress!.value(forKey: "address") as! String?
             }
         }
     }
@@ -36,27 +42,27 @@ class ReceiptAddressView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         addSubview(topImageView)
         addSubview(bottomImageView)
         addSubview(arrowImageView)
         
-        modifyButton.setTitle("修改", forState: UIControlState.Normal)
-        modifyButton.setTitleColor(UIColor.redColor(), forState: UIControlState.Normal)
-        modifyButton.addTarget(self, action: "modifyButtonClick", forControlEvents: UIControlEvents.TouchUpInside)
-        modifyButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        modifyButton.setTitle("修改", for: UIControlState.normal)
+        modifyButton.setTitleColor(UIColor.red, for: UIControlState.normal)
+        modifyButton.addTarget(self, action: #selector(ReceiptAddressView.modifyButtonClick), for: UIControlEvents.touchUpInside)
+        modifyButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         addSubview(modifyButton)
         
-        initLabel(consigneeLabel, text: "收  货  人  ")
-        initLabel(phoneNumLabel, text:  "电       话  ")
-        initLabel(receiptAdressLabel, text: "收货地址  ")
-        initLabel(consigneeTextLabel, text: "")
-        initLabel(phoneNumTextLabel, text: "")
-        initLabel(receiptAdressTextLabel, text: "")
+        initLabel(label: consigneeLabel, text: "收  货  人  ")
+        initLabel(label: phoneNumLabel, text:  "电       话  ")
+        initLabel(label: receiptAdressLabel, text: "收货地址  ")
+        initLabel(label: consigneeTextLabel, text: "")
+        initLabel(label: phoneNumTextLabel, text: "")
+        initLabel(label: receiptAdressTextLabel, text: "")
     }
     
-    convenience init(frame: CGRect, modifyButtonClickCallBack:(() -> ())) {
+    convenience init(frame: CGRect, modifyButtonClickCallBack:@escaping (() -> ())) {
         self.init(frame: frame)
         
         self.modifyButtonClickCallBack = modifyButtonClickCallBack
@@ -71,22 +77,22 @@ class ReceiptAddressView: UIView {
         
         let leftMargin: CGFloat = 15
         
-        topImageView.frame = CGRectMake(0, 0, width, 2)
-        bottomImageView.frame = CGRectMake(0, height - 2, width, 2)
-        consigneeLabel.frame = CGRectMake(leftMargin, 10, consigneeLabel.width, consigneeLabel.height)
-        consigneeTextLabel.frame = CGRectMake(CGRectGetMaxX(consigneeLabel.frame) + 5, consigneeLabel.y, 150, consigneeLabel.height)
-        phoneNumLabel.frame = CGRectMake(leftMargin, CGRectGetMaxY(consigneeLabel.frame) + 5, phoneNumLabel.width, phoneNumLabel.height)
-        phoneNumTextLabel.frame = CGRectMake(consigneeTextLabel.x, phoneNumLabel.y, 150, phoneNumLabel.height)
-        receiptAdressLabel.frame = CGRectMake(leftMargin, CGRectGetMaxY(phoneNumTextLabel.frame) + 5, receiptAdressLabel.width, receiptAdressLabel.height)
-        receiptAdressTextLabel.frame = CGRectMake(consigneeTextLabel.x, receiptAdressLabel.y, 150, receiptAdressLabel.height)
-        modifyButton.frame = CGRectMake(width - 60, 0, 30, height)
-        arrowImageView.frame = CGRectMake(width - 15, (height - arrowImageView.height) * 0.5, arrowImageView.width, arrowImageView.height)
+        topImageView.frame = CGRect(x:0, y:0, width:width, height:2)
+        bottomImageView.frame = CGRect(x:0, y:height - 2, width:width, height:2)
+        consigneeLabel.frame = CGRect(x:leftMargin, y:10, width:consigneeLabel.width, height:consigneeLabel.height)
+        consigneeTextLabel.frame = CGRect(x:consigneeLabel.frame.maxX + 5, y:consigneeLabel.y, width:150, height:consigneeLabel.height)
+        phoneNumLabel.frame = CGRect(x:leftMargin, y:consigneeLabel.frame.maxY + 5, width:phoneNumLabel.width, height:phoneNumLabel.height)
+        phoneNumTextLabel.frame = CGRect(x:consigneeTextLabel.x, y:phoneNumLabel.y, width:150, height:phoneNumLabel.height)
+        receiptAdressLabel.frame = CGRect(x:leftMargin, y:phoneNumTextLabel.frame.maxY + 5, width:receiptAdressLabel.width, height:receiptAdressLabel.height)
+        receiptAdressTextLabel.frame = CGRect(x:consigneeTextLabel.x, y:receiptAdressLabel.y, width:150, height:receiptAdressLabel.height)
+        modifyButton.frame = CGRect(x:width - 60, y:0, width:30, height:height)
+        arrowImageView.frame = CGRect(x:width - 15, y:(height - arrowImageView.height) * 0.5, width:arrowImageView.width, height:arrowImageView.height)
     }
     
     private func initLabel(label: UILabel, text: String) {
         label.text = text
-        label.font = UIFont.systemFontOfSize(12)
-        label.textColor = UIColor.blackColor()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = UIColor.black
         label.sizeToFit()
         addSubview(label)
     }

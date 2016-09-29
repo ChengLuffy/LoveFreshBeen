@@ -17,28 +17,28 @@ class BuyView: UIView {
     
     /// 添加按钮
     private lazy var addGoodsButton: UIButton = {
-        let addGoodsButton = UIButton(type: .Custom)
-        addGoodsButton.setImage(UIImage(named: "v2_increase"), forState: .Normal)
-        addGoodsButton.addTarget(self, action: "addGoodsButtonClick", forControlEvents: .TouchUpInside)
+        let addGoodsButton = UIButton(type: .custom)
+        addGoodsButton.setImage(UIImage(named: "v2_increase"), for: .normal)
+        addGoodsButton.addTarget(self, action: #selector(BuyView.addGoodsButtonClick), for: .touchUpInside)
         return addGoodsButton
         }()
     
     /// 删除按钮
     private lazy var reduceGoodsButton: UIButton = {
-        let reduceGoodsButton = UIButton(type: .Custom)
-        reduceGoodsButton.setImage(UIImage(named: "v2_reduce")!, forState: .Normal)
-        reduceGoodsButton.addTarget(self, action: "reduceGoodsButtonClick", forControlEvents: .TouchUpInside)
-        reduceGoodsButton.hidden = false
+        let reduceGoodsButton = UIButton(type: .custom)
+        reduceGoodsButton.setImage(UIImage(named: "v2_reduce")!, for: .normal)
+        reduceGoodsButton.addTarget(self, action: #selector(BuyView.reduceGoodsButtonClick), for: .touchUpInside)
+        reduceGoodsButton.isHidden = false
         return reduceGoodsButton
         }()
     
     /// 购买数量
     private lazy var buyCountLabel: UILabel = {
         let buyCountLabel = UILabel()
-        buyCountLabel.hidden = false
+        buyCountLabel.isHidden = false
         buyCountLabel.text = "0"
-        buyCountLabel.textColor = UIColor.blackColor()
-        buyCountLabel.textAlignment = NSTextAlignment.Center
+        buyCountLabel.textColor = UIColor.black
+        buyCountLabel.textAlignment = NSTextAlignment.center
         buyCountLabel.font = HomeCollectionTextFont
         return buyCountLabel
         }()
@@ -47,9 +47,9 @@ class BuyView: UIView {
     private lazy var supplementLabel: UILabel = {
         let supplementLabel = UILabel()
         supplementLabel.text = "补货中"
-        supplementLabel.hidden = true
-        supplementLabel.textAlignment = NSTextAlignment.Right
-        supplementLabel.textColor = UIColor.redColor()
+        supplementLabel.isHidden = true
+        supplementLabel.textAlignment = NSTextAlignment.right
+        supplementLabel.textColor = UIColor.red
         supplementLabel.font = HomeCollectionTextFont
         return supplementLabel
         }()
@@ -57,11 +57,11 @@ class BuyView: UIView {
     private var buyNumber: Int = 0 {
         willSet {
             if newValue > 0 {
-                reduceGoodsButton.hidden = false
+                reduceGoodsButton.isHidden = false
                 buyCountLabel.text = "\(newValue)"
             } else {
-                reduceGoodsButton.hidden = true
-                buyCountLabel.hidden = false
+                reduceGoodsButton.isHidden = true
+                buyCountLabel.isHidden = false
                 buyCountLabel.text = "\(newValue)"
             }
         }
@@ -84,69 +84,72 @@ class BuyView: UIView {
         super.layoutSubviews()
         
         let buyCountWidth: CGFloat = 25
-        addGoodsButton.frame = CGRectMake(width - height - 2, 0, height, height)
-        buyCountLabel.frame = CGRectMake(CGRectGetMinX(addGoodsButton.frame) - buyCountWidth, 0, buyCountWidth, height)
-        reduceGoodsButton.frame = CGRectMake(CGRectGetMinX(buyCountLabel.frame) - height, 0, height, height)
-        supplementLabel.frame = CGRectMake(CGRectGetMinX(reduceGoodsButton.frame), 0, height + buyCountWidth + height, height)
+        addGoodsButton.frame = CGRect(x:width - height - 2, y:0, width:height, height:height)
+        buyCountLabel.frame = CGRect(x:addGoodsButton.frame.minX - buyCountWidth, y:0, width:buyCountWidth, height:height)
+        reduceGoodsButton.frame = CGRect(x:buyCountLabel.frame.minX - height, y:0, width:height, height:height)
+        supplementLabel.frame = CGRect(x:reduceGoodsButton.frame.minX, y:0, width:height + buyCountWidth + height, height:height)
     }
     
     /// 商品模型Set方法
-    var goods: Goods? {
+    var goods: NSMutableDictionary? {
         didSet {
-            buyNumber = goods!.userBuyNumber
-            
-            if goods?.number <= 0 {
-                showSupplementLabel()
-            } else {
-                hideSupplementLabel()
-            }
+            buyNumber = 1
+            let str = goods?["number"]
+            print(str.self)
+//            
+//            if str <= 0 {
+//                self.showSupplementLabel()
+//            } else {
+                self.hideSupplementLabel()
+//            }
             if 0 == buyNumber {
-                reduceGoodsButton.hidden = true && !zearIsShow
-                buyCountLabel.hidden = true && !zearIsShow
+                reduceGoodsButton.isHidden = true && !zearIsShow
+                buyCountLabel.isHidden = true && !zearIsShow
             } else {
-                reduceGoodsButton.hidden = false
-                buyCountLabel.hidden = false
+                reduceGoodsButton.isHidden = false
+                buyCountLabel.isHidden = false
             }
         }
     }
     
     /// 显示补货中
     private func showSupplementLabel() {
-        supplementLabel.hidden = false
-        addGoodsButton.hidden = true
-        reduceGoodsButton.hidden = true
-        buyCountLabel.hidden = true
+        supplementLabel.isHidden = false
+        addGoodsButton.isHidden = true
+        reduceGoodsButton.isHidden = true
+        buyCountLabel.isHidden = true
     }
     
     /// 隐藏补货中,显示添加按钮
     private func hideSupplementLabel() {
-        supplementLabel.hidden = true
-        addGoodsButton.hidden = false
-        reduceGoodsButton.hidden = false
-        buyCountLabel.hidden = false
+        supplementLabel.isHidden = true
+        addGoodsButton.isHidden = false
+        reduceGoodsButton.isHidden = false
+        buyCountLabel.isHidden = false
     }
     
     // MARK: - Action
     func addGoodsButtonClick() {
         
-        if buyNumber >= goods?.number {
-            NSNotificationCenter.defaultCenter().postNotificationName(HomeGoodsInventoryProblem, object: goods?.name)
+        if buyNumber >= (goods?["number"] as! Int) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: HomeGoodsInventoryProblem), object: (goods?["name"] as! String))
             return
         }
         
-        reduceGoodsButton.hidden = false
-        buyNumber++
-        goods?.userBuyNumber = buyNumber
+        reduceGoodsButton.isHidden = false
+        buyNumber += 1
+        goods?["userBuyNumber"] = buyNumber
         buyCountLabel.text = "\(buyNumber)"
-        buyCountLabel.hidden = false
+        buyCountLabel.isHidden = false
         
         if clickAddShopCar != nil {
             clickAddShopCar!()
         }
         
-        ShopCarRedDotView.sharedRedDotView.addProductToRedDotView(true)
-        UserShopCarTool.sharedUserShopCar.addSupermarkProductToShopCar(goods!)
-        NSNotificationCenter.defaultCenter().postNotificationName(LFBShopCarBuyPriceDidChangeNotification, object: nil, userInfo: nil)
+        ShopCarRedDotView.sharedRedDotView.addProductToRedDotView(animation: true)
+        UserShopCarTool.sharedUserShopCar.addSupermarkProductToShopCar(goods: goods!)
+//        NotificationCenter.default.postNotificationName(LFBShopCarBuyPriceDidChangeNotification, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue:LFBShopCarBuyPriceDidChangeNotification), object: nil)
     }
     
     func reduceGoodsButtonClick() {
@@ -154,19 +157,20 @@ class BuyView: UIView {
             return
         }
         
-        buyNumber--
-        goods?.userBuyNumber = buyNumber
+        buyNumber -= 1
+        goods?.setValue(buyNumber, forKey: "userBuyNumber")
         if buyNumber == 0 {
-            reduceGoodsButton.hidden = true && !zearIsShow
-            buyCountLabel.hidden = true && !zearIsShow
+            reduceGoodsButton.isHidden = true && !zearIsShow
+            buyCountLabel.isHidden = true && !zearIsShow
             buyCountLabel.text = zearIsShow ? "0" : ""
-            UserShopCarTool.sharedUserShopCar.removeSupermarketProduct(goods!)
+            UserShopCarTool.sharedUserShopCar.removeSupermarketProduct(goods: goods!)
         } else {
             buyCountLabel.text = "\(buyNumber)"
         }
         
-        ShopCarRedDotView.sharedRedDotView.reduceProductToRedDotView(true)
-        NSNotificationCenter.defaultCenter().postNotificationName(LFBShopCarBuyPriceDidChangeNotification, object: nil, userInfo: nil)
+        ShopCarRedDotView.sharedRedDotView.reduceProductToRedDotView(animation: true)
+//        NotificationCenter.default.postNotificationName(LFBShopCarBuyPriceDidChangeNotification, object: nil, userInfo: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue:LFBShopCarBuyPriceDidChangeNotification), object: nil)
     }
 }
 

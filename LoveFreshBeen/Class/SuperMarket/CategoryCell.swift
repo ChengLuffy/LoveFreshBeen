@@ -18,10 +18,10 @@ class CategoryCell: UITableViewCell {
     private lazy var nameLabel: UILabel = {
         let nameLabel = UILabel()
         nameLabel.textColor = LFBTextGreyColol
-        nameLabel.highlightedTextColor = UIColor.blackColor()
-        nameLabel.backgroundColor = UIColor.clearColor()
-        nameLabel.textAlignment = NSTextAlignment.Center
-        nameLabel.font = UIFont.systemFontOfSize(14)
+        nameLabel.highlightedTextColor = UIColor.black
+        nameLabel.backgroundColor = UIColor.clear
+        nameLabel.textAlignment = NSTextAlignment.center
+        nameLabel.font = UIFont.systemFont(ofSize: 14)
         return nameLabel
     }()
     
@@ -40,13 +40,13 @@ class CategoryCell: UITableViewCell {
         }()
     private lazy var lineView: UIView = {
         let lineView = UIView()
-        lineView.backgroundColor = UIColor.colorWithCustom(225, g: 225, b: 225)
+        lineView.backgroundColor = UIColor.colorWithCustom(r: 225, g: 225, b: 225)
         return lineView
         }()
 // MARK: 模型setter方法
-    var categorie: Categorie? {
+    var categorie: NSDictionary? {
         didSet {
-            nameLabel.text = categorie?.name
+            nameLabel.text = categorie?["name"] as! String?
         }
     }
     
@@ -64,28 +64,28 @@ class CategoryCell: UITableViewCell {
     }
 
     class func cellWithTableView(tableView: UITableView) -> CategoryCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? CategoryCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? CategoryCell
         if cell == nil {
-            cell = CategoryCell(style: .Default, reuseIdentifier: identifier)
+            cell = CategoryCell(style: .default, reuseIdentifier: identifier)
         }
-        cell?.selectionStyle = UITableViewCellSelectionStyle.None
+        cell?.selectionStyle = UITableViewCellSelectionStyle.none
         return cell!
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        nameLabel.highlighted = selected
-        backImageView.highlighted = selected
-        yellowView.hidden = !selected
+        nameLabel.isHighlighted = selected
+        backImageView.isHighlighted = selected
+        yellowView.isHidden = !selected
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
         nameLabel.frame = bounds
-        backImageView.frame = CGRectMake(0, 0, width, height)
-        yellowView.frame = CGRectMake(0, height * 0.1, 5, height * 0.8)
-        lineView.frame = CGRectMake(0, height - 1, width, 1)
+        backImageView.frame = CGRect(x:0, y:0, width:width, height:height)
+        yellowView.frame = CGRect(x:0, y:height * 0.1, width:5, height:height * 0.8)
+        lineView.frame = CGRect(x:0, y:height - 1, width:width, height:1)
     }
 
 }

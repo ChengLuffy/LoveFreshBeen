@@ -44,7 +44,7 @@ enum WXAPISupport {
  *
  */
 enum WXBizProfileType{
-    WXBizProfileType_Normal = 0,    //**< 普通公众号  */
+    WXBizProfileType.normal = 0,    //**< 普通公众号  */
     WXBizProfileType_Device = 1,    //**< 硬件公众号  */
 };
 

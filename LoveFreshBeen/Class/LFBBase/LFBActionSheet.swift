@@ -19,10 +19,10 @@ enum ShareType: Int {
 
 class LFBActionSheet: NSObject, UIActionSheetDelegate {
     
-    private var selectedShaerType: ((shareType: ShareType) -> ())?
+    private var selectedShaerType: ((_ shareType: ShareType) -> ())?
     private var actionSheet: UIActionSheet?
     
-    func showActionSheetViewShowInView(inView: UIView, selectedShaerType: ((shareType: ShareType) -> ())) {
+    func showActionSheetViewShowInView(inView: UIView, selectedShaerType: @escaping ((_ shareType: ShareType) -> ())) {
         
         actionSheet = UIActionSheet(title: "分享到",
             delegate: self, cancelButtonTitle: "取消",
@@ -31,30 +31,30 @@ class LFBActionSheet: NSObject, UIActionSheetDelegate {
         
         self.selectedShaerType = selectedShaerType
         
-        actionSheet?.showInView(inView)
+        actionSheet?.show(in: inView)
         
     }
     
-    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int) {
         print(buttonIndex)
         if selectedShaerType != nil {
             
             switch buttonIndex {
 
             case ShareType.WeiXinMyFriend.rawValue:
-                selectedShaerType!(shareType: .WeiXinMyFriend)
+                selectedShaerType!(.WeiXinMyFriend)
                 break
                 
             case ShareType.WeiXinCircleOfFriends.rawValue:
-                selectedShaerType!(shareType: .WeiXinCircleOfFriends)
+                selectedShaerType!(.WeiXinCircleOfFriends)
                 break
                 
             case ShareType.SinaWeiBo.rawValue:
-                selectedShaerType!(shareType: .SinaWeiBo)
+                selectedShaerType!(.SinaWeiBo)
                 break
                 
             case ShareType.QQZone.rawValue:
-                selectedShaerType!(shareType: .QQZone)
+                selectedShaerType!(.QQZone)
                 break
                 
             default:

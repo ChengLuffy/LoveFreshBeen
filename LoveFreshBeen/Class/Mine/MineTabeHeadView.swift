@@ -18,7 +18,7 @@ enum MineHeadViewButtonType: Int {
 
 class MineTabeHeadView: UIView {
     
-    var mineHeadViewClick:((type: MineHeadViewButtonType) -> ())?
+    var mineHeadViewClick:((_ type: MineHeadViewButtonType) -> ())?
     private let orderView = MineOrderView()
     private let couponView = MineCouponView()
     private let messageView = MineMessageView()
@@ -28,7 +28,7 @@ class MineTabeHeadView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         buildUI()
     }
     
@@ -39,12 +39,12 @@ class MineTabeHeadView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         let subViewW = width / 3.0
-        orderView.frame = CGRectMake(0, 0, subViewW, height)
-        couponView.frame = CGRectMake(subViewW, 0, subViewW, height)
-        messageView.frame = CGRectMake(subViewW * 2, 0, subViewW, height)
-        couponNumber?.frame = CGRectMake(subViewW * 1.56, 12, 15, 15)
-        line1.frame = CGRectMake(subViewW - 0.5, height * 0.2, 1, height * 0.6)
-        line2.frame = CGRectMake(subViewW * 2 - 0.5, height * 0.2, 1, height * 0.6)
+        orderView.frame = CGRect(x:0, y:0, width:subViewW, height:height)
+        couponView.frame = CGRect(x:subViewW, y:0, width:subViewW, height:height)
+        messageView.frame = CGRect(x:subViewW * 2, y:0, width:subViewW, height:height)
+        couponNumber?.frame = CGRect(x:subViewW * 1.56, y:12, width:15, height:15)
+        line1.frame = CGRect(x:subViewW - 0.5, y:height * 0.2, width:1, height:height * 0.6)
+        line2.frame = CGRect(x:subViewW * 2 - 0.5, y:height * 0.2, width:1, height:height * 0.6)
     }
     
     func click(tap: UIGestureRecognizer) {
@@ -53,15 +53,15 @@ class MineTabeHeadView: UIView {
             switch tap.view!.tag {
                 
             case MineHeadViewButtonType.Order.rawValue:
-                mineHeadViewClick!(type: MineHeadViewButtonType.Order)
+                mineHeadViewClick!(MineHeadViewButtonType.Order)
                 break
                 
             case MineHeadViewButtonType.Coupon.rawValue:
-                mineHeadViewClick!(type: MineHeadViewButtonType.Coupon)
+                mineHeadViewClick!(MineHeadViewButtonType.Coupon)
                 break
                 
             case MineHeadViewButtonType.Message.rawValue:
-                mineHeadViewClick!(type: MineHeadViewButtonType.Message)
+                mineHeadViewClick!(MineHeadViewButtonType.Message)
                 break
                 
             default: break
@@ -81,37 +81,37 @@ class MineTabeHeadView: UIView {
         addSubview(messageView)
         
         for index in 0...2 {
-            let tap = UITapGestureRecognizer(target: self, action: "click:")
+            let tap = UITapGestureRecognizer(target: self, action: Selector(("click:")))
             let subView = viewWithTag(index)
             subView?.addGestureRecognizer(tap)
         }
         
-        line1.backgroundColor = UIColor.grayColor()
+        line1.backgroundColor = UIColor.gray
         line1.alpha = 0.3
         addSubview(line1)
         
-        line2.backgroundColor = UIColor.grayColor()
+        line2.backgroundColor = UIColor.gray
         line2.alpha = 0.3
         addSubview(line2)
         
-        couponNumber = UIButton(type: .Custom)
-        couponNumber?.setBackgroundImage(UIImage(named: "redCycle"), forState: UIControlState.Normal)
-        couponNumber?.setTitleColor(UIColor.redColor(), forState: .Normal)
-        couponNumber?.userInteractionEnabled = false
-        couponNumber?.titleLabel?.font = UIFont.systemFontOfSize(8)
-        couponNumber?.hidden = true
+        couponNumber = UIButton(type: .custom)
+        couponNumber?.setBackgroundImage(UIImage(named: "redCycle"), for: UIControlState.normal)
+        couponNumber?.setTitleColor(UIColor.red, for: .normal)
+        couponNumber?.isUserInteractionEnabled = false
+        couponNumber?.titleLabel?.font = UIFont.systemFont(ofSize: 8)
+        couponNumber?.isHidden = true
         addSubview(couponNumber!)
     }
     
     func setCouponNumer(number: Int) {
         if number > 0 && number <= 9 {
-            couponNumber?.hidden = false
-            couponNumber?.setTitle("\(number)", forState: .Normal)
+            couponNumber?.isHidden = false
+            couponNumber?.setTitle("\(number)", for: .normal)
         } else if number > 9 && number < 100 {
-            couponNumber?.setTitle("\(number)", forState: .Normal)
-            couponNumber?.hidden = false
+            couponNumber?.setTitle("\(number)", for: .normal)
+            couponNumber?.isHidden = false
         } else {
-            couponNumber?.hidden = true
+            couponNumber?.isHidden = true
         }
     }
 }
@@ -123,7 +123,7 @@ class MineOrderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        btn = MineUpImageDownText(frame: CGRectZero, title: "我的订单", imageName: "v2_my_order_icon")
+        btn = MineUpImageDownText(frame: CGRect.zero, title: "我的订单", imageName: "v2_my_order_icon")
         addSubview(btn)
     }
     
@@ -133,7 +133,7 @@ class MineOrderView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        btn.frame = CGRectMake(10, 10, width - 20, height - 20)
+        btn.frame = CGRect(x:10, y:10, width:width - 20, height:height - 20)
     }
 }
 
@@ -143,7 +143,7 @@ class MineCouponView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        btn = MineUpImageDownText(frame: CGRectZero, title: "优惠劵", imageName: "v2_my_coupon_icon")
+        btn = MineUpImageDownText(frame: CGRect.zero, title: "优惠劵", imageName: "v2_my_coupon_icon")
         addSubview(btn)
     }
     
@@ -153,7 +153,7 @@ class MineCouponView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        btn.frame = CGRectMake(10, 10, width - 20, height - 20)
+        btn.frame = CGRect(x:10, y:10, width:width - 20, height:height - 20)
     }
     
 }
@@ -163,7 +163,7 @@ class MineMessageView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        btn = MineUpImageDownText(frame: CGRectZero, title: "我的消息", imageName: "v2_my_message_icon")
+        btn = MineUpImageDownText(frame: CGRect.zero, title: "我的消息", imageName: "v2_my_message_icon")
         addSubview(btn)
     }
     
@@ -173,7 +173,7 @@ class MineMessageView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        btn.frame = CGRectMake(10, 10, width - 20, height - 20)
+        btn.frame = CGRect(x:10, y:10, width:width - 20, height:height - 20)
     }
 }
 
@@ -181,11 +181,11 @@ class MineUpImageDownText: UpImageDownTextButton {
     
     init(frame: CGRect, title: String, imageName: String) {
         super.init(frame: frame)
-        setTitle(title, forState: .Normal)
-        setTitleColor(UIColor.colorWithCustom(80, g: 80, b: 80), forState: .Normal)
-        setImage(UIImage(named: imageName), forState: .Normal)
-        userInteractionEnabled = false
-        titleLabel?.font = UIFont.systemFontOfSize(13)
+        setTitle(title, for: .normal)
+        setTitleColor(UIColor.colorWithCustom(r: 80, g: 80, b: 80), for: .normal)
+        setImage(UIImage(named: imageName), for: .normal)
+        isUserInteractionEnabled = false
+        titleLabel?.font = UIFont.systemFont(ofSize: 13)
     }
     
     required init?(coder aDecoder: NSCoder) {

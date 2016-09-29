@@ -12,7 +12,7 @@ import UIKit
 
 class ADViewController: UIViewController {
     
-    private lazy var backImageView: UIImageView = {
+    lazy var backImageView: UIImageView = {
         let backImageView = UIImageView()
         backImageView.frame = ScreenBounds
         return backImageView
@@ -31,32 +31,99 @@ class ADViewController: UIViewController {
             default:
                 placeholderImageName = "iphone6s"
             }
-            
-            backImageView.sd_setImageWithURL(NSURL(string: imageName!), placeholderImage: UIImage(named: placeholderImageName!)) { (image, error, _, _) -> Void in
+            // MARK: SDWebImage的方法翻译成swift3语言时出现错误，先用这个
+            backImageView.sd_setImage(with: URL.init(string: imageName!)) { (image, error, _, _) in
                 if error != nil {
                     //加载广告失败
                     print("加载广告失败")
-                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: ADImageLoadFail), object: nil)
                 }
                 
                 if image != nil {
-                    let time = dispatch_time(DISPATCH_TIME_NOW,Int64(1.0 * Double(NSEC_PER_SEC)))
-                    dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                        UIApplication.shared.setStatusBarHidden(false, with: UIStatusBarAnimation.fade)
                         
-                        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
                         
-                        let time1 = dispatch_time(DISPATCH_TIME_NOW,Int64(0.5 * Double(NSEC_PER_SEC)))
-                        dispatch_after(time1, dispatch_get_main_queue(), { () -> Void in
-                            NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadSecussed, object: image)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: ADImageLoadSecussed), object: image)
                         })
-                        
+//                        let time1 = dispatch_time(DISPATCH_TIME_NOW,Int64(0.5 * Double(NSEC_PER_SEC)))
+//                        dispatch_after(time1, dispatch_get_main_queue(), { () -> Void in
+//                            NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadSecussed, object: image)
+//                        })
                     })
+//                    let time = dispatch_time(DISPATCH_TIME_NOW,Int64(1.0 * Double(NSEC_PER_SEC)))
+//                    dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
+//                        
+//                        let time1 = dispatch_time(DISPATCH_TIME_NOW,Int64(0.5 * Double(NSEC_PER_SEC)))
+//                        dispatch_after(time1, dispatch_get_main_queue(), { () -> Void in
+//                            NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadSecussed, object: image)
+//                        })
+//                        
+//                    })
                 } else {
                     //加载广告失败
                     print("加载广告失败")
-                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: ADImageLoadFail), object: nil)
                 }
+
             }
+            
+            
+//            backImageView.sd_setImage(with: URL.init(string: imageName!), placeholderImage: UIImage.init(named: placeholderImageName!)) { (image, error, _, _) in
+//                if error != nil {
+//                    //加载广告失败
+//                    print("加载广告失败")
+//                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+//                }
+//                
+//                if image != nil {
+//                    let time = dispatch_time(DISPATCH_TIME_NOW,Int64(1.0 * Double(NSEC_PER_SEC)))
+//                    dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
+//                        
+//                        let time1 = dispatch_time(DISPATCH_TIME_NOW,Int64(0.5 * Double(NSEC_PER_SEC)))
+//                        dispatch_after(time1, dispatch_get_main_queue(), { () -> Void in
+//                            NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadSecussed, object: image)
+//                        })
+//                        
+//                    })
+//                } else {
+//                    //加载广告失败
+//                    print("加载广告失败")
+//                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+//                }
+//            }
+            
+//            backImageView.sd_setImageWithURL(NSURL(string: imageName!), placeholderImage: UIImage(named: placeholderImageName!)) { (image, error, _, _) -> Void in
+//                if error != nil {
+//                    //加载广告失败
+//                    print("加载广告失败")
+//                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+//                }
+//                
+//                if image != nil {
+//                    let time = dispatch_time(DISPATCH_TIME_NOW,Int64(1.0 * Double(NSEC_PER_SEC)))
+//                    dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+//                        
+//                        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: UIStatusBarAnimation.Fade)
+//                        
+//                        let time1 = dispatch_time(DISPATCH_TIME_NOW,Int64(0.5 * Double(NSEC_PER_SEC)))
+//                        dispatch_after(time1, dispatch_get_main_queue(), { () -> Void in
+//                            NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadSecussed, object: image)
+//                        })
+//                        
+//                    })
+//                } else {
+//                    //加载广告失败
+//                    print("加载广告失败")
+//                    NSNotificationCenter.defaultCenter().postNotificationName(ADImageLoadFail, object: nil)
+//                }
+//            }
         }
     }
     
@@ -64,6 +131,6 @@ class ADViewController: UIViewController {
         super.viewDidLoad()
         
         view.addSubview(backImageView)
-        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: UIStatusBarAnimation.None)
+        UIApplication.shared.setStatusBarHidden(true, with: UIStatusBarAnimation.none)
     }
 }

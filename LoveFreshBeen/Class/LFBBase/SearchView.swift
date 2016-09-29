@@ -15,15 +15,15 @@ class SearchView: UIView {
     private let searchLabel = UILabel()
     private var lastX: CGFloat = 0
     private var lastY: CGFloat = 35
-    private var searchButtonClickCallback:((sender: UIButton) -> ())?
+    private var searchButtonClickCallback:((_ sender: UIButton) -> ())?
     var searchHeight: CGFloat = 0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        searchLabel.frame = CGRectMake(0, 0, frame.size.width - 30, 35)
-        searchLabel.font = UIFont.systemFontOfSize(15)
-        searchLabel.textColor = UIColor.colorWithCustom(140, g: 140, b: 140)
+        searchLabel.frame = CGRect(x:0, y:0, width:frame.size.width - 30, height:35)
+        searchLabel.font = UIFont.systemFont(ofSize: 15)
+        searchLabel.textColor = UIColor.colorWithCustom(r: 140, g: 140, b: 140)
         addSubview(searchLabel)
     }
 
@@ -31,7 +31,7 @@ class SearchView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    convenience init(frame: CGRect, searchTitleText: String, searchButtonTitleTexts: [String], searchButtonClickCallback:((sender: UIButton) -> ())) {
+    convenience init(frame: CGRect, searchTitleText: String, searchButtonTitleTexts: [String], searchButtonClickCallback:@escaping ((_ sender: UIButton) -> ())) {
         self.init(frame: frame)
         
         searchLabel.text = searchTitleText
@@ -44,27 +44,27 @@ class SearchView: UIView {
         
         for i in 0..<searchButtonTitleTexts.count {
             let btn = UIButton()
-            btn.setTitle(searchButtonTitleTexts[i], forState: UIControlState.Normal)
-            btn.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            btn.titleLabel?.font = UIFont.systemFontOfSize(14)
+            btn.setTitle(searchButtonTitleTexts[i], for: UIControlState.normal)
+            btn.setTitleColor(UIColor.black, for: UIControlState.normal)
+            btn.titleLabel?.font = UIFont.systemFont(ofSize:14)
             btn.titleLabel?.sizeToFit()
-            btn.backgroundColor = UIColor.whiteColor()
+            btn.backgroundColor = UIColor.white
             btn.layer.masksToBounds = true
             btn.layer.cornerRadius = 15
             btn.layer.borderWidth = 0.5
-            btn.layer.borderColor = UIColor.colorWithCustom(200, g: 200, b: 200).CGColor
-            btn.addTarget(self, action: "searchButtonClick:", forControlEvents: UIControlEvents.TouchUpInside)
+            btn.layer.borderColor = UIColor.colorWithCustom(r: 200, g: 200, b: 200).cgColor
+            btn.addTarget(self, action: Selector(("searchButtonClick:")), for: UIControlEvents.touchUpInside)
             btnW = btn.titleLabel!.width + addW
             
             if frame.width - lastX > btnW {
-                btn.frame = CGRectMake(lastX, lastY, btnW, btnH)
+                btn.frame = CGRect(x:lastX, y:lastY, width:btnW, height:btnH)
             } else {
-                btn.frame = CGRectMake(0, lastY + marginY + btnH, btnW, btnH)
+                btn.frame = CGRect(x:0, y:lastY + marginY + btnH, width:btnW, height:btnH)
             }
             
-            lastX = CGRectGetMaxX(btn.frame) + marginX
+            lastX = btn.frame.maxX + marginX
             lastY = btn.y
-            searchHeight = CGRectGetMaxY(btn.frame)
+            searchHeight = btn.frame.maxY
             
             addSubview(btn)
         }
@@ -74,7 +74,7 @@ class SearchView: UIView {
     
     func searchButtonClick(sender: UIButton) {
         if searchButtonClickCallback != nil {
-            searchButtonClickCallback!(sender: sender)
+            searchButtonClickCallback!(sender)
         }
     }
     

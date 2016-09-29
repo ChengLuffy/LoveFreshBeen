@@ -13,7 +13,7 @@ class MessageViewController: BaseViewController {
     
     private var segment: LFBSegmentedControl!
     private var systemTableView: LFBTableView!
-    private var systemMessage: [UserMessage]?
+    var systemMessage: [UserMessage]?
     private var userMessage: [UserMessage]?
     private var secondView: UIView?
     
@@ -27,13 +27,13 @@ class MessageViewController: BaseViewController {
         loadSystemMessage()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     private func bulidSecontView() {
-        secondView = UIView(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64))
+        secondView = UIView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:ScreenHeight - 64))
         secondView?.backgroundColor = LFBGlobalBackgroundColor
         view.addSubview(secondView!)
         
@@ -44,14 +44,14 @@ class MessageViewController: BaseViewController {
         
         let normalLabel = UILabel()
         normalLabel.text = "~~~并没有消息~~~"
-        normalLabel.textAlignment = NSTextAlignment.Center
-        normalLabel.frame = CGRectMake(0, CGRectGetMaxY(normalImageView.frame) + 10, ScreenWidth, 50)
+        normalLabel.textAlignment = NSTextAlignment.center
+        normalLabel.frame = CGRect(x:0, y:normalImageView.frame.maxY + 10, width:ScreenWidth, height:50)
         secondView?.addSubview(normalLabel)
     }
 
     private func bulidSegmentedControl() {
         weak var tmpSelf = self
-        segment = LFBSegmentedControl(items: ["系统消息", "用户消息"], didSelectedIndex: { (index) -> () in
+        segment = LFBSegmentedControl(items: ["系统消息" as AnyObject, "用户消息" as AnyObject], didSelectedIndex: { (index) -> () in
             if 0 == index {
                 tmpSelf!.showSystemTableView()
             } else if 1 == index {
@@ -59,11 +59,11 @@ class MessageViewController: BaseViewController {
             }
         })
         navigationItem.titleView = segment
-        navigationItem.titleView?.frame = CGRectMake(0, 5, 180, 27)
+        navigationItem.titleView?.frame = CGRect(x:0, y:5, width:180, height:27)
     }
     
     private func bulidSystemTableView() {
-        systemTableView = LFBTableView(frame: view.bounds, style: .Plain)
+        systemTableView = LFBTableView(frame: view.bounds, style: .plain)
         systemTableView.backgroundColor = LFBGlobalBackgroundColor
         systemTableView.showsHorizontalScrollIndicator = false
         systemTableView.showsVerticalScrollIndicator = false
@@ -92,29 +92,29 @@ class MessageViewController: BaseViewController {
     }
     
     private func showSystemTableView() {
-        secondView?.hidden = true
+        secondView?.isHidden = true
     }
     
     private func showUserTableView() {
-        secondView?.hidden = false
+        secondView?.isHidden = false
     }
     
 }
 
 extension MessageViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = SystemMessageCell.systemMessageCell(tableView)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = SystemMessageCell.systemMessageCell(tableView: tableView)
         cell.message = systemMessage![indexPath.row]
         
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return systemMessage?.count ?? 0
     }
 
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let message = systemMessage![indexPath.row]
         
         return message.cellHeight

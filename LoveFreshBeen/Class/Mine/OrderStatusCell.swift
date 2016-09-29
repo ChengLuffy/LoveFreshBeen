@@ -32,13 +32,13 @@ class OrderStatusCell: UITableViewCell {
             timeLabel?.text = orderStatus?.status_time
             subTitleLable?.text = orderStatus?.status_desc
             titleLabel?.text = orderStatus?.status_title
-            if orderStatus?.status_desc?.characters.count > 0 {
+            if (orderStatus?.status_desc?.characters.count)! > 0 {
                 let tmpStr = (orderStatus?.status_desc)! as NSString
                 if tmpStr.length > 10 {
-                    let str = tmpStr.substringToIndex(5) as NSString
-                    if str.isEqualToString("下单成功，") {
+                    let str = tmpStr.substring(to: 5) as NSString
+                    if str.isEqual(to: "下单成功，") {
                         let mutableStr = NSMutableString(string: tmpStr)
-                        mutableStr.insertString("\n ", atIndex: 9)
+                        mutableStr.insert("\n ", at: 9)
                         subTitleLable?.text = mutableStr as String
                     }
                 }
@@ -50,27 +50,27 @@ class OrderStatusCell: UITableViewCell {
         didSet {
             switch orderStateType!.hashValue {
             case OrderStateType.Top.hashValue:
-                circleButton?.selected = true
-                titleLabel?.textColor = UIColor.blackColor()
-                bottomLineView?.hidden = false
-                topLineView?.hidden = true
-                lineView?.hidden = false
+                circleButton?.isSelected = true
+                titleLabel?.textColor = UIColor.black
+                bottomLineView?.isHidden = false
+                topLineView?.isHidden = true
+                lineView?.isHidden = false
                 subTitleLable?.numberOfLines = 1
                 break
             case OrderStateType.Middle.hashValue:
-                circleButton?.selected = false
-                titleLabel?.textColor = UIColor.colorWithCustom(100, g: 100, b: 100)
-                bottomLineView?.hidden = false
-                topLineView?.hidden = false
-                lineView?.hidden = false
+                circleButton?.isSelected = false
+                titleLabel?.textColor = UIColor.colorWithCustom(r: 100, g: 100, b: 100)
+                bottomLineView?.isHidden = false
+                topLineView?.isHidden = false
+                lineView?.isHidden = false
                 subTitleLable?.numberOfLines = 1
                 break
             case OrderStateType.Bottom.hashValue:
-                bottomLineView?.hidden = true
-                topLineView?.hidden = false
-                lineView?.hidden = true
-                titleLabel?.textColor = UIColor.colorWithCustom(100, g: 100, b: 100)
-                circleButton?.selected = false
+                bottomLineView?.isHidden = true
+                topLineView?.isHidden = false
+                lineView?.isHidden = true
+                titleLabel?.textColor = UIColor.colorWithCustom(r: 100, g: 100, b: 100)
+                circleButton?.isSelected = false
                 subTitleLable?.numberOfLines = 0
                 break
             default: break
@@ -81,20 +81,20 @@ class OrderStatusCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
         
-        let textColor = UIColor.colorWithCustom(100, g: 100, b: 100)
+        let textColor = UIColor.colorWithCustom(r: 100, g: 100, b: 100)
         
         timeLabel = UILabel()
         timeLabel?.textColor = textColor
-        timeLabel?.textAlignment = NSTextAlignment.Center
-        timeLabel?.font = UIFont.systemFontOfSize(12)
+        timeLabel?.textAlignment = NSTextAlignment.center
+        timeLabel?.font = UIFont.systemFont(ofSize: 12)
         contentView.addSubview(timeLabel!)
         
         circleButton = UIButton()
-        circleButton?.userInteractionEnabled = false
-        circleButton?.setBackgroundImage(UIImage(named: "order_grayMark"), forState: UIControlState.Normal)
-        circleButton?.setBackgroundImage(UIImage(named: "order_yellowMark"), forState: UIControlState.Selected)
+        circleButton?.isUserInteractionEnabled = false
+        circleButton?.setBackgroundImage(UIImage(named: "order_grayMark"), for: UIControlState.normal)
+        circleButton?.setBackgroundImage(UIImage(named: "order_yellowMark"), for: UIControlState.selected)
         contentView.addSubview(circleButton!)
         
         topLineView = UIView()
@@ -109,12 +109,12 @@ class OrderStatusCell: UITableViewCell {
         
         titleLabel = UILabel()
         titleLabel?.textColor = textColor
-        titleLabel?.font = UIFont.systemFontOfSize(15)
+        titleLabel?.font = UIFont.systemFont(ofSize: 15)
         contentView.addSubview(titleLabel!)
         
         subTitleLable = UILabel()
         subTitleLable?.textColor = textColor
-        subTitleLable?.font = UIFont.systemFontOfSize(12)
+        subTitleLable?.font = UIFont.systemFont(ofSize: 12)
         contentView.addSubview(subTitleLable!)
         
         lineView = UIView()
@@ -130,9 +130,9 @@ class OrderStatusCell: UITableViewCell {
     
     private static let identifier = "orderStatusCell"
     class func orderStatusCell(tableView: UITableView) -> OrderStatusCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? OrderStatusCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? OrderStatusCell
         if cell == nil {
-            cell = OrderStatusCell(style: UITableViewCellStyle.Default, reuseIdentifier: identifier)
+            cell = OrderStatusCell(style: UITableViewCellStyle.default, reuseIdentifier: identifier)
         }
         
         return cell!
@@ -142,13 +142,13 @@ class OrderStatusCell: UITableViewCell {
         super.layoutSubviews()
         
         let margin: CGFloat = 15
-        timeLabel?.frame = CGRectMake(margin, 12, 35, 20)
-        circleButton?.frame = CGRectMake(CGRectGetMaxX(timeLabel!.frame) + 10, 15, 15, 15)
-        topLineView?.frame = CGRectMake((circleButton?.center.x)! - 1, 0, 2, 15 )
-        bottomLineView?.frame = CGRectMake((circleButton?.center.x)! - 1, 15 + 15, 2, height - 15 - 15)
-        titleLabel?.frame = CGRectMake(CGRectGetMaxX(circleButton!.frame) + 20, 12, width - CGRectGetMaxX(circleButton!.frame) - 20, 20)
-        subTitleLable?.frame = CGRectMake(titleLabel!.x, CGRectGetMaxY(titleLabel!.frame) + 10, width - titleLabel!.frame.origin.x, 30)
-        lineView?.frame = CGRectMake(titleLabel!.x, height - 1, width - titleLabel!.x, 1)
+        timeLabel?.frame = CGRect(x:margin, y:12, width:35, height:20)
+        circleButton?.frame = CGRect(x:timeLabel!.frame.maxX + 10, y:15, width:15, height:15)
+        topLineView?.frame = CGRect(x:(circleButton?.center.x)! - 1, y:0, width:2, height:15 )
+        bottomLineView?.frame = CGRect(x:(circleButton?.center.x)! - 1, y:15 + 15, width:2, height:height - 15 - 15)
+        titleLabel?.frame = CGRect(x:circleButton!.frame.maxX + 20, y:12, width:width - circleButton!.frame.maxX - 20, height:20)
+        subTitleLable?.frame = CGRect(x:titleLabel!.x, y:titleLabel!.frame.maxY + 10, width:width - titleLabel!.frame.origin.x, height:30)
+        lineView?.frame = CGRect(x:titleLabel!.x, y:height - 1, width:width - titleLabel!.x, height:1)
     }
     
 }

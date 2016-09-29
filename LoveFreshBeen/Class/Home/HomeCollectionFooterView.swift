@@ -17,10 +17,10 @@ class HomeCollectionFooterView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         titleLabel.text = "点击查看更多商品 >"
-        titleLabel.textAlignment = NSTextAlignment.Center
-        titleLabel.font = UIFont.systemFontOfSize(16)
-        titleLabel.textColor = UIColor.colorWithCustom(150, g: 150, b: 150)
-        titleLabel.frame = CGRectMake(0, 0, ScreenWidth, 60)
+        titleLabel.textAlignment = NSTextAlignment.center
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
+        titleLabel.textColor = UIColor.colorWithCustom(r: 150, g: 150, b: 150)
+        titleLabel.frame = CGRect(x:0, y:0, width:ScreenWidth, height:60)
         addSubview(titleLabel)
     }
 
@@ -29,11 +29,11 @@ class HomeCollectionFooterView: UICollectionReusableView {
     }
     
     func hideLabel() {
-        self.titleLabel.hidden = true
+        self.titleLabel.isHidden = true
     }
     
     func showLabel() {
-        self.titleLabel.hidden = false
+        self.titleLabel.isHidden = false
     }
     
     func setFooterTitle(text: String, textColor: UIColor) {
@@ -48,10 +48,10 @@ class HomeCollectionHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         titleLabel.text = "新鲜热卖"
-        titleLabel.textAlignment = NSTextAlignment.Left
-        titleLabel.font = UIFont.systemFontOfSize(14)
-        titleLabel.frame = CGRectMake(10, 0, 200, 20)
-        titleLabel.textColor = UIColor.colorWithCustom(150, g: 150, b: 150)
+        titleLabel.textAlignment = NSTextAlignment.left
+        titleLabel.font = UIFont.systemFont(ofSize: 14)
+        titleLabel.frame = CGRect(x:10, y:0, width:200, height:20)
+        titleLabel.textColor = UIColor.colorWithCustom(r: 150, g: 150, b: 150)
         addSubview(titleLabel)
     }
     

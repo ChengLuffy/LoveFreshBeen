@@ -17,15 +17,15 @@ class LFBTableView: UITableView {
         
         delaysContentTouches = false
         canCancelContentTouches = true
-        separatorStyle = .None
+        separatorStyle = .none
         
         let wrapView = subviews.first
         
         if wrapView != nil && NSStringFromClass((wrapView?.classForCoder)!).hasPrefix("WrapperView") {
 
             for gesture in wrapView!.gestureRecognizers! {
-                if (NSStringFromClass(gesture.classForCoder).containsString("DelayedTouchesBegan")) {
-                    gesture.enabled = false
+                if (NSStringFromClass(gesture.classForCoder).contains("DelayedTouchesBegan")) {
+                    gesture.isEnabled = false
                     break
                 }
             }
@@ -36,11 +36,10 @@ class LFBTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func touchesShouldCancelInContentView(view: UIView) -> Bool {
-        if view.isKindOfClass(UIControl) {
+    override func touchesShouldCancel(in view: UIView) -> Bool {
+        if view.isKind(of: UIControl.self) {
             return true
         }
-        
-        return super.touchesShouldCancelInContentView(view)
+        return super.touchesShouldCancel(in: view)
     }
 }

@@ -30,7 +30,7 @@ class SettingViewController: BaseViewController {
         buildLogoutView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
         print(self)
@@ -42,61 +42,61 @@ class SettingViewController: BaseViewController {
     }
     
     private func buildaboutMeView() {
-        aboutMeView = UIView(frame: CGRectMake(0, 10, ScreenWidth, subViewHeight))
-        aboutMeView.backgroundColor = UIColor.whiteColor()
+        aboutMeView = UIView(frame: CGRect(x:0, y:10, width:ScreenWidth, height:subViewHeight))
+        aboutMeView.backgroundColor = UIColor.white
         view.addSubview(aboutMeView!)
         
-        let tap = UITapGestureRecognizer(target: self, action: "aboutMeViewClick")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SettingViewController.aboutMeViewClick))
         aboutMeView.addGestureRecognizer(tap)
         
-        let aboutLabel = UILabel(frame: CGRectMake(20, 0, 200, subViewHeight))
+        let aboutLabel = UILabel(frame: CGRect(x:20, y:0, width:200, height:subViewHeight))
         aboutLabel.text = "关于小熊"
-        aboutLabel.font = UIFont.systemFontOfSize(16)
+        aboutLabel.font = UIFont.systemFont(ofSize: 16)
         aboutMeView.addSubview(aboutLabel)
         
         let arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView.frame = CGRectMake(ScreenWidth - 20, (subViewHeight - 10) * 0.5, 5, 10)
+        arrowImageView.frame = CGRect(x:ScreenWidth - 20, y:(subViewHeight - 10) * 0.5, width:5, height:10)
         aboutMeView.addSubview(arrowImageView)
     }
     
     private func buildCleanCacheView() {
-        cleanCacheView = UIView(frame: CGRectMake(0, subViewHeight + 10, ScreenWidth, subViewHeight))
-        cleanCacheView.backgroundColor = UIColor.whiteColor()
+        cleanCacheView = UIView(frame: CGRect(x:0, y:subViewHeight + 10, width:ScreenWidth, height:subViewHeight))
+        cleanCacheView.backgroundColor = UIColor.white
         view.addSubview(cleanCacheView!)
         
-        let cleanCacheLabel = UILabel(frame: CGRectMake(20, 0, 200, subViewHeight))
+        let cleanCacheLabel = UILabel(frame: CGRect(x:20, y:0, width:200, height:subViewHeight))
         cleanCacheLabel.text = "清理缓存"
-        cleanCacheLabel.font = UIFont.systemFontOfSize(16)
+        cleanCacheLabel.font = UIFont.systemFont(ofSize: 16)
         cleanCacheView.addSubview(cleanCacheLabel)
         
-        let tap = UITapGestureRecognizer(target: self, action: "cleanCacheViewClick")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SettingViewController.cleanCacheViewClick))
         cleanCacheView.addGestureRecognizer(tap)
         
-        cacheNumberLabel = UILabel(frame: CGRectMake(150, 0, ScreenWidth - 165, subViewHeight))
-        cacheNumberLabel.textAlignment = NSTextAlignment.Right
-        cacheNumberLabel.textColor = UIColor.colorWithCustom(180, g: 180, b: 180)
-        cacheNumberLabel.text = String().stringByAppendingFormat("%.2fM", FileTool.folderSize(LFBCachePath)).cleanDecimalPointZear()
+        cacheNumberLabel = UILabel(frame: CGRect(x:150, y:0, width:ScreenWidth - 165, height:subViewHeight))
+        cacheNumberLabel.textAlignment = NSTextAlignment.right
+        cacheNumberLabel.textColor = UIColor.colorWithCustom(r:180, g: 180, b: 180)
+        cacheNumberLabel.text = String().appendingFormat("%.2fM", FileTool.folderSize(path: LFBCachePath)).cleanDecimalPointZear()
         cleanCacheView.addSubview(cacheNumberLabel)
         
-        let lineView = UIView(frame: CGRectMake(10, -0.5, ScreenWidth - 10, 0.5))
-        lineView.backgroundColor = UIColor.blackColor()
+        let lineView = UIView(frame: CGRect(x:10, y:-0.5, width:ScreenWidth - 10, height:0.5))
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.08
         cleanCacheView.addSubview(lineView)
     }
     
     private func buildLogoutView() {
-        logoutView = UIView(frame: CGRectMake(0, CGRectGetMaxY(cleanCacheView.frame) + 20, ScreenHeight, subViewHeight))
-        logoutView.backgroundColor = UIColor.whiteColor()
+        logoutView = UIView(frame: CGRect(x:0, y:cleanCacheView.frame.maxY + 20, width:ScreenHeight, height:subViewHeight))
+        logoutView.backgroundColor = UIColor.white
         view.addSubview(logoutView)
         
-        let logoutLabel = UILabel(frame: CGRectMake(0, 0, ScreenWidth, subViewHeight))
+        let logoutLabel = UILabel(frame: CGRect(x:0, y:0, width:ScreenWidth, height:subViewHeight))
         logoutLabel.text = "退出当前账号"
-        logoutLabel.textColor = UIColor.colorWithCustom(60, g: 60, b: 60)
-        logoutLabel.font = UIFont.systemFontOfSize(15)
-        logoutLabel.textAlignment = NSTextAlignment.Center
+        logoutLabel.textColor = UIColor.colorWithCustom(r: 60, g: 60, b: 60)
+        logoutLabel.font = UIFont.systemFont(ofSize: 15)
+        logoutLabel.textAlignment = NSTextAlignment.center
         logoutView.addSubview(logoutLabel)
         
-        let tap = UITapGestureRecognizer(target: self, action: "logoutViewClick")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(SettingViewController.logoutViewClick))
         logoutLabel.addGestureRecognizer(tap)
     }
     
@@ -109,7 +109,7 @@ class SettingViewController: BaseViewController {
     func cleanCacheViewClick() {
         weak var tmpSelf = self
         ProgressHUDManager.show()
-        FileTool.cleanFolder(LFBCachePath) { () -> () in
+        FileTool.cleanFolder(path: LFBCachePath) { () -> () in
             tmpSelf!.cacheNumberLabel.text = "0M"
             ProgressHUDManager.dismiss()
         }

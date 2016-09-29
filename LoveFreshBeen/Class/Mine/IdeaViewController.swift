@@ -28,7 +28,7 @@ class IdeaViewController: BaseViewController {
         buildIderTextView()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -42,20 +42,20 @@ class IdeaViewController: BaseViewController {
     }
     
     private func buildRightItemButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem.barButton("发送", titleColor: UIColor.colorWithCustom(100, g: 100, b: 100), target: self, action: "rightItemClick")
+        navigationItem.rightBarButtonItem = UIBarButtonItem.barButton(title: "发送", titleColor: UIColor.colorWithCustom(r: 100, g: 100, b: 100), target: self, action: #selector(IdeaViewController.rightItemClick))
     }
     
     private func buildPlaceholderLabel() {
-        promptLabel = UILabel(frame: CGRectMake(margin, 5, ScreenWidth - 2 * margin, 50))
+        promptLabel = UILabel(frame: CGRect(x:margin, y:5, width:ScreenWidth - 2 * margin, height:50))
         promptLabel.text = "你的批评和建议能帮助我们更好的完善产品,请留下你的宝贵意见!"
         promptLabel.numberOfLines = 2;
-        promptLabel.textColor = UIColor.blackColor()
-        promptLabel.font = UIFont.systemFontOfSize(15)
+        promptLabel.textColor = UIColor.black
+        promptLabel.font = UIFont.systemFont(ofSize: 15)
         view.addSubview(promptLabel)
     }
     
     private func buildIderTextView() {
-        iderTextView = PlaceholderTextView(frame: CGRectMake(margin, CGRectGetMaxY(promptLabel.frame) + 10, ScreenWidth - 2 * margin, 150))
+        iderTextView = PlaceholderTextView(frame: CGRect(x:margin, y:promptLabel.frame.maxY + 10, width:ScreenWidth - 2 * margin, height:150))
         iderTextView.placeholder = "请输入宝贵意见(300字以内)"
         view.addSubview(iderTextView)
     }
@@ -64,19 +64,26 @@ class IdeaViewController: BaseViewController {
     func rightItemClick() {
         
         if iderTextView.text == nil || 0 == iderTextView.text?.characters.count {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "请输入意见,心里空空的")
-        } else if iderTextView.text?.characters.count < 5 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "请输入超过5个字啊亲~")
-        } else if iderTextView.text?.characters.count >= 300 {
-            ProgressHUDManager.showImage(UIImage(named: "v2_orderSuccess")!, status: "说的太多了,臣妾做不到啊~")
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "请输入意见,心里空空的")
+        } else if (iderTextView.text?.characters.count)! < 5 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "请输入超过5个字啊亲~")
+        } else if (iderTextView.text?.characters.count)! >= 300 {
+            ProgressHUDManager.showImage(image: UIImage(named: "v2_orderSuccess")!, status: "说的太多了,臣妾做不到啊~")
         } else {
-            ProgressHUDManager.showWithStatus("发送中")
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-            dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
-                self.navigationController?.popViewControllerAnimated(true)
+            ProgressHUDManager.showWithStatus(status: "发送中")
+            
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
+                self.navigationController?.popViewController(animated: true)
                 self.mineVC?.iderVCSendIderSuccess = true
                 ProgressHUDManager.dismiss()
             })
+//            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+//            dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+//                self.navigationController?.popViewControllerAnimated(true)
+//                self.mineVC?.iderVCSendIderSuccess = true
+//                ProgressHUDManager.dismiss()
+//            })
         }
     }
 }

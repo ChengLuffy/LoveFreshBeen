@@ -23,18 +23,18 @@ class OrderViewController: BaseViewController {
         bulidOrderTableView()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     private func bulidOrderTableView() {
-        orderTableView = LFBTableView(frame: view.bounds, style: UITableViewStyle.Plain)
+        orderTableView = LFBTableView(frame: view.bounds, style: UITableViewStyle.plain)
         orderTableView.backgroundColor = view.backgroundColor
         orderTableView.delegate = self
         orderTableView.dataSource = self
-        orderTableView.backgroundColor = UIColor.clearColor()
+        orderTableView.backgroundColor = UIColor.clear
         orderTableView.contentInset = UIEdgeInsetsMake(0, 0, 64, 0)
         view.addSubview(orderTableView)
         
@@ -53,18 +53,18 @@ class OrderViewController: BaseViewController {
 
 extension OrderViewController: UITableViewDelegate, UITableViewDataSource, MyOrderCellDelegate {
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = MyOrderCell.myOrderCell(tableView, indexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = MyOrderCell.myOrderCell(tableView: tableView, indexPath: indexPath as NSIndexPath)
         cell.order = orders![indexPath.row]
         cell.delegate = self
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 185.0
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return orders?.count ?? 0
     }
     
@@ -72,7 +72,7 @@ extension OrderViewController: UITableViewDelegate, UITableViewDataSource, MyOrd
         print(buttonType, indexPath.row)
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let orderDetailVC = OrderStatuslViewController()
         orderDetailVC.order = orders![indexPath.row]
         navigationController?.pushViewController(orderDetailVC, animated: true)

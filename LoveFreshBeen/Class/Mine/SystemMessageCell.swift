@@ -18,7 +18,7 @@ class SystemMessageCell: UITableViewCell {
     private var subTitleView: UIView?
     private var subTitleLabel: UILabel?
     private var lineView: UIView?
-    private var isSelected = false
+    var isSelecte = false
     private weak var tableView: UITableView?
     
     var message: UserMessage? {
@@ -40,11 +40,11 @@ class SystemMessageCell: UITableViewCell {
             subTitleLabel?.attributedText = attStr
             subTitleLabel?.sizeToFit()
 
-            if subTitleLabel?.height >= 40 {
+            if (subTitleLabel?.height)! >= CGFloat(40.0) {
                 subTitleLabel?.numberOfLines = 2
-                showMoreButton?.hidden = false
+                showMoreButton?.isHidden = false
             } else {
-                showMoreButton?.hidden = true
+                showMoreButton?.isHidden = true
                 subTitleLabel?.numberOfLines = 1
                 message?.subTitleViewHeightNomarl = 20 + (subTitleLabel?.height)!
                 message?.cellHeight = 60 + message!.subTitleViewHeightNomarl + 20
@@ -55,45 +55,45 @@ class SystemMessageCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = UIColor.clearColor()
-        selectionStyle = UITableViewCellSelectionStyle.None
-        contentView.backgroundColor = UIColor.clearColor()
+        backgroundColor = UIColor.clear
+        selectionStyle = UITableViewCellSelectionStyle.none
+        contentView.backgroundColor = UIColor.clear
         
         titleView = UIView()
-        titleView!.backgroundColor = UIColor.whiteColor()
+        titleView!.backgroundColor = UIColor.white
         contentView.addSubview(titleView!)
 
         titleLabel = UILabel()
         titleLabel?.numberOfLines = 0
-        titleLabel!.textAlignment = NSTextAlignment.Left
-        titleLabel!.font = UIFont.systemFontOfSize(15)
+        titleLabel!.textAlignment = NSTextAlignment.left
+        titleLabel!.font = UIFont.systemFont(ofSize: 15)
         titleView!.addSubview(titleLabel!)
 
-        showMoreButton = UIButton(type: .Custom)
-        showMoreButton!.setTitle("显示全部", forState: .Normal)
-        showMoreButton!.titleLabel!.font = UIFont.systemFontOfSize(13)
-        showMoreButton?.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        showMoreButton?.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-        showMoreButton!.titleLabel?.textAlignment = NSTextAlignment.Center
-        showMoreButton!.addTarget(self, action: "showMoreButtonClick", forControlEvents: UIControlEvents.TouchUpInside)
-        showMoreButton?.hidden = true
+        showMoreButton = UIButton(type: .custom)
+        showMoreButton!.setTitle("显示全部", for: .normal)
+        showMoreButton!.titleLabel!.font = UIFont.systemFont(ofSize: 13)
+        showMoreButton?.setTitleColor(UIColor.black, for: UIControlState.normal)
+        showMoreButton?.setTitleColor(UIColor.lightGray, for: UIControlState.highlighted)
+        showMoreButton!.titleLabel?.textAlignment = NSTextAlignment.center
+        showMoreButton!.addTarget(self, action: #selector(SystemMessageCell.showMoreButtonClick), for: UIControlEvents.touchUpInside)
+        showMoreButton?.isHidden = true
         titleView!.addSubview(showMoreButton!)
         
         lineView = UIView()
-        lineView?.backgroundColor = UIColor.lightGrayColor()
+        lineView?.backgroundColor = UIColor.lightGray
         lineView?.alpha = 0.2
         titleView?.addSubview(lineView!)
         
         subTitleView = UIView()
-        subTitleView!.backgroundColor = UIColor.whiteColor()
+        subTitleView!.backgroundColor = UIColor.white
         contentView.addSubview(subTitleView!)
         
         subTitleLabel = UILabel()
         subTitleLabel?.numberOfLines = 0
-        subTitleLabel!.textAlignment = NSTextAlignment.Left
-        subTitleLabel?.backgroundColor = UIColor.clearColor()
-        subTitleLabel!.textColor = UIColor.lightGrayColor()
-        subTitleLabel!.font = UIFont.systemFontOfSize(12)
+        subTitleLabel!.textAlignment = NSTextAlignment.left
+        subTitleLabel?.backgroundColor = UIColor.clear
+        subTitleLabel!.textColor = UIColor.lightGray
+        subTitleLabel!.font = UIFont.systemFont(ofSize: 12)
         subTitleView!.addSubview(subTitleLabel!)
         
     }
@@ -104,9 +104,9 @@ class SystemMessageCell: UITableViewCell {
 
     static private let identifier = "identifier"
     class func systemMessageCell(tableView: UITableView) -> SystemMessageCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? SystemMessageCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SystemMessageCell
         if cell == nil {
-            cell = SystemMessageCell(style: UITableViewCellStyle.Default, reuseIdentifier: identifier)
+            cell = SystemMessageCell(style: UITableViewCellStyle.default, reuseIdentifier: identifier)
         }
         cell?.tableView = tableView
         
@@ -116,24 +116,24 @@ class SystemMessageCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        titleView?.frame = CGRectMake(0, 0, width, 60)
-        titleLabel?.frame = CGRectMake(20, 0, width - 40, 60)
-        showMoreButton?.frame = CGRectMake(width - 80, 15, 60, 30)
-        lineView?.frame = CGRectMake(20, 59, width - 20, 1)
+        titleView?.frame = CGRect(x:0, y:0, width:width, height:60)
+        titleLabel?.frame = CGRect(x:20, y:0, width:width - 40, height:60)
+        showMoreButton?.frame = CGRect(x:width - 80, y:15, width:60, height:30)
+        lineView?.frame = CGRect(x:20, y:59, width:width - 20, height:1)
         
-        if !isSelected {
-            subTitleView?.frame = CGRectMake(0, 60, width, 60)
-            subTitleLabel?.frame = CGRectMake(20, 10, width - 40, 60 - 20)
+        if !isSelecte {
+            subTitleView?.frame = CGRect(x:0, y:60, width:width, height:60)
+            subTitleLabel?.frame = CGRect(x:20, y:10, width:width - 40, height:60 - 20)
         } else {
-            subTitleView?.frame = CGRectMake(0, 60, width, (message?.subTitleViewHeightSpread)!)
-            subTitleLabel?.frame = CGRectMake(20, 10, width - 40, message!.subTitleViewHeightSpread)
+            subTitleView?.frame = CGRect(x:0, y:60, width:width, height:(message?.subTitleViewHeightSpread)!)
+            subTitleLabel?.frame = CGRect(x:20, y:10, width:width - 40, height:message!.subTitleViewHeightSpread)
             subTitleLabel?.numberOfLines = 0
             subTitleLabel?.sizeToFit()
         }
     }
     
     func showMoreButtonClick() {
-        isSelected = !isSelected
+        isSelecte = !isSelecte
         if isSelected {
             subTitleLabel?.numberOfLines = 0
             subTitleLabel?.sizeToFit()

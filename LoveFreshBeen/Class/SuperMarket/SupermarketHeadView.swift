@@ -18,7 +18,7 @@ class SupermarketHeadView: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         
         backgroundView = UIView()
-        backgroundView?.backgroundColor = UIColor.clearColor()
+        backgroundView?.backgroundColor = UIColor.clear
         
         contentView.backgroundColor = UIColor(red: 240 / 255.0, green: 240 / 255.0, blue: 240 / 255.0, alpha: 0.8)
         buildTitleLabel()
@@ -31,15 +31,15 @@ class SupermarketHeadView: UITableViewHeaderFooterView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        titleLabel.frame = CGRectMake(HotViewMargin, 0, width - HotViewMargin, height)
+        titleLabel.frame = CGRect(x:HotViewMargin, y:0, width:width - HotViewMargin, height:height)
     }
     
     private func buildTitleLabel() {
         titleLabel = UILabel()
-        titleLabel.backgroundColor = UIColor.clearColor()
-        titleLabel.font = UIFont.systemFontOfSize(13)
-        titleLabel.textColor = UIColor.colorWithCustom(100, g: 100, b: 100)
-        titleLabel.textAlignment = NSTextAlignment.Left
+        titleLabel.backgroundColor = UIColor.clear
+        titleLabel.font = UIFont.systemFont(ofSize: 13)
+        titleLabel.textColor = UIColor.colorWithCustom(r: 100, g: 100, b: 100)
+        titleLabel.textAlignment = NSTextAlignment.left
         contentView.addSubview(titleLabel)
     }
 

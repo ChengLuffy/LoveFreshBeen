@@ -105,7 +105,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     // 遇到这些情况就直接返回
-    if (!self.userInteractionEnabled) return;
+    if (!self.isUserInteractionEnabled) return;
     
     // 这个就算看不见也需要处理
     if ([keyPath isEqualToString:MJRefreshKeyPathContentSize]) {

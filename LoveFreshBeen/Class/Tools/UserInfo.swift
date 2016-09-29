@@ -15,7 +15,7 @@ class UserInfo: NSObject {
     
     private static let instance = UserInfo()
     
-    private var allAdress: [Adress]?
+    var allAdress: NSMutableArray?
     
     class var sharedUserInfo: UserInfo {
         return instance
@@ -30,7 +30,7 @@ class UserInfo: NSObject {
         }
     }
     
-    func setAllAdress(adresses: [Adress]) {
+    func setAllAdress(adresses: NSMutableArray) {
         allAdress = adresses
     }
     
@@ -38,30 +38,47 @@ class UserInfo: NSObject {
         allAdress = nil
     }
     
-    func defaultAdress() -> Adress? {
+    func defaultAdress() -> NSDictionary? {
         if allAdress == nil {
             weak var tmpSelf = self
             
             AdressData.loadMyAdressData { (data, error) -> Void in
-                if data?.data?.count > 0 {
-                    tmpSelf!.allAdress = data!.data!
+                
+                print(data)
+                let dict: NSDictionary = data! as NSDictionary
+                let tmparr = dict.value(forKey: "data") as? NSArray
+                let arr: NSMutableArray = NSMutableArray(array: tmparr!)
+                if arr.count > 0 {
+                    tmpSelf!.allAdress = arr
                 } else {
-                    tmpSelf?.allAdress?.removeAll()
+                    tmpSelf!.allAdress?.removeAllObjects()
                 }
+                
+//                if (data?.data?.count)! > 0 {
+//                    tmpSelf!.allAdress = data!.data!
+//                } else {
+//                    tmpSelf?.allAdress?.removeAll()
+//                }
             }
             
-            return allAdress?.count > 1 ? allAdress![0] : nil
+            if (allAdress?.count)! > 1 {
+                return allAdress![0] as? NSDictionary
+            } else {
+                return nil
+            }
+            
+//            return (allAdress?.count)! > 1 ? allAdress?[0] : NSDictionary()
         } else {
-            return allAdress![0]
+            return allAdress![0] as? NSDictionary
         }
     }
     
     func setDefaultAdress(adress: Adress) {
         if allAdress != nil {
-            allAdress?.insert(adress, atIndex: 0)
+            allAdress?.insert(adress, at: 0)
         } else {
-            allAdress = [Adress]()
-            allAdress?.append(adress)
+            allAdress = NSMutableArray()
+            allAdress?.add(adress)
         }
     }
 }

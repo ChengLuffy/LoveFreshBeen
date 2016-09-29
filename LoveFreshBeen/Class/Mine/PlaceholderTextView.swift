@@ -61,11 +61,11 @@ class PlaceholderTextView: UITextView {
         addSubview(placeholderLabel)
         
         alwaysBounceVertical = true
-        font = UIFont.systemFontOfSize(14)
-        placeholderColor = UIColor.grayColor()
+        font = UIFont.systemFont(ofSize: 14)
+        placeholderColor = UIColor.gray
         placeholderLabel.alpha = 0.6
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textDidChange", name: UITextViewTextDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PlaceholderTextView.textDidChange), name: NSNotification.Name.UITextViewTextDidChange, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -73,18 +73,18 @@ class PlaceholderTextView: UITextView {
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     func textDidChange() {
-        self.placeholderLabel.hidden = hasText()
+        self.placeholderLabel.isHidden = hasText
     }
     
     func updatePlaceholderLabelSize() {
-        let maxSize = CGSizeMake(bounds.size.width - 2 * placeholderLabel.frame.origin.x, 100000)
+        let maxSize = CGSize(width:bounds.size.width - 2 * placeholderLabel.frame.origin.x, height:100000)
         if placeholder != nil {
-        placeholderLabel.frame.size = (placeholder! as NSString).boundingRectWithSize(maxSize, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName : placeholderLabel.font as AnyObject], context: nil).size
-            placeholderLabel.backgroundColor = UIColor.clearColor()
+        placeholderLabel.frame.size = (placeholder! as NSString).boundingRect(with: maxSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName : placeholderLabel.font as AnyObject], context: nil).size
+            placeholderLabel.backgroundColor = UIColor.clear
         }
     }
 }

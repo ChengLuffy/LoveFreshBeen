@@ -36,20 +36,20 @@ class HelpHeadView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.white
         
         questionLabel = UILabel()
-        questionLabel?.font = UIFont.systemFontOfSize(16)
+        questionLabel?.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(questionLabel!)
         
         arrowImageView = UIImageView(image: UIImage(named: "cell_arrow_down_accessory"))
         contentView.addSubview(arrowImageView!)
         
-        let tap = UITapGestureRecognizer(target: self, action: "headViewDidClick:")
+        let tap = UITapGestureRecognizer(target: self, action: Selector(("headViewDidClick:")))
         contentView.addGestureRecognizer(tap)
         
         lineView.alpha = 0.08
-        lineView.backgroundColor = UIColor.blackColor()
+        lineView.backgroundColor = UIColor.black
         contentView.addSubview(lineView)
     }
 
@@ -60,23 +60,23 @@ class HelpHeadView: UITableViewHeaderFooterView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        questionLabel?.frame = CGRectMake(20, 0, width - 20, height)
-        arrowImageView?.frame = CGRectMake(width - 30, (height - arrowImageView!.size.height) * 0.5, arrowImageView!.size.width, arrowImageView!.size.height)
-        lineView.frame = CGRectMake(0, 0, width, 1)
+        questionLabel?.frame = CGRect(x:20, y:0, width:width - 20, height:height)
+        arrowImageView?.frame = CGRect(x:width - 30, y:(height - arrowImageView!.size.height) * 0.5, width:arrowImageView!.size.width, height:arrowImageView!.size.height)
+        lineView.frame = CGRect(x:0, y:0, width:width, height:1)
         
     }
     
     func headViewDidClick(tap: UITapGestureRecognizer) {
         isSelected = !isSelected
         
-        if delegate != nil && delegate!.respondsToSelector("headViewDidClck:") {
+        if delegate != nil && delegate!.responds(to: Selector(("headViewDidClck:"))) {
 
-            delegate!.headViewDidClck!(self)
+            delegate!.headViewDidClck!(headView: self)
         }
     }
 }
 
 @objc protocol HelpHeadViewDelegate: NSObjectProtocol {
-    optional
+    @objc optional
     func headViewDidClck(headView: HelpHeadView)
 }

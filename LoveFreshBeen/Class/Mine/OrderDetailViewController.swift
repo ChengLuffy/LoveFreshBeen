@@ -12,12 +12,12 @@ import UIKit
 
 class OrderDetailViewController: BaseViewController {
     
-    private var scrollView: UIScrollView?
-    private let orderDetailView = OrderDetailView()
-    private let orderUserDetailView = OrderUserDetailView()
-    private let orderGoodsListView = OrderGoodsListView()
-    private let evaluateView = UIView()
-    private let evaluateLabel = UILabel()
+    var scrollView: UIScrollView?
+    let orderDetailView = OrderDetailView()
+    let orderUserDetailView = OrderUserDetailView()
+    let orderGoodsListView = OrderGoodsListView()
+    let evaluateView = UIView()
+    let evaluateLabel = UILabel()
     
     private lazy var starImageViews: [UIImageView] = {
         var starImageViews: [UIImageView] = []
@@ -62,48 +62,48 @@ class OrderDetailViewController: BaseViewController {
         scrollView = UIScrollView(frame: view.bounds)
         scrollView?.alwaysBounceVertical = true
         scrollView?.backgroundColor = LFBGlobalBackgroundColor
-        scrollView?.contentSize = CGSizeMake(ScreenWidth, 1000)
+        scrollView?.contentSize = CGSize(width:ScreenWidth, height:1000)
         view.addSubview(scrollView!)
     }
     
     private func buildOrderDetailView() {
-        orderDetailView.frame = CGRectMake(0, 10, ScreenWidth, 185)
+        orderDetailView.frame = CGRect(x:0, y:10, width:ScreenWidth, height:185)
         
         scrollView?.addSubview(orderDetailView)
     }
     
     private func buildOrderUserDetailView() {
-        orderUserDetailView.frame = CGRectMake(0, CGRectGetMaxY(orderDetailView.frame) + 10, ScreenWidth, 110)
+        orderUserDetailView.frame = CGRect(x:0, y:orderDetailView.frame.maxY + 10, width:ScreenWidth, height:110)
         
         scrollView?.addSubview(orderUserDetailView)
     }
     
     private func buildOrderGoodsListView() {
-        orderGoodsListView.frame = CGRectMake(0, CGRectGetMaxY(orderUserDetailView.frame) + 10, ScreenWidth, 350)
+        orderGoodsListView.frame = CGRect(x:0, y:orderUserDetailView.frame.maxY + 10, width:ScreenWidth, height:350)
         orderGoodsListView.delegate = self
         scrollView?.addSubview(orderGoodsListView)
     }
     
     private func bulidEvaluateView() {
-        evaluateView.frame = CGRectMake(0, CGRectGetMaxY(orderGoodsListView.frame) + 10, ScreenWidth, 80)
-        evaluateView.backgroundColor = UIColor.whiteColor()
+        evaluateView.frame = CGRect(x:0, y:orderGoodsListView.frame.maxY + 10, width:ScreenWidth, height:80)
+        evaluateView.backgroundColor = UIColor.white
         scrollView?.addSubview(evaluateView)
         
         let myEvaluateLabel = UILabel()
         myEvaluateLabel.text = "我的评价"
         myEvaluateLabel.textColor = LFBTextBlackColor
-        myEvaluateLabel.font = UIFont.systemFontOfSize(14)
-        myEvaluateLabel.frame = CGRectMake(10, 5, ScreenWidth, 25)
+        myEvaluateLabel.font = UIFont.systemFont(ofSize: 14)
+        myEvaluateLabel.frame = CGRect(x:10, y:5, width:ScreenWidth, height:25)
         evaluateView.addSubview(myEvaluateLabel)
         
         for i in 0...4 {
             let starImageView = starImageViews[i]
-            starImageView.frame = CGRectMake(10 + CGFloat(i) * 30, CGRectGetMaxY(myEvaluateLabel.frame) + 5, 25, 25)
+            starImageView.frame = CGRect(x:10 + CGFloat(i) * 30, y:myEvaluateLabel.frame.maxY + 5, width:25, height:25)
             evaluateView.addSubview(starImageView)
         }
         
-        evaluateLabel.font = UIFont.systemFontOfSize(14)
-        evaluateLabel.frame = CGRectMake(10, CGRectGetMaxY(starImageViews[0].frame) + 10, ScreenWidth - 20, 25)
+        evaluateLabel.font = UIFont.systemFont(ofSize: 14)
+        evaluateLabel.frame = CGRect(x:10, y:starImageViews[0].frame.maxY + 10, width:ScreenWidth - 20, height:25)
         evaluateLabel.textColor = LFBTextBlackColor
         evaluateView.addSubview(evaluateLabel)
     }
@@ -114,9 +114,9 @@ class OrderDetailViewController: BaseViewController {
 extension OrderDetailViewController: OrderGoodsListViewDelegate {
     
     func orderGoodsListViewHeightDidChange(height: CGFloat) {
-        orderGoodsListView.frame = CGRectMake(0, CGRectGetMaxY(orderUserDetailView.frame) + 10, ScreenWidth, height)
-        evaluateView.frame = CGRectMake(0, CGRectGetMaxY(orderGoodsListView.frame) + 10, ScreenWidth, 100)
-        scrollView?.contentSize = CGSizeMake(ScreenWidth, CGRectGetMaxY(evaluateView.frame) + 10 + 50 + NavigationH)
+        orderGoodsListView.frame = CGRect(x:0, y:orderUserDetailView.frame.maxY + 10, width:ScreenWidth, height:height)
+        evaluateView.frame = CGRect(x:0, y:orderGoodsListView.frame.maxY + 10, width:ScreenWidth, height:100)
+        scrollView?.contentSize = CGSize(width:ScreenWidth, height:evaluateView.frame.maxY + 10 + 50 + NavigationH)
     }
     
 }

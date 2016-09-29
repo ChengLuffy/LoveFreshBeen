@@ -40,66 +40,66 @@ class MyOrderCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
-        backgroundColor = UIColor.clearColor()
-        contentView.backgroundColor = UIColor.whiteColor()
+        selectionStyle = UITableViewCellSelectionStyle.none
+        backgroundColor = UIColor.clear
+        contentView.backgroundColor = UIColor.white
         
         timeLabel = UILabel()
-        timeLabel?.font = UIFont.systemFontOfSize(13)
-        timeLabel?.textColor = UIColor.blackColor()
+        timeLabel?.font = UIFont.systemFont(ofSize: 13)
+        timeLabel?.textColor = UIColor.black
         contentView.addSubview(timeLabel!)
     
         statusTextLabel = UILabel()
-        statusTextLabel?.textAlignment = NSTextAlignment.Right
+        statusTextLabel?.textAlignment = NSTextAlignment.right
         statusTextLabel?.font = timeLabel?.font
-        statusTextLabel?.textColor = UIColor.redColor()
+        statusTextLabel?.textColor = UIColor.red
         contentView.addSubview(statusTextLabel!)
         
         goodsImageViews = OrderImageViews()
         contentView.addSubview(goodsImageViews!)
         
         productNumsLabel = UILabel()
-        productNumsLabel?.textColor = UIColor.grayColor()
-        productNumsLabel?.textAlignment = NSTextAlignment.Right
+        productNumsLabel?.textColor = UIColor.gray
+        productNumsLabel?.textAlignment = NSTextAlignment.right
         productNumsLabel?.font = timeLabel?.font
         contentView.addSubview(productNumsLabel!)
         
         payLabel = UILabel()
         payLabel?.text = "实付:"
-        payLabel?.textColor = UIColor.grayColor()
+        payLabel?.textColor = UIColor.gray
         payLabel?.font = productNumsLabel?.font
         contentView.addSubview(payLabel!)
         
         productsPriceLabel = UILabel()
-        productsPriceLabel?.textColor = UIColor.blackColor()
-        productsPriceLabel?.textAlignment = NSTextAlignment.Right
+        productsPriceLabel?.textColor = UIColor.black
+        productsPriceLabel?.textAlignment = NSTextAlignment.right
         productsPriceLabel?.font = payLabel?.font
-        productsPriceLabel?.textColor = UIColor.grayColor()
+        productsPriceLabel?.textColor = UIColor.gray
         contentView.addSubview(productsPriceLabel!)
         
         weak var tmpSelf = self
-        buttons = OrderButtons(frame: CGRectZero, buttonClickCallBack: { (type) -> () in
+        buttons = OrderButtons(frame: CGRect.zero, buttonClickCallBack: { (type) -> () in
             if tmpSelf?.delegate != nil {
-                if tmpSelf!.delegate!.respondsToSelector("orderCellButtonDidClick:buttonType:") {
-                    tmpSelf!.delegate!.orderCellButtonDidClick!(tmpSelf!.indexPath!, buttonType: type)
+                if tmpSelf!.delegate!.responds(to: Selector(("orderCellButtonDidClick:buttonType:"))) {
+                    tmpSelf!.delegate!.orderCellButtonDidClick!(indexPath: tmpSelf!.indexPath!, buttonType: type)
                 }
             }
         })
-        buttons?.backgroundColor = UIColor.whiteColor()
+        buttons?.backgroundColor = UIColor.white
         contentView.addSubview(buttons!)
         
         lineView1 = UIView()
-        lineView1?.backgroundColor = UIColor.lightGrayColor()
+        lineView1?.backgroundColor = UIColor.lightGray
         lineView1?.alpha = 0.1
         contentView.addSubview(lineView1!)
         
         lineView2 = UIView()
-        lineView2?.backgroundColor = UIColor.lightGrayColor()
+        lineView2?.backgroundColor = UIColor.lightGray
         lineView2?.alpha = 0.1
         contentView.addSubview(lineView2!)
         
         lineView3 = UIView()
-        lineView3?.backgroundColor = UIColor.lightGrayColor()
+        lineView3?.backgroundColor = UIColor.lightGray
         lineView3?.alpha = 0.1
         contentView.addSubview(lineView3!)
         
@@ -111,10 +111,10 @@ class MyOrderCell: UITableViewCell {
     
     static private let identifier = "OrderCell"
     class func myOrderCell(tableView: UITableView, indexPath: NSIndexPath) -> MyOrderCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? MyOrderCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? MyOrderCell
         
         if cell == nil {
-            cell = MyOrderCell(style: .Default, reuseIdentifier: identifier)
+            cell = MyOrderCell(style: .default, reuseIdentifier: identifier)
         }
         
         cell?.indexPath = indexPath
@@ -127,22 +127,22 @@ class MyOrderCell: UITableViewCell {
         
         let margin: CGFloat = 10
         let topViewHeight: CGFloat = 30
-        contentView.frame = CGRectMake(0, 0, width, height - 20)
-        timeLabel?.frame = CGRectMake(margin, 0, ScreenWidth, topViewHeight)
-        statusTextLabel?.frame = CGRectMake(ScreenWidth - 150, 0, 140, topViewHeight)
-        lineView1?.frame = CGRectMake(margin, topViewHeight, ScreenWidth - margin, 1)
-        goodsImageViews?.frame = CGRectMake(0, topViewHeight, width, 65)
-        lineView2?.frame = CGRectMake(margin, CGRectGetMaxY(goodsImageViews!.frame), width - margin, 1)
-        productsPriceLabel?.frame = CGRectMake(width - margin - 60, CGRectGetMaxY(goodsImageViews!.frame), 60, topViewHeight)
-        payLabel?.frame = CGRectMake(width - 70 - 20, productsPriceLabel!.y, 40, topViewHeight)
-        productNumsLabel?.frame = CGRectMake(width - 220, productsPriceLabel!.y, 100, topViewHeight)
-        lineView3?.frame = CGRectMake(margin, CGRectGetMaxY(payLabel!.frame), width - margin, 1)
-        buttons?.frame = CGRectMake(0, CGRectGetMaxY(productNumsLabel!.frame), width, 40)
+        contentView.frame = CGRect(x:0, y:0, width:width, height:height - 20)
+        timeLabel?.frame = CGRect(x:margin, y:0, width:ScreenWidth, height:topViewHeight)
+        statusTextLabel?.frame = CGRect(x:ScreenWidth - 150, y:0, width:140, height:topViewHeight)
+        lineView1?.frame = CGRect(x:margin, y:topViewHeight, width:ScreenWidth - margin, height:1)
+        goodsImageViews?.frame = CGRect(x:0, y:topViewHeight, width:width, height:65)
+        lineView2?.frame = CGRect(x:margin, y:goodsImageViews!.frame.maxY, width:width - margin, height:1)
+        productsPriceLabel?.frame = CGRect(x:width - margin - 60, y:goodsImageViews!.frame.maxY, width:60, height:topViewHeight)
+        payLabel?.frame = CGRect(x:width - 70 - 20, y:productsPriceLabel!.y, width:40, height:topViewHeight)
+        productNumsLabel?.frame = CGRect(x:width - 220, y:productsPriceLabel!.y, width:100, height:topViewHeight)
+        lineView3?.frame = CGRect(x:margin, y:payLabel!.frame.maxY, width:width - margin, height:1)
+        buttons?.frame = CGRect(x:0, y:productNumsLabel!.frame.maxY, width:width, height:40)
     }
 }
 
 @objc protocol MyOrderCellDelegate: NSObjectProtocol {
-    optional func orderCellButtonDidClick(indexPath: NSIndexPath, buttonType: Int)
+    @objc optional func orderCellButtonDidClick(indexPath: NSIndexPath, buttonType: Int)
 }
 
 class OrderImageViews: UIView {
@@ -155,22 +155,23 @@ class OrderImageViews: UIView {
             for i in 0..<order_goods!.count {
                 if i < 4 {
                     let subImageView = imageViewsSubViews![i] as! UIImageView
-                    subImageView.hidden = false
-                    subImageView.sd_setImageWithURL(NSURL(string: order_goods![i][0].img!), placeholderImage: UIImage(named: "author"))
+                    subImageView.isHidden = false
+                    subImageView.sd_setImage(with: URL.init(string: order_goods![i][0].img!), placeholderImage: UIImage.init(named: "author"))
+//                    subImageView.sd_setImageWithURL(NSURL(string: order_goods![i][0].img!), placeholderImage: UIImage(named: "author"))
                 }
             }
             
-            for var i = order_goods!.count; i < 4; i++ {
+            for i in order_goods!.count ..< 4 {
                 let subImageView = imageViewsSubViews![i]
-                subImageView.hidden = true
+                subImageView.isHidden = true
             }
             
-            if order_goods?.count >= 5 {
+            if (order_goods?.count)! >= 5 {
                 let subImageView = imageViewsSubViews![4]
-                subImageView.hidden = false
+                subImageView.isHidden = false
             } else {
                 let subImageView = imageViewsSubViews![4]
-                subImageView.hidden = true
+                subImageView.isHidden = true
             }
         }
     }
@@ -178,19 +179,19 @@ class OrderImageViews: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        imageViews = UIView(frame: CGRectMake(0, 5, ScreenWidth, 55))
+        imageViews = UIView(frame: CGRect(x:0, y:5, width:ScreenWidth, height:55))
         for i in 0...4 {
-            let imageView = UIImageView(frame: CGRectMake(CGFloat(i) * 60 + 10, 0, 55, 55))
+            let imageView = UIImageView(frame: CGRect(x:CGFloat(i) * 60 + 10, y:0, width:55, height:55))
             if 4 == i {
                 imageView.image = UIImage(named: "v2_goodmore")
             }
-            imageView.contentMode = UIViewContentMode.ScaleAspectFit
-            imageView.hidden = true
+            imageView.contentMode = UIViewContentMode.scaleAspectFit
+            imageView.isHidden = true
             imageViews?.addSubview(imageView)
         }
         
         arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView?.frame = CGRectMake(ScreenWidth - 15, (65 - arrowImageView!.bounds.size.height) * 0.5, arrowImageView!.bounds.size.width, arrowImageView!.bounds.size.height)
+        arrowImageView?.frame = CGRect(x:ScreenWidth - 15, y:(65 - arrowImageView!.bounds.size.height) * 0.5, width:arrowImageView!.bounds.size.width, height:arrowImageView!.bounds.size.height)
         imageViews?.addSubview(arrowImageView!)
         addSubview(imageViews!)
     }
@@ -207,11 +208,11 @@ class OrderImageViews: UIView {
 
 class OrderButtons: UIView {
     
-    var buttonClickCallBack: ((type: Int) -> ())?
+    var buttonClickCallBack: ((_ type: Int) -> ())?
     
     var buttons: [OrderButton]? {
         didSet {
-            for var i = subviews.count; i > 0; i-- {
+            for i in ((0 + 1)...subviews.count).reversed() {
                 let subBtnView = self.subviews[i-1]
                 subBtnView.removeFromSuperview()
             }
@@ -220,15 +221,15 @@ class OrderButtons: UIView {
             let btnH: CGFloat = 26
             
             for i in 0..<buttons!.count {
-                let btn = UIButton(frame: CGRectMake(ScreenWidth - CGFloat(i + 1) * (btnW + 10) - 5, (self.height - btnH) * 0.5, btnW, btnH))
+                let btn = UIButton(frame: CGRect(x:ScreenWidth - CGFloat(i + 1) * (btnW + 10) - 5, y:(self.height - btnH) * 0.5, width:btnW, height:btnH))
                 btn.tag = i
-                btn.titleLabel?.font = UIFont.systemFontOfSize(12)
-                btn.setTitleColor(UIColor.blackColor(), forState: .Normal)
+                btn.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+                btn.setTitleColor(UIColor.black, for: .normal)
                 btn.layer.masksToBounds = true
                 btn.layer.cornerRadius = 5
                 btn.backgroundColor = LFBNavigationYellowColor
-                btn.setTitle(buttons![i].text, forState: UIControlState.Normal)
-                btn.addTarget(self, action: "orderButtonClick:", forControlEvents: UIControlEvents.TouchUpInside)
+                btn.setTitle(buttons![i].text, for: UIControlState.normal)
+                btn.addTarget(self, action: Selector(("orderButtonClick:")), for: UIControlEvents.touchUpInside)
                 addSubview(btn)
             }
         }
@@ -238,7 +239,7 @@ class OrderButtons: UIView {
         super.init(frame: frame)
     }
     
-    convenience init(frame: CGRect, buttonClickCallBack:(type: Int) -> ()) {
+    convenience init(frame: CGRect, buttonClickCallBack:@escaping (_ type: Int) -> ()) {
         self.init(frame: frame)
         self.buttonClickCallBack = buttonClickCallBack
     }
@@ -258,7 +259,7 @@ class OrderButtons: UIView {
     
     func orderButtonClick(sender: UIButton) {
         if buttonClickCallBack != nil {
-            buttonClickCallBack!(type: buttons![sender.tag].type)
+            buttonClickCallBack!(buttons![sender.tag].type)
         }
     }
 }

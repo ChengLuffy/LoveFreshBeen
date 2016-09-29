@@ -102,7 +102,7 @@ typedef void (^ClickHandler)(void);
         customButton.clickHandler = ^(){
         NSLog(@"click !!");
     };
-    [customButton setImage:[UIImage imageNamed:@"icon"] forState:UIControlStateNormal];
+    [customButton setImage:[UIImage imageNamed:@"icon"] forState:UIControlStat.normal];
     [_socialBar.barButtons addObject:customButton];
  ```
  

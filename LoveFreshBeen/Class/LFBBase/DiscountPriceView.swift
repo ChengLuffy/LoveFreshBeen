@@ -39,18 +39,18 @@ class DiscountPriceView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         marketPriceLabel = UILabel()
-        marketPriceLabel?.textColor = UIColor.colorWithCustom(80, g: 80, b: 80)
+        marketPriceLabel?.textColor = UIColor.colorWithCustom(r: 80, g: 80, b: 80)
         marketPriceLabel?.font = HomeCollectionTextFont
         addSubview(marketPriceLabel!)
         
         lineView = UIView()
-        lineView?.backgroundColor = UIColor.colorWithCustom(80, g: 80, b: 80)
+        lineView?.backgroundColor = UIColor.colorWithCustom(r: 80, g: 80, b: 80)
         
         marketPriceLabel?.addSubview(lineView!)
         
         priceLabel = UILabel()
         priceLabel?.font = HomeCollectionTextFont
-        priceLabel!.textColor = UIColor.redColor()
+        priceLabel!.textColor = UIColor.red
         addSubview(priceLabel!)
         
     }
@@ -81,16 +81,16 @@ class DiscountPriceView: UIView {
             hasMarketPrice = true
         }
         
-        marketPriceLabel?.hidden = !hasMarketPrice
+        marketPriceLabel?.isHidden = !hasMarketPrice
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        priceLabel?.frame = CGRectMake(0, 0, priceLabel!.width, height)
+        priceLabel?.frame = CGRect(x:0, y:0, width:priceLabel!.width, height:height)
         if hasMarketPrice {
-            marketPriceLabel?.frame = CGRectMake(CGRectGetMaxX(priceLabel!.frame) + 5, 0, marketPriceLabel!.width, height)
-            lineView?.frame = CGRectMake(0, marketPriceLabel!.height * 0.5 - 0.5, marketPriceLabel!.width, 1)
+            marketPriceLabel?.frame = CGRect(x:priceLabel!.frame.maxX + 5, y:0, width:marketPriceLabel!.width, height:height)
+            lineView?.frame = CGRect(x:0, y:marketPriceLabel!.height * 0.5 - 0.5, width:marketPriceLabel!.width, height:1)
         }
     }
 }

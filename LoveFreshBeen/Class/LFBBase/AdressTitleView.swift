@@ -21,42 +21,54 @@ class AdressTitleView: UIView {
         super.init(frame: frame)
         
         playLabel.text = "配送至"
-        playLabel.textColor = UIColor.blackColor()
-        playLabel.backgroundColor = UIColor.clearColor()
+        playLabel.textColor = UIColor.black
+        playLabel.backgroundColor = UIColor.clear
         playLabel.layer.borderWidth = 0.5
-        playLabel.layer.borderColor = UIColor.blackColor().CGColor
-        playLabel.font = UIFont.systemFontOfSize(10)
+        playLabel.layer.borderColor = UIColor.black.cgColor
+        playLabel.font = UIFont.systemFont(ofSize: 10)
         playLabel.sizeToFit()
-        playLabel.textAlignment = NSTextAlignment.Center
-        playLabel.frame = CGRectMake(0, (frame.size.height - playLabel.height - 2) * 0.5, playLabel.frame.size.width + 6, playLabel.frame.size.height + 2)
+        playLabel.textAlignment = NSTextAlignment.center
+        playLabel.frame = CGRect(x:0, y:(frame.size.height - playLabel.height - 2) * 0.5, width:playLabel.frame.size.width + 6, height:playLabel.frame.size.height + 2)
         addSubview(playLabel)
 
-        titleLabel.textColor = UIColor.blackColor()
-        titleLabel.font = UIFont.systemFontOfSize(15)
+        titleLabel.textColor = UIColor.black
+        titleLabel.font = UIFont.systemFont(ofSize: 15)
         if let adress = UserInfo.sharedUserInfo.defaultAdress() {
-            if adress.address?.characters.count > 0 {
-                let adressStr = adress.address! as NSString
-                if adressStr.componentsSeparatedByString(" ").count > 1 {
-                    titleLabel.text = adressStr.componentsSeparatedByString(" ")[0]
+            
+            if adress.value(forKey: "adress") != nil {
+                let adressStr = adress.value(forKey: "adress") as! NSString
+                if adressStr.components(separatedBy: " ").count > 1 {
+                    titleLabel.text = adressStr.components(separatedBy: " ")[0]
                 } else {
                     titleLabel.text = adressStr as String
                 }
-
             } else {
                 titleLabel.text = "你在哪里呀"
             }
             
+//            if (adress.address?.characters.count)! > 0 {
+//                let adressStr = adress.address! as NSString
+//                if adressStr.components(separatedBy: " ").count > 1 {
+//                    titleLabel.text = adressStr.components(separatedBy: " ")[0]
+//                } else {
+//                    titleLabel.text = adressStr as String
+//                }
+//
+//            } else {
+//                titleLabel.text = "你在哪里呀"
+//            }
+//            
         } else {
             titleLabel.text = "你在哪里呀"
         }
         titleLabel.sizeToFit()
-        titleLabel.frame = CGRectMake(CGRectGetMaxX(playLabel.frame) + 4, 0, titleLabel.width, frame.height)
+        titleLabel.frame = CGRect(x:playLabel.frame.maxX + 4, y:0, width:titleLabel.width, height:frame.height)
         addSubview(titleLabel)
         
-        arrowImageView.frame = CGRectMake(CGRectGetMaxX(titleLabel.frame) + 4, (frame.size.height - 6) * 0.5, 10, 6)
+        arrowImageView.frame = CGRect(x:titleLabel.frame.maxX + 4, y:(frame.size.height - 6) * 0.5, width:10, height:6)
         addSubview(arrowImageView)
         
-        adressWidth = CGRectGetMaxX(arrowImageView.frame)
+        adressWidth = arrowImageView.frame.maxX
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,14 +77,14 @@ class AdressTitleView: UIView {
     
     func setTitle(text: String) {
         let adressStr = text as NSString
-        if adressStr.componentsSeparatedByString(" ").count > 1 {
-            titleLabel.text = adressStr.componentsSeparatedByString(" ")[0]
+        if adressStr.components(separatedBy: " ").count > 1 {
+            titleLabel.text = adressStr.components(separatedBy: " ")[0]
         } else {
             titleLabel.text = adressStr as String
         }
         titleLabel.sizeToFit()
-        titleLabel.frame = CGRectMake(CGRectGetMaxX(playLabel.frame) + 4, 0, titleLabel.width, frame.height)
-        arrowImageView.frame = CGRectMake(CGRectGetMaxX(titleLabel.frame) + 4, (frame.size.height - arrowImageView.height) * 0.5, arrowImageView.width, arrowImageView.height)
-        adressWidth = CGRectGetMaxX(arrowImageView.frame)
+        titleLabel.frame = CGRect(x:playLabel.frame.maxX + 4, y:0, width:titleLabel.width, height:frame.height)
+        arrowImageView.frame = CGRect(x:titleLabel.frame.maxX + 4, y:(frame.size.height - arrowImageView.height) * 0.5, width:arrowImageView.width, height:arrowImageView.height)
+        adressWidth = arrowImageView.frame.maxX
     }
 }

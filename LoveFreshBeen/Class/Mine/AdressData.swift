@@ -16,18 +16,18 @@ class AdressData: NSObject, DictModelProtocol {
     var msg: String?
     var data: [Adress]?
     
-    static func customClassMapping() -> [String : String]? {
+    class func customClassMapping() -> [String : String]? {
         return ["data" : "\(Adress.self)"]
     }
     
-    class func loadMyAdressData(completion:(data: AdressData?, error: NSError?) -> Void) {
-        let path = NSBundle.mainBundle().pathForResource("MyAdress", ofType: nil)
+    class func loadMyAdressData(completion:(_ data: NSDictionary?, _ error: NSError?) -> Void) {
+        let path = Bundle.main.path(forResource: "MyAdress", ofType: nil)
         let data = NSData(contentsOfFile: path!)
         if data != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
-            let modelTool = DictModelManager.sharedManager
-            let data = modelTool.objectWithDictionary(dict, cls: AdressData.self) as? AdressData
-            completion(data: data, error: nil)
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)) as! NSDictionary
+//            let modelTool = DictModelManager.sharedManager
+//            let data = modelTool.objectWithDictionary(dict: dict, cls: AdressData.self) as? AdressData
+            completion(dict, nil)
         }
     }
 }

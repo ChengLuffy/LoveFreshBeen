@@ -12,18 +12,18 @@ import UIKit
 
 class LFBSegmentedControl: UISegmentedControl {
     
-    var segmentedClick:((index: Int) -> Void)?
+    var segmentedClick:((_ index: Int) -> Void)?
     
-    override init(items: [AnyObject]?) {
+    override init(items: [Any]?) {
         super.init(items: items)
         tintColor = LFBNavigationYellowColor
-        setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.blackColor()], forState: UIControlState.Selected)
-        setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.colorWithCustom(100, g: 100, b: 100)], forState: UIControlState.Normal)
-        addTarget(self, action: "segmentedControlDidValuechange:", forControlEvents: UIControlEvents.ValueChanged)
+        setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.black], for: UIControlState.selected)
+        setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.colorWithCustom(r: 100, g: 100, b: 100)], for: UIControlState.normal)
+        addTarget(self, action: Selector(("segmentedControlDidValuechange:")), for: UIControlEvents.valueChanged)
         selectedSegmentIndex = 0
     }
     
-    convenience init(items: [AnyObject]?, didSelectedIndex: (index: Int) -> ()) {
+    convenience init(items: [AnyObject]?, didSelectedIndex: @escaping (_ index: Int) -> ()) {
         self.init(items: items)
         
         segmentedClick = didSelectedIndex
@@ -35,7 +35,7 @@ class LFBSegmentedControl: UISegmentedControl {
     
     func segmentedControlDidValuechange(sender: UISegmentedControl) {
         if segmentedClick != nil {
-            segmentedClick!(index: sender.selectedSegmentIndex)
+            segmentedClick!(sender.selectedSegmentIndex)
         }
     }
     

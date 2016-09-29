@@ -16,39 +16,39 @@ class ShopCartCell: UITableViewCell {
     private let priceLabel = UILabel()
     private let buyView    = BuyView()
     
-    var goods: Goods? {
+    var goods: NSDictionary? {
         didSet {
-            if goods?.is_xf == 1 {
-                titleLabel.text = "[精选]" + goods!.name!
+            if goods?["is_xf"] as! Int == 1 {
+                titleLabel.text = "[精选]" + (goods?["name"] as! String)
             } else {
-                titleLabel.text = goods?.name
+                titleLabel.text = goods?["name"] as? String
             }
             
-            priceLabel.text = "$" + goods!.price!.cleanDecimalPointZear()
+            priceLabel.text = "$" + (goods?["price"] as! String).cleanDecimalPointZear()
             
-            buyView.goods = goods
+            buyView.goods = goods as! NSMutableDictionary?
         }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        selectionStyle = UITableViewCellSelectionStyle.None
+        selectionStyle = UITableViewCellSelectionStyle.none
         
-        titleLabel.frame = CGRectMake(15, 0, ScreenWidth * 0.5, ShopCartRowHeight)
-        titleLabel.font = UIFont.systemFontOfSize(15)
-        titleLabel.textColor = UIColor.blackColor()
+        titleLabel.frame = CGRect(x:15, y:0, width:ScreenWidth * 0.5, height:ShopCartRowHeight)
+        titleLabel.font = UIFont.systemFont(ofSize: 15)
+        titleLabel.textColor = UIColor.black
         contentView.addSubview(titleLabel)
         
-        buyView.frame = CGRectMake(ScreenWidth - 85, (ShopCartRowHeight - 25) * 0.55, 80, 25)
+        buyView.frame = CGRect(x:ScreenWidth - 85, y:(ShopCartRowHeight - 25) * 0.55, width:80, height:25)
         contentView.addSubview(buyView)
         
-        priceLabel.frame = CGRectMake(CGRectGetMinX(buyView.frame) - 100 - 5, 0, 100, ShopCartRowHeight)
-        priceLabel.textAlignment = NSTextAlignment.Right
+        priceLabel.frame = CGRect(x:buyView.frame.minX - 100 - 5, y:0, width:100, height:ShopCartRowHeight)
+        priceLabel.textAlignment = NSTextAlignment.right
         contentView.addSubview(priceLabel)
         
-        let lineView = UIView(frame: CGRectMake(10, ShopCartRowHeight - 0.5, ScreenWidth - 10, 0.5))
-        lineView.backgroundColor = UIColor.blackColor()
+        let lineView = UIView(frame: CGRect(x:10, y:ShopCartRowHeight - 0.5, width:ScreenWidth - 10, height:0.5))
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         contentView.addSubview(lineView)
     }
@@ -61,10 +61,10 @@ class ShopCartCell: UITableViewCell {
     
     class func shopCarCell(tableView: UITableView) -> ShopCartCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as? ShopCartCell
+        var cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? ShopCartCell
         
         if cell == nil {
-            cell = ShopCartCell(style: UITableViewCellStyle.Default, reuseIdentifier: identifier)
+            cell = ShopCartCell(style: UITableViewCellStyle.default, reuseIdentifier: identifier)
         }
         
         return cell!

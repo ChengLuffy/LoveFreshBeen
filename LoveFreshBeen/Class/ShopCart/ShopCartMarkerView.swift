@@ -18,32 +18,32 @@ class ShopCartMarkerView: UIView {
         let marketHeight: CGFloat = 60
         
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         
-        addSubview(lineView(CGRectMake(0, 0, ScreenWidth, 0.5)))
+        addSubview(lineView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:0.5)))
         
         let rocketImageView = UIImageView(image: UIImage(named: "icon_lighting"))
-        rocketImageView.frame = CGRectMake(15, 5, 20, 20)
+        rocketImageView.frame = CGRect(x:15, y:5, width:20, height:20)
         addSubview(rocketImageView)
         
         let redDotImaegView = UIImageView(image: UIImage(named: "reddot"))
-        redDotImaegView.frame = CGRectMake(15, (marketHeight - CGRectGetMaxY(rocketImageView.frame) - 4) * 0.5 + CGRectGetMaxY(rocketImageView.frame), 4, 4)
+        redDotImaegView.frame = CGRect(x:15, y:(marketHeight - rocketImageView.frame.maxY - 4) * 0.5 + rocketImageView.frame.maxY, width:4, height:4)
         addSubview(redDotImaegView)
         
-        let marketTitleLabel = UILabel(frame: CGRectMake(CGRectGetMaxX(rocketImageView.frame) + 10, 5, ScreenWidth * 0.6, 20))
+        let marketTitleLabel = UILabel(frame: CGRect(x:rocketImageView.frame.maxX + 10, y:5, width:ScreenWidth * 0.6, height:20))
         marketTitleLabel.text = "闪电超市"
-        marketTitleLabel.font = UIFont.systemFontOfSize(12)
-        marketTitleLabel.textColor = UIColor.lightGrayColor()
+        marketTitleLabel.font = UIFont.systemFont(ofSize: 12)
+        marketTitleLabel.textColor = UIColor.lightGray
         addSubview(marketTitleLabel)
         
-        let marketLabel = UILabel(frame: CGRectMake(CGRectGetMaxX(redDotImaegView.frame) + 5, CGRectGetMaxY(rocketImageView.frame), ScreenWidth * 0.7, 60 - CGRectGetMaxY(rocketImageView.frame)))
+        let marketLabel = UILabel(frame: CGRect(x:redDotImaegView.frame.maxX + 5, y:rocketImageView.frame.maxY, width:ScreenWidth * 0.7, height:60 - rocketImageView.frame.maxY))
         marketLabel.text = "   22:00前满$30免运费,22:00后满$50面运费"
-        marketLabel.textColor = UIColor.lightGrayColor()
-        marketLabel.font = UIFont.systemFontOfSize(10)
+        marketLabel.textColor = UIColor.lightGray
+        marketLabel.font = UIFont.systemFont(ofSize: 10)
         addSubview(marketLabel)
         
-        addSubview(lineView(CGRectMake(0, marketHeight - 0.5, ScreenWidth, 0.5)))
+        addSubview(lineView(frame: CGRect(x:0, y:marketHeight - 0.5, width:ScreenWidth, height:0.5)))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -52,7 +52,7 @@ class ShopCartMarkerView: UIView {
     
     private func lineView(frame: CGRect) -> UIView {
         let lineView = UIView(frame: frame)
-        lineView.backgroundColor = UIColor.blackColor()
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         return lineView
     }

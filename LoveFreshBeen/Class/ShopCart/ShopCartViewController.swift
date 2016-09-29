@@ -16,14 +16,14 @@ class ShopCartViewController: BaseViewController {
     
     private let shopImageView         = UIImageView()
     private let emptyLabel            = UILabel()
-    private let emptyButton           = UIButton(type: .Custom)
+    private let emptyButton           = UIButton(type: .custom)
     private var receiptAdressView: ReceiptAddressView?
     private var tableHeadView         = UIView()
     private let signTimeLabel         = UILabel()
     private let reserveLabel          = UILabel()
     private let signTimePickerView    = UIPickerView()
-    private let commentsView          = ShopCartCommentsView()
-    private let supermarketTableView  = LFBTableView(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight - 64 - 50), style: .Plain)
+    let commentsView          = ShopCartCommentsView()
+    private let supermarketTableView  = LFBTableView(frame: CGRect(x:0, y:0, width:ScreenWidth, height:ScreenHeight - 64 - 50), style: .plain)
     private let tableFooterView       = ShopCartSupermarketTableFooterView()
     private var isFristLoadData       = false
     
@@ -38,7 +38,7 @@ class ShopCartViewController: BaseViewController {
         buildEmptyUI()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         weak var tmpSelf = self
@@ -48,28 +48,33 @@ class ShopCartViewController: BaseViewController {
         } else {
             
             if !ProgressHUDManager.isVisible() {
-                ProgressHUDManager.setBackgroundColor(UIColor.colorWithCustom(230, g: 230, b: 230))
-                ProgressHUDManager.showWithStatus("正在加载商品信息")
+                ProgressHUDManager.setBackgroundColor(color: UIColor.colorWithCustom(r: 230, g: 230, b: 230))
+                ProgressHUDManager.showWithStatus(status: "正在加载商品信息")
             }
             
-            let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
-            dispatch_after(time, dispatch_get_main_queue()) { () -> Void in
-                
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
                 tmpSelf!.showProductView()
                 ProgressHUDManager.dismiss()
-            }
+            })
+//            let time = dispatch_time(dispatch_time_t(DISPATCH_TIME_NOW), Int64(0.5 * Double(NSEC_PER_SEC)))
+//            dispatch_after(time, dispatch_get_main_queue()) { () -> Void in
+//                
+//                tmpSelf!.showProductView()
+//                ProgressHUDManager.dismiss()
+//            }
         }
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK - Add Notification KVO Action
     private func addNSNotification() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "shopCarProductsDidRemove", name: LFBShopCarDidRemoveProductNSNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ShopCartViewController.shopCarProductsDidRemove), name: NSNotification.Name(rawValue: LFBShopCarDidRemoveProductNSNotification), object: nil)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "shopCarBuyPriceDidChange", name: LFBShopCarBuyPriceDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ShopCartViewController.shopCarBuyPriceDidChange), name: NSNotification.Name(rawValue: LFBShopCarBuyPriceDidChangeNotification), object: nil)
     }
     
     func shopCarProductsDidRemove() {
@@ -89,30 +94,30 @@ class ShopCartViewController: BaseViewController {
     private func buildNavigationItem() {
         navigationItem.title = "购物车"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem.barButton(UIImage(named: "v2_goback")!, target: self, action: "leftNavigitonItemClick")
+        navigationItem.leftBarButtonItem = UIBarButtonItem.barButton(image: UIImage(named: "v2_goback")!, target: self, action: #selector(ShopCartViewController.leftNavigitonItemClick))
     }
     
     private func buildEmptyUI() {
         shopImageView.image = UIImage(named: "v2_shop_empty")
-        shopImageView.contentMode = UIViewContentMode.Center
-        shopImageView.frame = CGRectMake((view.width - shopImageView.width) * 0.5, view.height * 0.25, shopImageView.width, shopImageView.height)
-        shopImageView.hidden = true
+        shopImageView.contentMode = UIViewContentMode.center
+        shopImageView.frame = CGRect(x:(view.width - shopImageView.width) * 0.5, y:view.height * 0.25, width:shopImageView.width, height:shopImageView.height)
+        shopImageView.isHidden = true
         view.addSubview(shopImageView)
         
         emptyLabel.text = "亲,购物车空空的耶~赶紧挑好吃的吧"
-        emptyLabel.textColor = UIColor.colorWithCustom(100, g: 100, b: 100)
-        emptyLabel.textAlignment = NSTextAlignment.Center
-        emptyLabel.frame = CGRectMake(0, CGRectGetMaxY(shopImageView.frame) + 55, view.width, 50)
-        emptyLabel.font = UIFont.systemFontOfSize(16)
-        emptyLabel.hidden = true
+        emptyLabel.textColor = UIColor.colorWithCustom(r: 100, g: 100, b: 100)
+        emptyLabel.textAlignment = NSTextAlignment.center
+        emptyLabel.frame = CGRect(x:0, y:shopImageView.frame.maxY + 55, width:view.width, height:50)
+        emptyLabel.font = UIFont.systemFont(ofSize: 16)
+        emptyLabel.isHidden = true
         view.addSubview(emptyLabel)
         
-        emptyButton.frame = CGRectMake((view.width - 150) * 0.5, CGRectGetMaxY(emptyLabel.frame) + 15, 150, 30)
-        emptyButton.setBackgroundImage(UIImage(named: "btn.png"), forState: UIControlState.Normal)
-        emptyButton.setTitle("去逛逛", forState: UIControlState.Normal)
-        emptyButton.setTitleColor(UIColor.colorWithCustom(100, g: 100, b: 100), forState: UIControlState.Normal)
-        emptyButton.addTarget(self, action: "leftNavigitonItemClick", forControlEvents: UIControlEvents.TouchUpInside)
-        emptyButton.hidden = true
+        emptyButton.frame = CGRect(x:(view.width - 150) * 0.5, y:emptyLabel.frame.maxY + 15, width:150, height:30)
+        emptyButton.setBackgroundImage(UIImage(named: "btn.png"), for: UIControlState.normal)
+        emptyButton.setTitle("去逛逛", for: UIControlState.normal)
+        emptyButton.setTitleColor(UIColor.colorWithCustom(r: 100, g: 100, b: 100), for: UIControlState.normal)
+        emptyButton.addTarget(self, action: #selector(ShopCartViewController.leftNavigitonItemClick), for: UIControlEvents.touchUpInside)
+        emptyButton.isHidden = true
         view.addSubview(emptyButton)
     }
     
@@ -130,7 +135,7 @@ class ShopCartViewController: BaseViewController {
     
     private func buildTableHeadView() {
         tableHeadView.backgroundColor = view.backgroundColor
-        tableHeadView.frame = CGRectMake(0, 0, view.width, 250)
+        tableHeadView.frame = CGRect(x:0, y:0, width:view.width, height:250)
         
         buildReceiptAddress()
         
@@ -143,7 +148,7 @@ class ShopCartViewController: BaseViewController {
     
     private func buildSupermarketTableView() {
         supermarketTableView.tableHeaderView = tableHeadView
-        tableFooterView.frame = CGRectMake(0, ScreenHeight - 64 - 50, ScreenWidth, 50)
+        tableFooterView.frame = CGRect(x:0, y:ScreenHeight - 64 - 50, width:ScreenWidth, height:50)
         view.addSubview(tableFooterView)
         tableFooterView.delegate = self
         supermarketTableView.delegate = self
@@ -156,7 +161,7 @@ class ShopCartViewController: BaseViewController {
     
     private func buildReceiptAddress() {
         
-        receiptAdressView = ReceiptAddressView(frame: CGRectMake(0, 10, view.width, 70), modifyButtonClickCallBack: { () -> () in
+        receiptAdressView = ReceiptAddressView(frame: CGRect(x:0, y:10, width:view.width, height:70), modifyButtonClickCallBack: { () -> () in
             
         })
         
@@ -168,80 +173,83 @@ class ShopCartViewController: BaseViewController {
             weak var tmpSelf = self
             AdressData.loadMyAdressData { (data, error) -> Void in
                 if error == nil {
-                    if data!.data?.count > 0 {
-                        UserInfo.sharedUserInfo.setAllAdress(data!.data!)
-                        tmpSelf!.receiptAdressView?.adress = UserInfo.sharedUserInfo.defaultAdress()
-                    }
+                    print(data)
+                    
+//                    if (data!.data?.count)! > 0 {
+//                        UserInfo.sharedUserInfo.setAllAdress(adresses: data!.data!)
+//                        tmpSelf!.receiptAdressView?.adress = UserInfo.sharedUserInfo.defaultAdress()
+//                    }
                 }
             }
         }
     }
     
     private func buildMarketView() {
-        let markerView = ShopCartMarkerView(frame: CGRectMake(0, 90, ScreenWidth, 60))
+        let markerView = ShopCartMarkerView(frame: CGRect(x:0, y:90, width:ScreenWidth, height:60))
         
         tableHeadView.addSubview(markerView)
     }
     
     private func buildSignTimeView() {
-        let signTimeView = UIView(frame: CGRectMake(0, 150, view.width, ShopCartRowHeight))
-        signTimeView.backgroundColor = UIColor.whiteColor()
+        let signTimeView = UIView(frame: CGRect(x:0, y:150, width:view.width, height:ShopCartRowHeight))
+        signTimeView.backgroundColor = UIColor.white
         tableHeadView.addSubview(signTimeView)
         
-        let tap = UITapGestureRecognizer(target: self, action: "modifySignTimeViewClick")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(ShopCartViewController.modifySignTimeViewClick))
         tableHeadView.addGestureRecognizer(tap)
         
         let signTimeTitleLabel = UILabel()
         signTimeTitleLabel.text = "收货时间"
-        signTimeTitleLabel.textColor = UIColor.blackColor()
-        signTimeTitleLabel.font = UIFont.systemFontOfSize(15)
+        signTimeTitleLabel.textColor = UIColor.black
+        signTimeTitleLabel.font = UIFont.systemFont(ofSize: 15)
         signTimeTitleLabel.sizeToFit()
-        signTimeTitleLabel.frame = CGRectMake(15, 0, signTimeTitleLabel.width, ShopCartRowHeight)
+        signTimeTitleLabel.frame = CGRect(x:15, y:0, width:signTimeTitleLabel.width, height:ShopCartRowHeight)
         signTimeView.addSubview(signTimeTitleLabel)
         
-        signTimeLabel.frame = CGRectMake(CGRectGetMaxX(signTimeTitleLabel.frame) + 10, 0, view.width * 0.5, ShopCartRowHeight)
-        signTimeLabel.textColor = UIColor.redColor()
-        signTimeLabel.font = UIFont.systemFontOfSize(15)
+        signTimeLabel.frame = CGRect(x:signTimeTitleLabel.frame.maxX + 10, y:0, width:view.width * 0.5, height:ShopCartRowHeight)
+        signTimeLabel.textColor = UIColor.red
+        signTimeLabel.font = UIFont.systemFont(ofSize: 15)
         signTimeLabel.text = "闪电送,及时达"
         signTimeView.addSubview(signTimeLabel)
         
         reserveLabel.text = "可预定"
-        reserveLabel.backgroundColor = UIColor.whiteColor()
-        reserveLabel.textColor = UIColor.redColor()
-        reserveLabel.font = UIFont.systemFontOfSize(15)
-        reserveLabel.frame = CGRectMake(view.width - 72, 0, 60, ShopCartRowHeight)
+        reserveLabel.backgroundColor = UIColor.white
+        reserveLabel.textColor = UIColor.red
+        reserveLabel.font = UIFont.systemFont(ofSize: 15)
+        reserveLabel.frame = CGRect(x:view.width - 72, y:0, width:60, height:ShopCartRowHeight)
         signTimeView.addSubview(reserveLabel)
         
         let arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView.frame = CGRectMake(view.width - 15, (ShopCartRowHeight - arrowImageView.height) * 0.5, arrowImageView.width, arrowImageView.height)
+        arrowImageView.frame = CGRect(x:view.width - 15, y:(ShopCartRowHeight - arrowImageView.height) * 0.5, width:arrowImageView.width, height:arrowImageView.height)
         signTimeView.addSubview(arrowImageView)
         
     }
     
     private func buildSignComments() {
-        commentsView.frame = CGRectMake(0, 200, view.width, ShopCartRowHeight)
+        commentsView.frame = CGRect(x:0, y:200, width:view.width, height:ShopCartRowHeight)
         tableHeadView.addSubview(commentsView)
     }
     
     private func lineView(frame: CGRect) -> UIView {
         let lineView = UIView(frame: frame)
-        lineView.backgroundColor = UIColor.blackColor()
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         return lineView
     }
     
     // MARK: - Private Method
     private func showshopCarEmptyUI() {
-        shopImageView.hidden = false
-        emptyButton.hidden = false
-        emptyLabel.hidden = false
-        supermarketTableView.hidden = true
+        shopImageView.isHidden = false
+        emptyButton.isHidden = false
+        emptyLabel.isHidden = false
+        supermarketTableView.isHidden = true
     }
     
     // MARK: -  Action
     func leftNavigitonItemClick() {
-        NSNotificationCenter.defaultCenter().postNotificationName(LFBShopCarBuyProductNumberDidChangeNotification, object: nil, userInfo: nil)
-        dismissViewControllerAnimated(true, completion: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: LFBShopCarBuyProductNumberDidChangeNotification), object: nil)
+//        NotificationCenter.default.postNotificationName(LFBShopCarBuyProductNumberDidChangeNotification, object: nil, userInfo: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     func modifySignTimeViewClick() {
@@ -253,7 +261,7 @@ class ShopCartViewController: BaseViewController {
     }
     
     // MARK: - Override SuperMethod
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         commentsView.textField.endEditing(true)
     }
 }
@@ -270,18 +278,18 @@ extension ShopCartViewController: ShopCartSupermarketTableFooterViewDelegate {
 // MARK: - UITableViewDeletate UITableViewDataSource
 extension ShopCartViewController: UITableViewDelegate, UITableViewDataSource {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return UserShopCarTool.sharedUserShopCar.getShopCarProductsClassifNumber()
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = ShopCartCell.shopCarCell(tableView)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = ShopCartCell.shopCarCell(tableView: tableView)
         cell.goods = UserShopCarTool.sharedUserShopCar.getShopCarProducts()[indexPath.row]
         
         return cell
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         commentsView.textField.endEditing(true)
     }
 }

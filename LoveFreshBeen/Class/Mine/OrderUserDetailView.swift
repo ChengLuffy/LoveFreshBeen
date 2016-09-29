@@ -31,38 +31,38 @@ class OrderUserDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         consigneeLabel.textColor = LFBTextBlackColor
-        consigneeLabel.font = UIFont.systemFontOfSize(14)
+        consigneeLabel.font = UIFont.systemFont(ofSize: 14)
         addSubview(consigneeLabel)
         
         consigneeAdressLabel.textColor = LFBTextBlackColor
-        consigneeAdressLabel.font = UIFont.systemFontOfSize(12)
+        consigneeAdressLabel.font = UIFont.systemFont(ofSize: 12)
         addSubview(consigneeAdressLabel)
         
         phoneNumberLabel.textColor = LFBTextBlackColor
-        phoneNumberLabel.textAlignment = NSTextAlignment.Right
-        phoneNumberLabel.font = UIFont.systemFontOfSize(12)
+        phoneNumberLabel.textAlignment = NSTextAlignment.right
+        phoneNumberLabel.font = UIFont.systemFont(ofSize: 12)
         addSubview(phoneNumberLabel)
         
-        lineView.backgroundColor = UIColor.lightGrayColor()
+        lineView.backgroundColor = UIColor.lightGray
         lineView.alpha = 0.1
         addSubview(lineView)
         
         shopLabel.textColor = LFBTextBlackColor
-        shopLabel.font = UIFont.systemFontOfSize(12)
+        shopLabel.font = UIFont.systemFont(ofSize: 12)
         addSubview(shopLabel)
         
-        collectionButton.setTitle("+ 收藏", forState: .Normal)
-        collectionButton.setTitleColor(LFBTextBlackColor, forState: .Normal)
-        collectionButton.setTitle("取消收藏", forState: .Selected)
-        collectionButton.setTitleColor(UIColor.whiteColor(), forState: .Selected)
-        collectionButton.setBackgroundImage(UIImage.imageWithColor(LFBNavigationYellowColor, size: CGSizeMake(60, 25), alpha: 1), forState: UIControlState.Normal)
-        collectionButton.setBackgroundImage(UIImage.imageWithColor(LFBNavigationYellowColor, size: CGSizeMake(60, 25), alpha: 1), forState: .Selected)
+        collectionButton.setTitle("+ 收藏", for: .normal)
+        collectionButton.setTitleColor(LFBTextBlackColor, for: .normal)
+        collectionButton.setTitle("取消收藏", for: .selected)
+        collectionButton.setTitleColor(UIColor.white, for: .selected)
+        collectionButton.setBackgroundImage(UIImage.imageWithColor(color: LFBNavigationYellowColor, size: CGSize(width:60, height:25), alpha: 1), for: UIControlState.normal)
+        collectionButton.setBackgroundImage(UIImage.imageWithColor(color: LFBNavigationYellowColor, size: CGSize(width:60, height:25), alpha: 1), for: .selected)
         collectionButton.layer.masksToBounds = true
         collectionButton.layer.cornerRadius = 5
-        collectionButton.titleLabel?.font = UIFont.systemFontOfSize(12)
+        collectionButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         addSubview(collectionButton)
     }
 
@@ -75,12 +75,12 @@ class OrderUserDetailView: UIView {
         
         let leftMargin: CGFloat = 10
         let labelHeight: CGFloat = 30
-        consigneeLabel.frame = CGRectMake(leftMargin, 5, width * 0.5, labelHeight)
-        phoneNumberLabel.frame = CGRectMake(width - width * 0.4 - 10, 5, width * 0.4, labelHeight)
-        consigneeAdressLabel.frame = CGRectMake(leftMargin, CGRectGetMaxY(consigneeLabel.frame), width - 20, labelHeight)
-        lineView.frame = CGRectMake(leftMargin, CGRectGetMaxY(consigneeAdressLabel.frame) + 5, width - leftMargin, 1)
-        shopLabel.frame = CGRectMake(leftMargin, CGRectGetMaxY(lineView.frame), width * 0.6, 40)
-        collectionButton.frame = CGRectMake(width - 60 - 10, CGRectGetMaxY(lineView.frame) + (40 - 25) * 0.5, 60, 25)
+        consigneeLabel.frame = CGRect(x:leftMargin, y:5, width:width * 0.5, height:labelHeight)
+        phoneNumberLabel.frame = CGRect(x:width - width * 0.4 - 10, y:5, width:width * 0.4, height:labelHeight)
+        consigneeAdressLabel.frame = CGRect(x:leftMargin, y:consigneeLabel.frame.maxY, width:width - 20, height:labelHeight)
+        lineView.frame = CGRect(x:leftMargin, y:consigneeAdressLabel.frame.maxY + 5, width:width - leftMargin, height:1)
+        shopLabel.frame = CGRect(x:leftMargin, y:lineView.frame.maxY, width:width * 0.6, height:40)
+        collectionButton.frame = CGRect(x:width - 60 - 10, y:lineView.frame.maxY + (40 - 25) * 0.5, width:60, height:25)
     }
 
 }

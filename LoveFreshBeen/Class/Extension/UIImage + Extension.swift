@@ -13,43 +13,43 @@ import UIKit
 extension UIImage {
     
     class func imageWithColor(color: UIColor, size: CGSize, alpha: CGFloat) -> UIImage {
-        let rect = CGRectMake(0, 0, size.width, size.height)
+        let rect = CGRect(x:0, y:0, width:size.width, height:size.height)
         
         UIGraphicsBeginImageContext(rect.size)
         let ref = UIGraphicsGetCurrentContext()
-        CGContextSetAlpha(ref, alpha)
-        CGContextSetFillColorWithColor(ref, color.CGColor)
-        CGContextFillRect(ref, rect)
+        ref!.setAlpha(alpha)
+        ref!.setFillColor(color.cgColor)
+        ref!.fill(rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
     
     class func createImageFromView(view: UIView) -> UIImage {
         UIGraphicsBeginImageContext(view.bounds.size);
         
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
         
         let image = UIGraphicsGetImageFromCurrentImageContext();
         
         UIGraphicsEndImageContext();
         
-        return image
+        return image!
     }
     
     func imageClipOvalImage() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, 0.0)
         let ctx = UIGraphicsGetCurrentContext()
-        let rect = CGRectMake(0, 0, self.size.width, self.size.height)
-        CGContextAddEllipseInRect(ctx, rect)
+        let rect = CGRect(x:0, y:0, width:self.size.width, height:self.size.height)
+        ctx!.addEllipse(in: rect)
         
-        CGContextClip(ctx)
-        self.drawInRect(rect)
+        ctx?.clip()
+        self.draw(in: rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return image
+        return image!
     }
 }

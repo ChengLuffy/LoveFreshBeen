@@ -19,30 +19,30 @@ class ShopCartGoodsListView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         
         let goodses = UserShopCarTool.sharedUserShopCar.getShopCarProducts()
         
         for i in 0..<goodses.count {
             let goods = goodses[i]
             
-            buildLineView(CGRectMake(15, lastViewY, ScreenWidth - 15, 0.5))
+            buildLineView(lineFrame: CGRect(x:15, y:lastViewY, width:ScreenWidth - 15, height:0.5))
             
-            if goods.pm_desc != "买一赠一" {
-                let goodsDetailView = PayGoodsDetailView(frame: CGRectMake(0, lastViewY + 10, ScreenWidth, 20))
+            if (goods["pm_desc"] as! String) != "买一赠一" {
+                let goodsDetailView = PayGoodsDetailView(frame: CGRect(x:0, y:lastViewY + 10, width:ScreenWidth, height:20))
                 goodsDetailView.goods = goods
                 addSubview(goodsDetailView)
                 lastViewY += 40
                 goodsHeight += 40
             } else {
-                let goodsDetailView = PayGoodsDetailView(frame: CGRectMake(0, lastViewY + 10, ScreenWidth, 20))
-                goods.pm_desc = ""
+                let goodsDetailView = PayGoodsDetailView(frame: CGRect(x:0, y:lastViewY + 10, width:ScreenWidth, height:20))
+                goods["pm_desc"] = ""
                 goodsDetailView.goods = goods
                 addSubview(goodsDetailView)
                 lastViewY += 30
                 
-                let giftView = PayGoodsDetailView(frame: CGRectMake(0, lastViewY, ScreenWidth, 20))
-                goods.pm_desc = "买一赠一"
+                let giftView = PayGoodsDetailView(frame: CGRect(x:0, y:lastViewY, width:ScreenWidth, height:20))
+                goods["pm_desc"] = "买一赠一"
                 giftView.goods = goods
                 addSubview(giftView)
                 lastViewY += 30
@@ -51,22 +51,22 @@ class ShopCartGoodsListView: UIView {
             }
         }
         
-        let lineView = UIView(frame: CGRectMake(15, lastViewY - 0.5, ScreenWidth - 15, 0.5))
-        lineView.backgroundColor = UIColor.blackColor()
+        let lineView = UIView(frame: CGRect(x:15, y:lastViewY - 0.5, width:ScreenWidth - 15, height:0.5))
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         addSubview(lineView)
         
         goodsHeight += 40
         
-        let finePriceLabel = UILabel(frame: CGRectMake(50, lastViewY, ScreenWidth - 60, 40))
-        finePriceLabel.textAlignment = NSTextAlignment.Right
-        finePriceLabel.textColor = UIColor.redColor()
-        finePriceLabel.font = UIFont.systemFontOfSize(14)
+        let finePriceLabel = UILabel(frame: CGRect(x:50, y:lastViewY, width:ScreenWidth - 60, height:40))
+        finePriceLabel.textAlignment = NSTextAlignment.right
+        finePriceLabel.textColor = UIColor.red
+        finePriceLabel.font = UIFont.systemFont(ofSize: 14)
         finePriceLabel.text = "合计:$" + UserShopCarTool.sharedUserShopCar.getAllProductsPrice()
         addSubview(finePriceLabel)
         
-        let lineView1 = UIView(frame: CGRectMake(0, goodsHeight - 1, ScreenWidth, 1))
-        lineView1.backgroundColor = UIColor.blackColor()
+        let lineView1 = UIView(frame: CGRect(x:0, y:goodsHeight - 1, width:ScreenWidth, height:1))
+        lineView1.backgroundColor = UIColor.black
         lineView1.alpha = 0.1
         addSubview(lineView1)
     }
@@ -78,7 +78,7 @@ class ShopCartGoodsListView: UIView {
     
     private func buildLineView(lineFrame: CGRect) {
         let lineView = UIView(frame: lineFrame)
-        lineView.backgroundColor = UIColor.blackColor()
+        lineView.backgroundColor = UIColor.black
         lineView.alpha = 0.1
         
         addSubview(lineView)
@@ -95,49 +95,49 @@ class PayGoodsDetailView: UIView {
     
     var isShowImageView = false
     
-    var goods: Goods? {
+    var goods: NSDictionary? {
         didSet {
-            if goods?.is_xf == 1 {
-                titleLabel.text = "[精选]" + (goods?.name)!
+            if (goods?["is_xf"] as! Int) == 1 {
+                titleLabel.text = "[精选]" + ((goods?["name"])! as! String)
             } else {
-                titleLabel.text = goods?.name
+                titleLabel.text = goods?["name"] as! String?
             }
             
-            numberLabel.text = "x" + "\(goods!.userBuyNumber)"
-            priceLabel.text = "$" + (goods!.price)!.cleanDecimalPointZear()
+            numberLabel.text = "x" + "\(goods!["userBuyNumber"])"
+            priceLabel.text = "$" + (goods!["price"] as! String).cleanDecimalPointZear()
             
-            if !(goods!.pm_desc == "买一赠一") {
-                giftImageView.hidden = true
+            if !(goods!["pm_desc"] as! String == "买一赠一") {
+                giftImageView.isHidden = true
                 isShowImageView = false
                 layoutSubviews()
             } else  {
-                giftImageView.hidden = false
+                giftImageView.isHidden = false
                 isShowImageView = true
-                priceLabel.hidden = true
-                titleLabel.text = "[精选]" + (goods?.name)! + "[赠]"
+                priceLabel.isHidden = true
+                titleLabel.text = "[精选]" + (goods?["name"] as! String) + "[赠]"
             }
         }
     }
     
     override init(frame: CGRect) {
-        super.init(frame: CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, 20))
+        super.init(frame: CGRect(x:frame.origin.x, y:frame.origin.y, width:frame.size.width, height:20))
         
-        titleLabel.font = UIFont.systemFontOfSize(13)
-        titleLabel.textColor = UIColor.blackColor()
-        titleLabel.textAlignment = NSTextAlignment.Left
+        titleLabel.font = UIFont.systemFont(ofSize: 13)
+        titleLabel.textColor = UIColor.black
+        titleLabel.textAlignment = NSTextAlignment.left
         addSubview(titleLabel)
         
-        numberLabel.font = UIFont.systemFontOfSize(13)
-        numberLabel.textColor = UIColor.blackColor()
-        numberLabel.textAlignment = NSTextAlignment.Left
+        numberLabel.font = UIFont.systemFont(ofSize: 13)
+        numberLabel.textColor = UIColor.black
+        numberLabel.textAlignment = NSTextAlignment.left
         addSubview(numberLabel)
         
-        priceLabel.font = UIFont.systemFontOfSize(13)
-        priceLabel.textColor = UIColor.blackColor()
-        priceLabel.textAlignment = NSTextAlignment.Right
+        priceLabel.font = UIFont.systemFont(ofSize: 13)
+        priceLabel.textColor = UIColor.black
+        priceLabel.textAlignment = NSTextAlignment.right
         addSubview(priceLabel)
         
-        giftImageView.hidden = true
+        giftImageView.isHidden = true
         giftImageView.image = UIImage(named: "zengsong")
         addSubview(giftImageView)
     }
@@ -150,14 +150,14 @@ class PayGoodsDetailView: UIView {
         super.layoutSubviews()
         
         if isShowImageView {
-            giftImageView.frame = CGRectMake(15, (height - 20) * 0.5, 40, 20)
-            titleLabel.frame = CGRectMake(CGRectGetMaxX(giftImageView.frame) + 5, 0, width * 0.5, height)
-            numberLabel.frame = CGRectMake(ScreenWidth * 0.7, 0, 50, height)
+            giftImageView.frame = CGRect(x:15, y:(height - 20) * 0.5, width:40, height:20)
+            titleLabel.frame = CGRect(x:giftImageView.frame.maxX + 5, y:0, width:width * 0.5, height:height)
+            numberLabel.frame = CGRect(x:ScreenWidth * 0.7, y:0, width:50, height:height)
         } else {
-            titleLabel.frame = CGRectMake(15, 0, width * 0.6, height)
-            numberLabel.frame = CGRectMake(ScreenWidth * 0.7, 0, 50, height)
+            titleLabel.frame = CGRect(x:15, y:0, width:width * 0.6, height:height)
+            numberLabel.frame = CGRect(x:ScreenWidth * 0.7, y:0, width:50, height:height)
         }
-        priceLabel.frame = CGRectMake(width - 60 - 10, 0, 60, 20)
+        priceLabel.frame = CGRect(x:width - 60 - 10, y:0, width:60, height:20)
     }
     
 }

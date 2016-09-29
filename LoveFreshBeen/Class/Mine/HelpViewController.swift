@@ -18,37 +18,37 @@ enum HelpCellType: Int {
 class HelpViewController: BaseViewController {
 
     let margin: CGFloat = 20
-    let backView: UIView = UIView(frame: CGRectMake(0, 10, ScreenWidth, 100))
+    let backView: UIView = UIView(frame: CGRect(x:0, y:10, width:ScreenWidth, height:100))
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = "客服帮助"
         
-        backView.backgroundColor = UIColor.whiteColor()
+        backView.backgroundColor = UIColor.white
         view.addSubview(backView)
         
-        let phoneLabel = UILabel(frame: CGRectMake(20, 0, ScreenWidth - margin, 50))
-        creatLabel(phoneLabel, text: "客服电话: 400-8484-842", type: .Phone)
+        let phoneLabel = UILabel(frame: CGRect(x:20, y:0, width:ScreenWidth - margin, height:50))
+        creatLabel(label: phoneLabel, text: "客服电话: 400-8484-842", type: .Phone)
         
         let arrowImageView = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView.frame = CGRectMake(ScreenWidth - 20, (50 - 10) * 0.5, 5, 10)
+        arrowImageView.frame = CGRect(x:ScreenWidth - 20, y:(50 - 10) * 0.5, width:5, height:10)
         backView.addSubview(arrowImageView)
         
-        let lineView = UIView(frame: CGRectMake(margin, 49.5, ScreenWidth - margin, 1))
-        lineView.backgroundColor = UIColor.grayColor()
+        let lineView = UIView(frame: CGRect(x:margin, y:49.5, width:ScreenWidth - margin, height:1))
+        lineView.backgroundColor = UIColor.gray
         lineView.alpha = 0.2
         backView.addSubview(lineView)
         
-        let questionLabel = UILabel(frame: CGRectMake(margin, 50, ScreenWidth - margin, 50))
-        creatLabel(questionLabel, text: "常见问题", type: .Question)
+        let questionLabel = UILabel(frame: CGRect(x:margin, y:50, width:ScreenWidth - margin, height:50))
+        creatLabel(label: questionLabel, text: "常见问题", type: .Question)
         
         let arrowImageView2 = UIImageView(image: UIImage(named: "icon_go"))
-        arrowImageView2.frame = CGRectMake(ScreenWidth - 20, (50 - 10) * 0.5 + 50, 5, 10)
+        arrowImageView2.frame = CGRect(x:ScreenWidth - 20, y:(50 - 10) * 0.5 + 50, width:5, height:10)
         backView.addSubview(arrowImageView2)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
@@ -56,12 +56,12 @@ class HelpViewController: BaseViewController {
     // MARK - Method
     private func creatLabel(label: UILabel, text: String, type: HelpCellType) {
         label.text = text
-        label.userInteractionEnabled = true
-        label.font = UIFont.systemFontOfSize(15)
+        label.isUserInteractionEnabled = true
+        label.font = UIFont.systemFont(ofSize: 15)
         label.tag = type.hashValue
         backView.addSubview(label)
         
-        let tap = UITapGestureRecognizer(target: self, action: "cellClick:")
+        let tap = UITapGestureRecognizer(target: self, action: Selector(("cellClick:")))
         label.addGestureRecognizer(tap)
     }
     
@@ -85,9 +85,9 @@ class HelpViewController: BaseViewController {
 }
 
 extension HelpViewController: UIAlertViewDelegate {
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+    func alertView(_ alertView: UIAlertView, clickedButtonAt buttonIndex: Int) {
         if buttonIndex == 1 {
-            UIApplication.sharedApplication().openURL(NSURL(string: "tel:4008484842")!)
+            UIApplication.shared.openURL(NSURL(string: "tel:4008484842")! as URL)
         }
     }
 }

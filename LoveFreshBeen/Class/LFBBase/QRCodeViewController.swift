@@ -16,7 +16,7 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var animationLineView = UIImageView()
-    private var timer: NSTimer?
+    private var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +33,7 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
         
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if timer != nil {
             timer!.invalidate()
@@ -50,16 +50,16 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
     
     private func buildTitleLabel() {
         
-        titleLabel.textColor = UIColor.whiteColor()
-        titleLabel.font = UIFont.systemFontOfSize(16)
-        titleLabel.frame = CGRectMake(0, 340, ScreenWidth, 30)
-        titleLabel.textAlignment = NSTextAlignment.Center
+        titleLabel.textColor = UIColor.white
+        titleLabel.font = UIFont.systemFont(ofSize: 16)
+        titleLabel.frame = CGRect(x:0, y:340, width:ScreenWidth, height:30)
+        titleLabel.textAlignment = NSTextAlignment.center
         view.addSubview(titleLabel)
     }
     
     private func buildInputAVCaptureDevice() {
         
-        let captureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let captureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         titleLabel.text = "将店铺二维码对准方块内既可收藏店铺"
         let input = try? AVCaptureDeviceInput(device: captureDevice)
         if input == nil {
@@ -72,7 +72,7 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
         captureSession = AVCaptureSession()
         captureSession?.addInput(input!)
         captureSession?.addOutput(captureMetadataOutput)
-        let dispatchQueue = dispatch_queue_create("myQueue", nil)
+        let dispatchQueue = DispatchQueue(label: "myQueue")
         captureMetadataOutput.setMetadataObjectsDelegate(self, queue: dispatchQueue)
         captureMetadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode, AVMetadataObjectTypeAztecCode]
         
@@ -80,51 +80,51 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
         videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
         videoPreviewLayer?.frame = view.layer.frame
         view.layer.addSublayer(videoPreviewLayer!)
-        captureMetadataOutput.rectOfInterest = CGRectMake(0, 0, 1, 1)
+        captureMetadataOutput.rectOfInterest = CGRect(x:0, y:0, width:1, height:1)
         
         captureSession?.startRunning()
     }
     
     private func buildFrameImageView() {
         
-        let lineT = [CGRectMake(0, 0, ScreenWidth, 100),
-            CGRectMake(0, 100, ScreenWidth * 0.2, ScreenWidth * 0.6),
-            CGRectMake(0, 100 + ScreenWidth * 0.6, ScreenWidth, ScreenHeight - 100 - ScreenWidth * 0.6),
-            CGRectMake(ScreenWidth * 0.8, 100, ScreenWidth * 0.2, ScreenWidth * 0.6)]
+        let lineT = [CGRect(x:0, y:0, width:ScreenWidth, height:100),
+                     CGRect(x:0, y:100, width:ScreenWidth * 0.2, height:ScreenWidth * 0.6),
+                     CGRect(x:0, y:100 + ScreenWidth * 0.6, width:ScreenWidth, height:ScreenHeight - 100 - ScreenWidth * 0.6),
+                     CGRect(x:ScreenWidth * 0.8, y:100, width:ScreenWidth * 0.2, height:ScreenWidth * 0.6)]
         for lineTFrame in lineT {
-            buildTransparentView(lineTFrame)
+            buildTransparentView(frame: lineTFrame)
         }
         
-        let lineR = [CGRectMake(ScreenWidth * 0.2, 100, ScreenWidth * 0.6, 2),
-            CGRectMake(ScreenWidth * 0.2, 100, 2, ScreenWidth * 0.6),
-            CGRectMake(ScreenWidth * 0.8 - 2, 100, 2, ScreenWidth * 0.6),
-            CGRectMake(ScreenWidth * 0.2, 100 + ScreenWidth * 0.6, ScreenWidth * 0.6, 2)]
+        let lineR = [CGRect(x:ScreenWidth * 0.2, y:100, width:ScreenWidth * 0.6, height:2),
+                     CGRect(x:ScreenWidth * 0.2, y:100, width:2, height:ScreenWidth * 0.6),
+                     CGRect(x:ScreenWidth * 0.8 - 2, y:100, width:2, height:ScreenWidth * 0.6),
+                     CGRect(x:ScreenWidth * 0.2, y:100 + ScreenWidth * 0.6, width:ScreenWidth * 0.6, height:2)]
         
         for lineFrame in lineR {
-            buildLineView(lineFrame)
+            buildLineView(frame: lineFrame)
         }
         
         let yellowHeight: CGFloat = 4
         let yellowWidth: CGFloat = 30
         let yellowX: CGFloat = ScreenWidth * 0.2
         let bottomY: CGFloat = 100 + ScreenWidth * 0.6
-        let lineY = [CGRectMake(yellowX, 100, yellowWidth, yellowHeight),
-            CGRectMake(yellowX, 100, yellowHeight, yellowWidth),
-            CGRectMake(ScreenWidth * 0.8 - yellowHeight, 100, yellowHeight, yellowWidth),
-            CGRectMake(ScreenWidth * 0.8 - yellowWidth, 100, yellowWidth, yellowHeight),
-            CGRectMake(yellowX, bottomY - yellowHeight + 2, yellowWidth, yellowHeight),
-            CGRectMake(ScreenWidth * 0.8 - yellowWidth, bottomY - yellowHeight + 2, yellowWidth, yellowHeight),
-            CGRectMake(yellowX, bottomY - yellowWidth, yellowHeight, yellowWidth),
-            CGRectMake(ScreenWidth * 0.8 - yellowHeight, bottomY - yellowWidth, yellowHeight, yellowWidth)]
+        let lineY = [CGRect(x:yellowX, y:100, width:yellowWidth, height:yellowHeight),
+                     CGRect(x:yellowX, y:100, width:yellowHeight, height:yellowWidth),
+                     CGRect(x:ScreenWidth * 0.8 - yellowHeight, y:100, width:yellowHeight, height:yellowWidth),
+                     CGRect(x:ScreenWidth * 0.8 - yellowWidth, y:100, width:yellowWidth, height:yellowHeight),
+                     CGRect(x:yellowX, y:bottomY - yellowHeight + 2, width:yellowWidth, height:yellowHeight),
+                     CGRect(x:ScreenWidth * 0.8 - yellowWidth, y:bottomY - yellowHeight + 2, width:yellowWidth, height:yellowHeight),
+                     CGRect(x:yellowX, y:bottomY - yellowWidth, width:yellowHeight, height:yellowWidth),
+                     CGRect(x:ScreenWidth * 0.8 - yellowHeight, y:bottomY - yellowWidth, width:yellowHeight, height:yellowWidth)]
         
         for yellowRect in lineY {
-            buildYellowLineView(yellowRect)
+            buildYellowLineView(frame: yellowRect)
         }
     }
     
     private func buildLineView(frame: CGRect) {
         let view1 = UIView(frame: frame)
-        view1.backgroundColor = UIColor.colorWithCustom(230, g: 230, b: 230)
+        view1.backgroundColor = UIColor.colorWithCustom(r: 230, g: 230, b: 230)
         view.addSubview(view1)
     }
     
@@ -136,7 +136,7 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
     
     private func buildTransparentView(frame: CGRect) {
         let tView = UIView(frame: frame)
-        tView.backgroundColor = UIColor.blackColor()
+        tView.backgroundColor = UIColor.black
         tView.alpha = 0.5
         view.addSubview(tView)
     }
@@ -145,16 +145,16 @@ class QRCodeViewController: BaseViewController, AVCaptureMetadataOutputObjectsDe
         animationLineView.image = UIImage(named: "yellowlight")
         view.addSubview(animationLineView)
         
-        timer = NSTimer(timeInterval: 2.5, target: self, selector: "startYellowViewAnimation", userInfo: nil, repeats: true)
-        let runloop = NSRunLoop.currentRunLoop()
-        runloop.addTimer(timer!, forMode: NSRunLoopCommonModes)
+        timer = Timer(timeInterval: 2.5, target: self, selector: #selector(QRCodeViewController.startYellowViewAnimation), userInfo: nil, repeats: true)
+        let runloop = RunLoop.current
+        runloop.add(timer!, forMode: RunLoopMode.commonModes)
         timer!.fire()
     }
     
     func startYellowViewAnimation() {
         weak var weakSelf = self
-        animationLineView.frame = CGRectMake(ScreenWidth * 0.2 + ScreenWidth * 0.1 * 0.5, 100, ScreenWidth * 0.5, 20)
-        UIView.animateWithDuration(2.5) { () -> Void in
+        animationLineView.frame = CGRect(x:ScreenWidth * 0.2 + ScreenWidth * 0.1 * 0.5, y:100, width:ScreenWidth * 0.5, height:20)
+        UIView.animate(withDuration: 2.5) { () -> Void in
             weakSelf!.animationLineView.frame.origin.y += ScreenWidth * 0.55
         }
     }

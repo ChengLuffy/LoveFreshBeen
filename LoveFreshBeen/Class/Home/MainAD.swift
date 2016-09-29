@@ -15,14 +15,14 @@ class MainAD: NSObject, DictModelProtocol {
     var msg: String?
     var data: AD?
     
-    class func loadADData(completion:(data: MainAD?, error: NSError?) -> Void) {
-        let path = NSBundle.mainBundle().pathForResource("AD", ofType: nil)
+    class func loadADData(completion:(_ data: NSDictionary?, _ error: NSError?) -> Void) {
+        let path = Bundle.main.path(forResource: "AD", ofType: nil)
         let data = NSData(contentsOfFile: path!)
         if data != nil {
-            let dict: NSDictionary = (try! NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments)) as! NSDictionary
-            let modelTool = DictModelManager.sharedManager
-            let data = modelTool.objectWithDictionary(dict, cls: MainAD.self) as? MainAD
-            completion(data: data, error: nil)
+            let dict: NSDictionary = (try! JSONSerialization.jsonObject(with: data! as Data, options: .allowFragments)) as! NSDictionary
+//            let modelTool = DictModelManager.sharedManager
+//            let data = modelTool.objectWithDictionary(dict: dict, cls: MainAD.self) as? MainAD
+            completion(dict, nil)
         }
     }
     

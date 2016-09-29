@@ -14,8 +14,8 @@ class LeftImageRightTextButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        titleLabel?.font = UIFont.systemFontOfSize(15)
-        imageView?.contentMode = UIViewContentMode.Center
+        titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        imageView?.contentMode = UIViewContentMode.center
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -25,7 +25,7 @@ class LeftImageRightTextButton: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageView?.frame = CGRectMake(0, (height - (imageView?.size.height)!) * 0.5, (imageView?.size.width)!, (imageView?.size.height)!)
-        titleLabel?.frame = CGRectMake((imageView?.size.width)! + 10, 0, width - (imageView?.size.width)! - 10, height)
+        imageView?.frame = CGRect(x:0, y:(height - (imageView?.size.height)!) * 0.5, width:(imageView?.size.width)!, height:(imageView?.size.height)!)
+        titleLabel?.frame = CGRect(x:(imageView?.size.width)! + 10, y:0, width:width - (imageView?.size.width)! - 10, height:height)
     }
 }
