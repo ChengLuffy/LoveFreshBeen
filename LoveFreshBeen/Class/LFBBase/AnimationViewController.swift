@@ -74,7 +74,7 @@ class AnimationViewController: BaseViewController, CAAnimationDelegate {
         let positionAnimation = CAKeyframeAnimation(keyPath: "position")
         let path = CGMutablePath();
         path.move(to: p1)
-        path.addCurve(to: CGPoint(x:p1.x, y:p1.y - 30), control1: CGPoint(x: p3.x, y:p1.y - 30), control2: p3)
+        path.addCurve(to: p3, control1: CGPoint(x:p1.x, y:p1.y - 30), control2: CGPoint(x: p3.x, y:p1.y - 30))
 //        CGPathMoveToPoint(path, nil, p1.x, p1.y);
 //        CGPathAddCurveToPoint(path, nil, p1.x, p1.y - 30, p3.x, p1.y - 30, p3.x, p3.y);
         positionAnimation.path = path;
