@@ -292,7 +292,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     private func startAnimation(view: UIView, offsetY: CGFloat, duration: TimeInterval) {
         
         view.transform = CGAffineTransform(translationX: 0, y: offsetY)
-        
+        print(view)
         UIView.animate(withDuration: duration, animations: { () -> Void in
             view.transform = CGAffineTransform.identity
         })
